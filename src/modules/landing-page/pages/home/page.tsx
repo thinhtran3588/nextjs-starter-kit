@@ -1,82 +1,14 @@
-import { routing } from "@/application/routing/routing";
 import { Link } from "@/application/routing/navigation";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { ScrollReveal } from "./components/scroll-reveal";
 
 export async function LandingPage() {
   const tCommon = await getTranslations("common");
   const tHome = await getTranslations("modules.landing.pages.home");
-  const locale = await getLocale();
 
   return (
-    <div className="relative overflow-hidden">
-      <div className="glow-orb float left-[-10%] top-[-10%] h-[420px] w-[420px] bg-[rgba(139,184,255,0.45)]" />
-      <div className="glow-orb float right-[-15%] top-[10%] h-[380px] w-[380px] bg-[rgba(126,249,216,0.35)]" />
-      <div className="glow-orb float bottom-[-20%] left-[20%] h-[460px] w-[460px] bg-[rgba(139,184,255,0.2)]" />
-
-      <header className="relative z-30 mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 pt-8 sm:flex-row sm:items-center sm:justify-between">
-        <div className="glass-panel flex w-fit items-center gap-3 rounded-full px-4 py-2 text-sm text-[var(--text-muted)]">
-          <span className="h-2 w-2 rounded-full bg-[var(--mint)] shadow-[0_0_12px_rgba(126,249,216,0.8)]" />
-          {tHome("badge")}
-        </div>
-        <div className="flex w-full flex-wrap items-center justify-between gap-3 text-sm text-[var(--text-muted)] sm:w-auto sm:flex-nowrap sm:justify-end">
-          <nav className="flex flex-wrap items-center gap-3 sm:gap-4">
-            <Link className="transition hover:text-white" href="/auth/sign-in">
-              {tCommon("navigation.signIn")}
-            </Link>
-            <Link
-              className="transition hover:text-white"
-              href="/privacy-policy"
-            >
-              {tCommon("navigation.privacy")}
-            </Link>
-            <Link
-              className="transition hover:text-white"
-              href="/terms-of-service"
-            >
-              {tCommon("navigation.terms")}
-            </Link>
-          </nav>
-          <details className="group relative">
-            <summary
-              className="glass-panel flex cursor-pointer list-none items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-[var(--text-muted)] transition hover:text-white"
-              aria-label={`${tCommon("language.label")}: ${tCommon(
-                `language.options.${locale}`,
-              )}`}
-            >
-              <span className="text-sm">
-                {tCommon(`language.flags.${locale}`)}
-              </span>
-              <span>{tCommon(`language.options.${locale}`)}</span>
-              <span aria-hidden="true">▾</span>
-            </summary>
-            <div className="glass-panel-strong pointer-events-auto absolute right-0 z-40 mt-2 flex w-44 flex-col gap-1 rounded-2xl bg-[rgba(8,12,24,0.9)] px-2 py-2 text-xs text-white shadow-[0_20px_55px_rgba(0,0,0,0.45)] backdrop-blur">
-              {routing.locales.map((targetLocale) => {
-                const isActive = targetLocale === locale;
-
-                return (
-                  <Link
-                    key={targetLocale}
-                    className={`flex items-center gap-2 rounded-full px-3 py-2 font-semibold transition hover:bg-white/10 ${
-                      isActive ? "bg-white/10 text-white" : "text-white/80"
-                    }`}
-                    href="/"
-                    locale={targetLocale}
-                    aria-current={isActive ? "true" : undefined}
-                  >
-                    <span className="text-sm">
-                      {tCommon(`language.flags.${targetLocale}`)}
-                    </span>
-                    <span>{tCommon(`language.options.${targetLocale}`)}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </details>
-        </div>
-      </header>
-
-      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 pb-24 pt-16">
+    <>
+      <div className="flex flex-col gap-24">
         <section className="hero-grid glass-panel-strong liquid-border rounded-[32px] px-8 py-16 sm:px-14">
           <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div className="space-y-6">
@@ -317,7 +249,7 @@ export async function LandingPage() {
             </div>
           </section>
         </ScrollReveal>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }

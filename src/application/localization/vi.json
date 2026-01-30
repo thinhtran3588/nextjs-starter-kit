@@ -1,13 +1,15 @@
 {
   "common": {
     "navigation": {
+      "home": "Trang chủ",
       "goToApp": "Đi đến ứng dụng chính",
       "backToHome": "Quay lại trang chủ",
       "signIn": "Đăng nhập",
       "signUp": "Đăng ký",
       "createAccount": "Tạo tài khoản",
       "privacy": "Quyền riêng tư",
-      "terms": "Điều khoản"
+      "terms": "Điều khoản",
+      "menu": "Menu"
     },
     "language": {
       "label": "Ngôn ngữ",
@@ -63,7 +65,7 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Bộ UI Liquid Glass",
+          "badge": "Nextjs Starter Kit",
           "hero": {
             "eyebrow": "Độ rõ nét thế hệ mới",
             "title": "Bề mặt kính lỏng cho trải nghiệm sản phẩm cao cấp và nhẹ nhàng.",

@@ -1,13 +1,15 @@
 {
   "common": {
     "navigation": {
+      "home": "Home",
       "goToApp": "Go to main app",
       "backToHome": "Back to home",
       "signIn": "Sign in",
       "signUp": "Sign up",
       "createAccount": "Create an account",
       "privacy": "Privacy",
-      "terms": "Terms"
+      "terms": "Terms",
+      "menu": "Menu"
     },
     "language": {
       "label": "Language",
@@ -63,7 +65,7 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Liquid Glass UI Kit",
+          "badge": "Nextjs Starter Kit",
           "hero": {
             "eyebrow": "Next-level clarity",
             "title": "Liquid glass surfaces for a calm, premium product experience.",
