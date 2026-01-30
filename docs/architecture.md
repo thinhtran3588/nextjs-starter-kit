@@ -189,12 +189,14 @@ The app uses `/src` as the main source folder, keeping `/app` as the routing lay
 app/                               # Routing layer ONLY (Next.js App Router)
 └── [locale]/                      # Locale segment (next-intl)
     ├── layout.tsx                 # Imports RootLayout from src/common
-    ├── page.tsx                   # Imports HomePage from src/modules/home
+    ├── page.tsx                   # Imports LandingPage from src/modules/landing-page
     ├── auth/
-    │   ├── login/
-    │   │   └── page.tsx           # Imports LoginPage from src/modules/auth
-    │   └── register/
-    │       └── page.tsx           # Imports RegisterPage from src/modules/auth
+    │   ├── sign-in/
+    │   │   └── page.tsx           # Imports SignInPage from src/modules/auth
+    │   ├── sign-up/
+    │   │   └── page.tsx           # Imports SignUpPage from src/modules/auth
+    │   └── forgot-password/
+    │       └── page.tsx           # Imports ForgotPasswordPage from src/modules/auth
 
 src/                               # All application code lives here
 ├── application/                   # App-level setup (next-intl)
@@ -237,12 +239,15 @@ src/                               # All application code lives here
 │   │   │   ├── services/          # Module external services
 │   │   │   └── repositories/      # Module client persistence
 │   │   ├── pages/                 # Pages (each in its own folder)
-│   │   │   ├── login/
-│   │   │   │   ├── page.tsx        # Login page component
-│   │   │   │   └── components/     # Login page child components
-│   │   │   └── register/
-│   │   │       ├── page.tsx        # Register page component
-│   │   │       └── components/     # Register page child components
+│   │   │   ├── sign-in/
+│   │   │   │   ├── page.tsx        # Sign-in page component
+│   │   │   │   └── components/     # Sign-in page child components
+│   │   │   ├── sign-up/
+│   │   │   │   ├── page.tsx        # Sign-up page component
+│   │   │   │   └── components/     # Sign-up page child components
+│   │   │   └── forgot-password/
+│   │   │       ├── page.tsx        # Forgot password page component
+│   │   │       └── components/     # Forgot password page child components
 │   │   └── components/            # Module-shared components (not page-specific)
 │   │
 │   └── {module-name}/             # Other modules follow same structure
@@ -268,17 +273,17 @@ src/                               # All application code lives here
 The `/app` folder contains only Next.js routing files that import from `/src`:
 
 ```tsx
-// app/[locale]/auth/login/page.tsx
-import { LoginPage } from '@/modules/auth/pages/LoginPage';
+// app/[locale]/auth/sign-in/page.tsx
+import { SignInPage } from "@/modules/auth/pages/sign-in/page";
 
 export default function Page() {
-  return <LoginPage />;
+  return <SignInPage />;
 }
 ```
 
 ```tsx
 // app/[locale]/layout.tsx
-import { RootLayout } from '@/common/components/layout/RootLayout';
+import { RootLayout } from "@/common/components/layout/root-layout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <RootLayout>{children}</RootLayout>;
@@ -392,6 +397,9 @@ This keeps `/app` minimal and all code in `/src` for better organization and tes
 
 ### File and Folder Conventions
 
+- **All files and folders use kebab-case** (lowercase with hyphens), except Next.js reserved route files like `page.tsx` and `layout.tsx`.
+- **All components with props must define a props type** and use it in the component signature.
+- **Components without props should not define a props type** or include a props parameter.
 - `app/` – routing only (page.tsx, layout.tsx, loading, error, not-found); under `app/[locale]/` with next-intl. Imports from `/src`.
 - `src/application/` – app-level setup for next-intl (localization, routing).
 - `src/common/components/` – shared components; `src/common/components/ui/` for shadcn.

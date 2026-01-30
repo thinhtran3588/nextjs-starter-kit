@@ -100,3 +100,14 @@ flowchart TD
 - **Use squash merge** when merging PRs to `develop` - this keeps the commit history clean
 - **Create release tags** on `develop` before merging to `main` - this marks specific release points
 - **Merge `develop` into `main`** only when ready for production release
+
+## File Naming Conventions
+
+- **All files and folders use kebab-case** (lowercase with hyphens).
+- **Next.js reserved route files** (`page.tsx`, `layout.tsx`, `loading.tsx`, etc.) keep their required names.
+- **Page modules live in their own folder** under `src/modules/{module}/pages/{page}/page.tsx`.
+
+## Component Props Types
+
+- **Components with props must define a props type** and use it in the component signature.
+- **Components without props** should not define a props type or include a props parameter.

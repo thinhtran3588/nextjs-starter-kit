@@ -92,11 +92,35 @@ The app will be available at `http://localhost:3000`.
 - `npm run test:coverage` - Run tests with coverage
 - `npm run validate` - Run lint, format check, and tests
 
+## Next.js Notes
+
+This app was bootstrapped with `create-next-app` and uses the App Router.
+Routing files live under `app/[locale]/`, while feature UI lives in `src/`.
+Update the landing page in `src/modules/landing-page/pages/home/page.tsx`.
+
+The project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
+to automatically optimize and load Geist.
+
 ## Documentation
 
 - [Architecture Guide](docs/architecture.md)
 - [Development Guide](docs/development-guide.md)
 - [Testing Guide](docs/testing-guide.md)
+
+## Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js GitHub repository](https://github.com/vercel/next.js)
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the
+[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
+
+Check out the
+[Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)
+for more details.
 
 ## Project Structure
 
