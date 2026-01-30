@@ -1,4 +1,4 @@
-import { SimplePage } from "@/common/components/layout/simple-page";
+import { Link } from "@/application/routing/navigation";
 import { getTranslations } from "next-intl/server";
 
 export async function PrivacyPolicyPage() {
@@ -8,9 +8,107 @@ export async function PrivacyPolicyPage() {
   );
 
   return (
-    <SimplePage
-      title={tPrivacyPolicy("title")}
-      ctaLabel={tCommon("navigation.backToHome")}
-    />
+    <section className="glass-panel-strong liquid-border rounded-[32px] px-8 py-12 sm:px-14">
+      <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">
+        {tPrivacyPolicy("title")}
+      </h1>
+      <p className="mt-4 text-sm text-[var(--text-muted)]">
+        {tPrivacyPolicy("lastUpdated")}
+      </p>
+
+      <div className="mt-10 space-y-10 text-[var(--text-muted)]">
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.overview.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.overview.body")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.collection.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.collection.body")}</p>
+          <ul className="list-disc space-y-2 pl-6">
+            <li>{tPrivacyPolicy("sections.collection.items.email")}</li>
+            <li>{tPrivacyPolicy("sections.collection.items.displayName")}</li>
+            <li>{tPrivacyPolicy("sections.collection.items.providerIds")}</li>
+          </ul>
+          <p className="pt-2">
+            {tPrivacyPolicy("sections.collection.analyticsNote")}
+          </p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.usage.title")}
+          </h2>
+          <ul className="list-disc space-y-2 pl-6">
+            <li>{tPrivacyPolicy("sections.usage.items.auth")}</li>
+            <li>{tPrivacyPolicy("sections.usage.items.display")}</li>
+            <li>{tPrivacyPolicy("sections.usage.items.improve")}</li>
+          </ul>
+          <p className="pt-2">{tPrivacyPolicy("sections.usage.note")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.analytics.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.analytics.body")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.sharing.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.sharing.body")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.retention.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.retention.body")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.security.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.security.body")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.children.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.children.body")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.changes.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.changes.body")}</p>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold text-white">
+            {tPrivacyPolicy("sections.contact.title")}
+          </h2>
+          <p>{tPrivacyPolicy("sections.contact.body")}</p>
+        </section>
+      </div>
+
+      <div className="mt-12">
+        <Link
+          className="glass-panel inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:translate-y-[-2px]"
+          href="/"
+        >
+          {tCommon("navigation.backToHome")}
+        </Link>
+      </div>
+    </section>
   );
 }
