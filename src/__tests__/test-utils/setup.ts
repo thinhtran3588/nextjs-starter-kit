@@ -1,4 +1,29 @@
 import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
+import messages from "@/application/localization/en.json";
+
+const lookupMessage = (fullKey: string) => {
+  const value = fullKey.split(".").reduce<unknown>((result, key) => {
+    if (result && typeof result === "object" && key in result) {
+      return (result as Record<string, unknown>)[key];
+    }
+    return undefined;
+  }, messages);
+
+  return typeof value === "string" ? value : String(value ?? fullKey);
+};
+
+vi.mock("next-intl/server", () => ({
+  getTranslations: async (namespace?: string) => (key: string) =>
+    lookupMessage(namespace ? `${namespace}.${key}` : key),
+  getMessages: async () => messages,
+  getLocale: async () => "en",
+  getRequestConfig: (
+    handler: (params: {
+      requestLocale: Promise<string | undefined>;
+    }) => unknown,
+  ) => handler,
+}));
 
 class IntersectionObserverMock implements IntersectionObserver {
   private callback: IntersectionObserverCallback;

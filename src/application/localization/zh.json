@@ -1,0 +1,155 @@
+{
+  "common": {
+    "navigation": {
+      "goToApp": "进入主应用",
+      "backToHome": "返回主页",
+      "signIn": "登录",
+      "signUp": "注册",
+      "createAccount": "创建账号",
+      "privacy": "隐私",
+      "terms": "条款"
+    },
+    "language": {
+      "label": "语言",
+      "options": {
+        "en": "英语",
+        "vi": "越南语",
+        "zh": "中文"
+      },
+      "flags": {
+        "en": "🇺🇸",
+        "vi": "🇻🇳",
+        "zh": "🇨🇳"
+      }
+    },
+    "app": {
+      "metadata": {
+        "title": "Liquid Glass",
+        "description": "面向应用的液态玻璃着陆体验。"
+      }
+    }
+  },
+  "modules": {
+    "auth": {
+      "pages": {
+        "sign-in": {
+          "title": "登录"
+        },
+        "sign-up": {
+          "title": "注册"
+        },
+        "forgot-password": {
+          "title": "忘记密码"
+        }
+      }
+    },
+    "main": {
+      "pages": {
+        "app": {
+          "title": "主应用"
+        }
+      }
+    },
+    "legal": {
+      "pages": {
+        "privacy-policy": {
+          "title": "隐私政策"
+        },
+        "terms-of-service": {
+          "title": "服务条款"
+        }
+      }
+    },
+    "landing": {
+      "pages": {
+        "home": {
+          "badge": "Liquid Glass UI 套件",
+          "hero": {
+            "eyebrow": "更高层次的清晰度",
+            "title": "液态玻璃表面带来沉静、优雅的产品体验。",
+            "subtitle": "以多层半透明、柔和渐变与随滚动响应的动效，提升你的产品发布。"
+          },
+          "stats": {
+            "activeSessions": {
+              "label": "活跃会话",
+              "value": "28,490"
+            },
+            "momentum": {
+              "label": "动能",
+              "value": "+42%"
+            },
+            "latency": {
+              "label": "延迟",
+              "value": "48ms"
+            },
+            "note": "顺滑的引导、个性化与安全性融为一体，构成完整的玻璃体验。"
+          },
+          "features": {
+            "clarity": {
+              "title": "层层清晰",
+              "description": "分层玻璃面板让信息更有序，同时保持平静、高级的氛围。"
+            },
+            "motion": {
+              "title": "意图驱动的动效",
+              "description": "细腻的滚动显现与悬浮光晕引导注意力而不分散。"
+            },
+            "trust": {
+              "title": "为信任而设计",
+              "description": "玻璃拟态与高对比排版结合，保持数据可读。"
+            }
+          },
+          "launch": {
+            "title": "为高信号发布而生",
+            "description": "将故事叙述与清晰指标结合。用滚动触发的呈现与柔和视差动效展示你的路线图、安全与引导流程。",
+            "tags": {
+              "glassTokens": "玻璃样式令牌",
+              "scrollCues": "滚动提示",
+              "performanceReady": "性能就绪"
+            }
+          },
+          "metrics": {
+            "dataGlow": {
+              "label": "数据光晕",
+              "value": "1.8x",
+              "caption": "互动更高"
+            },
+            "retentionLift": {
+              "label": "留存提升",
+              "value": "+33%",
+              "caption": "首月"
+            }
+          },
+          "story": {
+            "title": "故事驱动的滚动",
+            "description": "每个版块都为你的叙事呼吸。以有节奏的铺陈强调功能速度、可信安全与愉悦的引导流程。",
+            "pills": {
+              "onboard": "几分钟完成引导",
+              "insights": "实时性能洞察",
+              "prompts": "情境化提示",
+              "security": "自适应安全层"
+            }
+          },
+          "trust": {
+            "eyebrow": "团队信赖",
+            "title": "让每位干系人都看见清晰信号。",
+            "description": "玻璃表面勾勒故事，其余画布聚焦于最重要的结果：你的产品成果。",
+            "testimonials": {
+              "nova": {
+                "name": "Nova Labs",
+                "quote": "玻璃界面让我们的发布更显沉稳与可信。"
+              },
+              "orion": {
+                "name": "Orion Studio",
+                "quote": "我们用玻璃套件在一个周末完成了高质感落地页。"
+              }
+            }
+          },
+          "cta": {
+            "title": "准备以清晰开启发布？",
+            "description": "将液态玻璃美学带入核心产品旅程。主应用体验已为你准备就绪。"
+          }
+        }
+      }
+    }
+  }
+}

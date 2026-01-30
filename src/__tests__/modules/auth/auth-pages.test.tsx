@@ -4,41 +4,53 @@ import { AuthPageContent } from "@/modules/auth/components/auth-page-content";
 import { SignInPage } from "@/modules/auth/pages/sign-in/page";
 import { SignUpPage } from "@/modules/auth/pages/sign-up/page";
 import { ForgotPasswordPage } from "@/modules/auth/pages/forgot-password/page";
+import messages from "@/application/localization/en.json";
 
 describe("Auth pages", () => {
   it("renders the shared auth layout shell", () => {
     render(
       <AuthLayout>
-        <AuthPageContent title="Sign in" />
+        <AuthPageContent
+          title={messages.modules.auth.pages["sign-in"].title}
+          ctaLabel={messages.common.navigation.backToHome}
+        />
       </AuthLayout>,
     );
 
     expect(
-      screen.getByRole("heading", { name: /sign in/i }),
+      screen.getByRole("heading", {
+        name: messages.modules.auth.pages["sign-in"].title,
+      }),
     ).toBeInTheDocument();
   });
 
-  it("renders the sign in page", () => {
-    render(<SignInPage />);
+  it("renders the sign in page", async () => {
+    render(await SignInPage());
 
     expect(
-      screen.getByRole("heading", { name: /sign in/i }),
+      screen.getByRole("heading", {
+        name: messages.modules.auth.pages["sign-in"].title,
+      }),
     ).toBeInTheDocument();
   });
 
-  it("renders the sign up page", () => {
-    render(<SignUpPage />);
+  it("renders the sign up page", async () => {
+    render(await SignUpPage());
 
     expect(
-      screen.getByRole("heading", { name: /sign up/i }),
+      screen.getByRole("heading", {
+        name: messages.modules.auth.pages["sign-up"].title,
+      }),
     ).toBeInTheDocument();
   });
 
-  it("renders the forgot password page", () => {
-    render(<ForgotPasswordPage />);
+  it("renders the forgot password page", async () => {
+    render(await ForgotPasswordPage());
 
     expect(
-      screen.getByRole("heading", { name: /forgot password/i }),
+      screen.getByRole("heading", {
+        name: messages.modules.auth.pages["forgot-password"].title,
+      }),
     ).toBeInTheDocument();
   });
 });

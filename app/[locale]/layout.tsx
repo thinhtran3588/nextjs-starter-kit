@@ -1,7 +1,6 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { routing } from "@/application/routing/routing";
 import { RootLayout } from "@/common/components/layout/root-layout";
 import "../globals.css";
@@ -16,10 +15,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Liquid Glass",
-  description: "A liquid glass landing experience for the app.",
-};
+export async function generateMetadata() {
+  const t = await getTranslations("common");
+
+  return {
+    title: t("app.metadata.title"),
+    description: t("app.metadata.description"),
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
