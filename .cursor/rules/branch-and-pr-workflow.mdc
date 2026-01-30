@@ -49,6 +49,8 @@ alwaysApply: true
 
    **If you are already on a feature branch:**
    - Verify it's not `main` or `develop` (should be a feature branch name)
+  - Confirm the branch was created from the latest `develop` branch
+  - If not based on latest `develop`, create a new branch from up-to-date `develop`
    - If it's a valid feature branch, proceed with your changes
    - If unsure, create a new branch following the steps above
 
@@ -133,6 +135,16 @@ If `npm run validate` fails:
 ### Committing Changes
 
 **CRITICAL**: You MUST request explicit permission from the user before making any commits to the local branch.
+
+**CRITICAL**: Before drafting the commit message, you MUST check all file changes to ensure nothing is missed:
+
+- Review `git status` for untracked and modified files
+- Review `git diff` for unstaged changes
+- Review `git diff --staged` for staged changes
+- Ensure the commit message explicitly reflects all relevant changes
+- Stage ALL changes with `git add .` unless the user explicitly requests a partial commit
+- Review `git diff --staged` after staging to confirm all changes are included
+- Draft the commit message only after this review is complete
 
 1. **Run validation first**: Ensure `npm run validate` passes before committing
 2. **Request permission**: Before committing, you MUST:
