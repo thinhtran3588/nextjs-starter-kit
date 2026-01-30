@@ -55,10 +55,116 @@
     "legal": {
       "pages": {
         "privacy-policy": {
-          "title": "Chính sách quyền riêng tư"
+          "title": "Chính sách quyền riêng tư",
+          "lastUpdated": "Cập nhật lần cuối: 31 tháng 1, 2026",
+          "sections": {
+            "overview": {
+              "title": "Tổng quan",
+              "body": "Starter kit này cung cấp luồng xác thực dựa trên Firebase. Nó có thể được dùng làm nền tảng cho các ứng dụng trong tương lai. Chính sách này giải thích dữ liệu nào được thu thập mặc định và cách dữ liệu được sử dụng. Nếu bạn xây dựng sản phẩm thực trên nền starter kit, hãy cập nhật chính sách này cho phù hợp."
+            },
+            "collection": {
+              "title": "Thông tin chúng tôi thu thập",
+              "body": "Chúng tôi chỉ thu thập dữ liệu tối thiểu để xác thực người dùng:",
+              "items": {
+                "email": "Địa chỉ email",
+                "displayName": "Tên hiển thị (nếu được nhà cung cấp xác thực trả về)",
+                "providerIds": "Định danh nhà cung cấp xác thực (Firebase, Google, Apple)"
+              },
+              "analyticsNote": "Nếu bật analytics, chúng tôi cũng có thể thu thập dữ liệu sử dụng cơ bản như thông tin thiết bị, loại trình duyệt, trang đã xem, và sự kiện tương tác."
+            },
+            "usage": {
+              "title": "Cách chúng tôi sử dụng thông tin",
+              "items": {
+                "auth": "Xác thực và giữ tài khoản của bạn an toàn.",
+                "display": "Hiển thị tên của bạn trong UI khi có sẵn.",
+                "improve": "Theo dõi độ ổn định và cải thiện trải nghiệm người dùng."
+              },
+              "note": "Chúng tôi chỉ dùng email và tên hiển thị cho mục đích xác thực và truy cập tài khoản."
+            },
+            "analytics": {
+              "title": "Analytics",
+              "body": "Chúng tôi có thể dùng Google Analytics hoặc Firebase Analytics để hiểu cách mọi người sử dụng starter kit. Dữ liệu analytics giúp cải thiện hiệu năng và khả năng sử dụng. Bạn có thể tắt analytics trong triển khai của mình nếu không cần."
+            },
+            "sharing": {
+              "title": "Chia sẻ và công bố",
+              "body": "Chúng tôi không bán thông tin cá nhân của bạn. Chúng tôi chỉ chia sẻ dữ liệu với các nhà cung cấp dịch vụ cần thiết để vận hành xác thực hoặc analytics, như Firebase và Google Analytics."
+            },
+            "retention": {
+              "title": "Lưu trữ dữ liệu",
+              "body": "Dữ liệu xác thực được lưu trữ trong suốt thời gian tài khoản của bạn hoạt động. Nếu bạn xóa tài khoản, chúng tôi sẽ xóa dữ liệu xác thực liên quan khỏi Firebase trong khoảng thời gian hợp lý."
+            },
+            "security": {
+              "title": "Bảo mật",
+              "body": "Chúng tôi áp dụng các biện pháp kỹ thuật và tổ chức hợp lý để bảo vệ thông tin của bạn. Tuy nhiên, không hệ thống nào có thể đảm bảo an toàn 100%."
+            },
+            "children": {
+              "title": "Quyền riêng tư của trẻ em",
+              "body": "Starter kit này không dành cho trẻ em dưới 13 tuổi. Nếu bạn cho rằng trẻ em đã cung cấp thông tin cá nhân, hãy xóa dữ liệu và cập nhật chính sách của sản phẩm."
+            },
+            "changes": {
+              "title": "Thay đổi chính sách",
+              "body": "Chúng tôi có thể cập nhật chính sách này khi starter kit phát triển. Hãy xem lại định kỳ và cập nhật khi bạn phát hành sản phẩm thực dựa trên starter kit."
+            },
+            "contact": {
+              "title": "Liên hệ",
+              "body": "Nếu có câu hỏi về quyền riêng tư, hãy liên hệ với đội ngũ vận hành ứng dụng được xây dựng từ starter kit này."
+            }
+          }
         },
         "terms-of-service": {
-          "title": "Điều khoản dịch vụ"
+          "title": "Điều khoản dịch vụ",
+          "lastUpdated": "Cập nhật lần cuối: 31 tháng 1, 2026",
+          "sections": {
+            "overview": {
+              "title": "Tổng quan",
+              "body": "Các điều khoản này mô tả cách sử dụng starter kit. Nếu bạn triển khai sản phẩm thực dựa trên starter kit, hãy cập nhật điều khoản để phù hợp với sản phẩm, mô hình kinh doanh và yêu cầu pháp lý."
+            },
+            "acceptance": {
+              "title": "Chấp thuận",
+              "body": "Bằng việc truy cập hoặc sử dụng ứng dụng được xây dựng từ starter kit này, bạn đồng ý với các điều khoản. Nếu không đồng ý, vui lòng không sử dụng ứng dụng."
+            },
+            "accounts": {
+              "title": "Tài khoản và xác thực",
+              "body": "Starter kit sử dụng Firebase Authentication và hỗ trợ đăng nhập bằng email, Google và Apple. Bạn chịu trách nhiệm bảo vệ thông tin đăng nhập và mọi hoạt động diễn ra trong tài khoản của mình."
+            },
+            "acceptableUse": {
+              "title": "Sử dụng hợp lệ",
+              "body": "Bạn đồng ý không:",
+              "items": {
+                "unlawful": "Sử dụng dịch vụ cho mục đích trái pháp luật, gây hại hoặc lạm dụng.",
+                "access": "Cố gắng truy cập hoặc thăm dò tài khoản hoặc dữ liệu khác.",
+                "interference": "Can thiệp hoặc làm gián đoạn dịch vụ hay hạ tầng của dịch vụ."
+              }
+            },
+            "thirdParty": {
+              "title": "Dịch vụ bên thứ ba",
+              "body": "Starter kit tích hợp các dịch vụ bên thứ ba như Firebase và Google Analytics. Việc bạn sử dụng các dịch vụ đó cũng tuân theo điều khoản và chính sách quyền riêng tư của họ."
+            },
+            "starterKit": {
+              "title": "Tính chất starter kit",
+              "body": "Dự án này là starter kit phục vụ phát triển và tùy biến. Tính năng, thực tiễn dữ liệu và chính sách pháp lý có thể thay đổi khi bạn điều chỉnh nó cho ứng dụng sản xuất."
+            },
+            "termination": {
+              "title": "Chấm dứt",
+              "body": "Quyền truy cập có thể bị tạm ngưng hoặc chấm dứt bất cứ lúc nào do vi phạm điều khoản hoặc vì lý do vận hành."
+            },
+            "disclaimers": {
+              "title": "Miễn trừ trách nhiệm",
+              "body": "Starter kit được cung cấp theo trạng thái \"nguyên trạng\" và \"sẵn có\". Không có bảo đảm nào được đưa ra, và bạn tự chịu rủi ro khi sử dụng."
+            },
+            "liability": {
+              "title": "Giới hạn trách nhiệm",
+              "body": "Trong phạm vi tối đa luật cho phép, những người tạo ra starter kit không chịu trách nhiệm về các thiệt hại gián tiếp, ngẫu nhiên, đặc biệt, phát sinh hoặc mang tính trừng phạt do việc bạn sử dụng ứng dụng."
+            },
+            "changes": {
+              "title": "Thay đổi",
+              "body": "Các điều khoản này có thể được cập nhật khi starter kit phát triển. Hãy xem lại định kỳ và cập nhật khi bạn phát hành sản phẩm thực dựa trên starter kit."
+            },
+            "contact": {
+              "title": "Liên hệ",
+              "body": "Nếu có câu hỏi về các điều khoản này, hãy liên hệ với đội ngũ vận hành ứng dụng được xây dựng từ starter kit."
+            }
+          }
         }
       }
     },

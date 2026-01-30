@@ -55,10 +55,116 @@
     "legal": {
       "pages": {
         "privacy-policy": {
-          "title": "隐私政策"
+          "title": "隐私政策",
+          "lastUpdated": "最后更新：2026年1月31日",
+          "sections": {
+            "overview": {
+              "title": "概述",
+              "body": "该 starter kit 提供基于 Firebase 的认证流程，可作为未来应用的基础。本政策说明默认收集的数据以及用途。如果你基于该 starter kit 构建真实产品，请根据实际行为更新本政策。"
+            },
+            "collection": {
+              "title": "我们收集的信息",
+              "body": "我们仅收集完成认证所需的最少数据：",
+              "items": {
+                "email": "邮箱地址",
+                "displayName": "显示名称（若由认证提供方提供）",
+                "providerIds": "认证提供方标识（Firebase、Google、Apple）"
+              },
+              "analyticsNote": "如果启用分析，我们也可能收集基础使用数据，如设备信息、浏览器类型、访问页面和交互事件。"
+            },
+            "usage": {
+              "title": "信息使用方式",
+              "items": {
+                "auth": "进行身份验证并保障账户安全。",
+                "display": "在可用时在 UI 中展示你的名称。",
+                "improve": "监控稳定性并改进用户体验。"
+              },
+              "note": "你的邮箱和显示名称仅用于认证与账户访问。"
+            },
+            "analytics": {
+              "title": "分析",
+              "body": "我们可能使用 Google Analytics 或 Firebase Analytics 了解人们如何使用 starter kit。分析数据用于提升性能与可用性。如不需要，可在你的部署中禁用分析。"
+            },
+            "sharing": {
+              "title": "共享与披露",
+              "body": "我们不会出售你的个人信息。我们仅与运营认证或分析所需的服务提供商共享数据，如 Firebase 和 Google Analytics。"
+            },
+            "retention": {
+              "title": "数据保留",
+              "body": "认证数据会在账户处于活跃状态期间保存。若你删除账户，我们会在合理时间内从 Firebase 中移除相关认证数据。"
+            },
+            "security": {
+              "title": "安全",
+              "body": "我们采用合理的技术和组织措施保护你的信息，但任何系统都无法保证 100% 安全。"
+            },
+            "children": {
+              "title": "儿童隐私",
+              "body": "该 starter kit 不面向 13 岁以下儿童。如果你认为儿童提供了个人信息，请删除数据并相应更新产品政策。"
+            },
+            "changes": {
+              "title": "政策变更",
+              "body": "随着 starter kit 的演进，我们可能更新本政策。请定期查看，并在发布基于该 starter kit 的真实产品时进行更新。"
+            },
+            "contact": {
+              "title": "联系",
+              "body": "如对隐私有疑问，请联系使用该 starter kit 构建的应用的运营团队。"
+            }
+          }
         },
         "terms-of-service": {
-          "title": "服务条款"
+          "title": "服务条款",
+          "lastUpdated": "最后更新：2026年1月31日",
+          "sections": {
+            "overview": {
+              "title": "概述",
+              "body": "本条款描述了如何使用该 starter kit。若你部署基于该 starter kit 的真实产品，应根据产品、商业模式和法律要求更新条款。"
+            },
+            "acceptance": {
+              "title": "接受条款",
+              "body": "访问或使用基于该 starter kit 构建的应用即表示你同意本条款。如不同意，请勿使用该应用。"
+            },
+            "accounts": {
+              "title": "账户与认证",
+              "body": "该 starter kit 使用 Firebase Authentication，支持邮箱、Google 和 Apple 登录。你应妥善保管凭据，并对账户下发生的活动负责。"
+            },
+            "acceptableUse": {
+              "title": "可接受使用",
+              "body": "你同意不进行以下行为：",
+              "items": {
+                "unlawful": "将服务用于违法、有害或滥用目的。",
+                "access": "尝试访问或探测其他账户或数据。",
+                "interference": "干扰或破坏服务及其基础设施。"
+              }
+            },
+            "thirdParty": {
+              "title": "第三方服务",
+              "body": "该 starter kit 集成 Firebase 与 Google Analytics 等第三方服务。你对这些服务的使用同样受其条款与隐私政策约束。"
+            },
+            "starterKit": {
+              "title": "starter kit 的性质",
+              "body": "本项目为开发与定制用途的 starter kit。当你将其适配为生产应用时，功能、数据实践和法律政策可能会变化。"
+            },
+            "termination": {
+              "title": "终止",
+              "body": "如违反条款或出于运营原因，访问权限可随时暂停或终止。"
+            },
+            "disclaimers": {
+              "title": "免责声明",
+              "body": "该 starter kit 以“按现状”和“可用”为基础提供。我们不提供任何保证，你需自行承担使用风险。"
+            },
+            "liability": {
+              "title": "责任限制",
+              "body": "在法律允许的最大范围内，starter kit 的创建者不对因使用该应用产生的间接、偶发、特殊、后果性或惩罚性损害负责。"
+            },
+            "changes": {
+              "title": "变更",
+              "body": "本条款可能随 starter kit 的演进而更新。请定期查看，并在发布基于该 starter kit 的真实产品时进行更新。"
+            },
+            "contact": {
+              "title": "联系",
+              "body": "如对本条款有疑问，请联系使用该 starter kit 构建的应用的运营团队。"
+            }
+          }
         }
       }
     },

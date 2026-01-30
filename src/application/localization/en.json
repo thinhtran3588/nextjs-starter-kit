@@ -55,10 +55,116 @@
     "legal": {
       "pages": {
         "privacy-policy": {
-          "title": "Privacy Policy"
+          "title": "Privacy Policy",
+          "lastUpdated": "Last updated: January 31, 2026",
+          "sections": {
+            "overview": {
+              "title": "Overview",
+              "body": "This starter kit provides authentication flows powered by Firebase. It may be used as a base for future applications. This policy explains what data the starter kit collects by default and how that data is used. If you build a real product on top of this starter kit, update this policy to match your actual behavior."
+            },
+            "collection": {
+              "title": "Information we collect",
+              "body": "We collect the minimum data needed to authenticate users:",
+              "items": {
+                "email": "Email address",
+                "displayName": "Display name (if provided by the auth provider)",
+                "providerIds": "Authentication provider identifiers (Firebase, Google, Apple)"
+              },
+              "analyticsNote": "If analytics is enabled, we may also collect basic usage data such as device information, browser type, pages viewed, and interaction events."
+            },
+            "usage": {
+              "title": "How we use information",
+              "items": {
+                "auth": "Authenticate you and keep your account secure.",
+                "display": "Display your name in the UI when available.",
+                "improve": "Monitor reliability and improve the user experience."
+              },
+              "note": "We use your email and display name only for authentication and account access."
+            },
+            "analytics": {
+              "title": "Analytics",
+              "body": "We may use Google Analytics or Firebase Analytics to understand how people use the starter kit. Analytics data helps us improve performance and usability. You can disable analytics in your own deployment if you do not need it."
+            },
+            "sharing": {
+              "title": "Sharing and disclosure",
+              "body": "We do not sell your personal information. We only share data with service providers needed to operate authentication or analytics, such as Firebase and Google Analytics."
+            },
+            "retention": {
+              "title": "Data retention",
+              "body": "Authentication data is stored as long as your account is active. If you delete your account, we remove associated authentication data from Firebase within a reasonable timeframe."
+            },
+            "security": {
+              "title": "Security",
+              "body": "We use reasonable technical and organizational measures to protect your information. However, no system can be guaranteed to be 100% secure."
+            },
+            "children": {
+              "title": "Children's privacy",
+              "body": "This starter kit is not intended for children under 13. If you believe a child has provided personal information, remove the data and update your product policies accordingly."
+            },
+            "changes": {
+              "title": "Changes to this policy",
+              "body": "We may update this policy as the starter kit evolves. Review it periodically, and update it when you ship a real product based on this starter kit."
+            },
+            "contact": {
+              "title": "Contact",
+              "body": "For questions about privacy, contact the team that operates the application built from this starter kit."
+            }
+          }
         },
         "terms-of-service": {
-          "title": "Terms of Service"
+          "title": "Terms of Service",
+          "lastUpdated": "Last updated: January 31, 2026",
+          "sections": {
+            "overview": {
+              "title": "Overview",
+              "body": "These terms describe how the starter kit can be used. If you deploy a real product based on this starter kit, you should update these terms to match your product, business model, and legal requirements."
+            },
+            "acceptance": {
+              "title": "Acceptance",
+              "body": "By accessing or using the application built from this starter kit, you agree to these terms. If you do not agree, do not use the application."
+            },
+            "accounts": {
+              "title": "Accounts and authentication",
+              "body": "The starter kit uses Firebase Authentication and supports email, Google, and Apple sign-in. You are responsible for safeguarding your credentials and for any activity that occurs under your account."
+            },
+            "acceptableUse": {
+              "title": "Acceptable use",
+              "body": "You agree not to:",
+              "items": {
+                "unlawful": "Use the service for unlawful, harmful, or abusive purposes.",
+                "access": "Attempt to access or probe other accounts or data.",
+                "interference": "Interfere with or disrupt the service or its infrastructure."
+              }
+            },
+            "thirdParty": {
+              "title": "Third-party services",
+              "body": "The starter kit integrates third-party services such as Firebase and Google Analytics. Your use of those services is also subject to their terms and privacy policies."
+            },
+            "starterKit": {
+              "title": "Starter kit nature",
+              "body": "This project is a starter kit intended for development and customization. Features, data practices, and legal policies may change when you adapt it for a production application."
+            },
+            "termination": {
+              "title": "Termination",
+              "body": "Access may be suspended or terminated at any time for violations of these terms or for operational reasons."
+            },
+            "disclaimers": {
+              "title": "Disclaimers",
+              "body": "The starter kit is provided on an \"as is\" and \"as available\" basis. No warranties are provided, and you use it at your own risk."
+            },
+            "liability": {
+              "title": "Limitation of liability",
+              "body": "To the fullest extent permitted by law, the creators of this starter kit are not liable for indirect, incidental, special, consequential, or punitive damages arising from your use of the application."
+            },
+            "changes": {
+              "title": "Changes",
+              "body": "These terms may be updated as the starter kit evolves. Review them periodically, and update them when you ship a real product based on this starter kit."
+            },
+            "contact": {
+              "title": "Contact",
+              "body": "For questions about these terms, contact the team that operates the application built from this starter kit."
+            }
+          }
         }
       }
     },
