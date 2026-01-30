@@ -1,17 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import { LandingPage } from "@/modules/landing-page/pages/home/page";
+import messages from "@/application/localization/en.json";
 
 describe("LandingPage", () => {
-  it("renders the hero headline and main app CTA", () => {
-    render(<LandingPage />);
+  it("renders the hero headline and main app CTA", async () => {
+    render(await LandingPage());
 
     expect(
       screen.getByRole("heading", {
-        name: /liquid glass surfaces/i,
+        name: messages.modules.landing.pages.home.hero.title,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getAllByRole("link", { name: /go to main app/i }),
+      screen.getAllByRole("link", {
+        name: messages.common.navigation.goToApp,
+      }),
     ).toHaveLength(2);
   });
 });

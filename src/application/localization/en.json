@@ -1,7 +1,155 @@
 {
   "common": {
-    "goHome": "Go to home",
-    "goToApp": "Go to main app",
-    "backToHome": "Back to home"
+    "navigation": {
+      "goToApp": "Go to main app",
+      "backToHome": "Back to home",
+      "signIn": "Sign in",
+      "signUp": "Sign up",
+      "createAccount": "Create an account",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    },
+    "language": {
+      "label": "Language",
+      "options": {
+        "en": "English",
+        "vi": "Vietnamese",
+        "zh": "Chinese"
+      },
+      "flags": {
+        "en": "🇺🇸",
+        "vi": "🇻🇳",
+        "zh": "🇨🇳"
+      }
+    },
+    "app": {
+      "metadata": {
+        "title": "Liquid Glass",
+        "description": "A liquid glass landing experience for the app."
+      }
+    }
+  },
+  "modules": {
+    "auth": {
+      "pages": {
+        "sign-in": {
+          "title": "Sign in"
+        },
+        "sign-up": {
+          "title": "Sign up"
+        },
+        "forgot-password": {
+          "title": "Forgot password"
+        }
+      }
+    },
+    "main": {
+      "pages": {
+        "app": {
+          "title": "Main App"
+        }
+      }
+    },
+    "legal": {
+      "pages": {
+        "privacy-policy": {
+          "title": "Privacy Policy"
+        },
+        "terms-of-service": {
+          "title": "Terms of Service"
+        }
+      }
+    },
+    "landing": {
+      "pages": {
+        "home": {
+          "badge": "Liquid Glass UI Kit",
+          "hero": {
+            "eyebrow": "Next-level clarity",
+            "title": "Liquid glass surfaces for a calm, premium product experience.",
+            "subtitle": "Elevate your product launch with layered translucency, soft gradients, and motion that feels responsive to every scroll."
+          },
+          "stats": {
+            "activeSessions": {
+              "label": "Active sessions",
+              "value": "28,490"
+            },
+            "momentum": {
+              "label": "Momentum",
+              "value": "+42%"
+            },
+            "latency": {
+              "label": "Latency",
+              "value": "48ms"
+            },
+            "note": "Smooth onboarding, personalization, and security all woven into a single glass stack."
+          },
+          "features": {
+            "clarity": {
+              "title": "Clarity at every depth",
+              "description": "Layered glass panels keep information organized while preserving a calm, premium mood."
+            },
+            "motion": {
+              "title": "Motion that follows intent",
+              "description": "Subtle scroll reveals and hovering glows guide attention without distracting."
+            },
+            "trust": {
+              "title": "Designed for trust",
+              "description": "Glassmorphism paired with high contrast typography keeps data accessible."
+            }
+          },
+          "launch": {
+            "title": "Built for high-signal launches",
+            "description": "Combine storytelling with crisp metrics. Showcase your roadmap, security, and onboarding flows with scroll-triggered reveals and gentle parallax motion.",
+            "tags": {
+              "glassTokens": "Glass tokens",
+              "scrollCues": "Scroll cues",
+              "performanceReady": "Performance ready"
+            }
+          },
+          "metrics": {
+            "dataGlow": {
+              "label": "Data glow",
+              "value": "1.8x",
+              "caption": "higher engagement"
+            },
+            "retentionLift": {
+              "label": "Retention lift",
+              "value": "+33%",
+              "caption": "in the first month"
+            }
+          },
+          "story": {
+            "title": "A story-driven scroll",
+            "description": "Every section breathes with your narrative. Highlight feature velocity, trusted security, and joyful onboarding sequences with intentional pacing.",
+            "pills": {
+              "onboard": "Onboard in minutes",
+              "insights": "Live performance insights",
+              "prompts": "Context-aware prompts",
+              "security": "Adaptive security layers"
+            }
+          },
+          "trust": {
+            "eyebrow": "Trusted by teams",
+            "title": "Give every stakeholder a clear signal.",
+            "description": "Glass surfaces frame the story while the rest of the canvas stays focused on what matters: your product's outcome.",
+            "testimonials": {
+              "nova": {
+                "name": "Nova Labs",
+                "quote": "The glass interface gave our launch a sense of calm trust."
+              },
+              "orion": {
+                "name": "Orion Studio",
+                "quote": "We shipped a premium landing in a weekend with the glass kit."
+              }
+            }
+          },
+          "cta": {
+            "title": "Ready to launch with clarity?",
+            "description": "Bring the liquid glass aesthetic into your core product journey. The main app experience is ready for you."
+          }
+        }
+      }
+    }
   }
 }

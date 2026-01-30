@@ -1,0 +1,155 @@
+{
+  "common": {
+    "navigation": {
+      "goToApp": "Đi đến ứng dụng chính",
+      "backToHome": "Quay lại trang chủ",
+      "signIn": "Đăng nhập",
+      "signUp": "Đăng ký",
+      "createAccount": "Tạo tài khoản",
+      "privacy": "Quyền riêng tư",
+      "terms": "Điều khoản"
+    },
+    "language": {
+      "label": "Ngôn ngữ",
+      "options": {
+        "en": "Tiếng Anh",
+        "vi": "Tiếng Việt",
+        "zh": "Tiếng Trung"
+      },
+      "flags": {
+        "en": "🇺🇸",
+        "vi": "🇻🇳",
+        "zh": "🇨🇳"
+      }
+    },
+    "app": {
+      "metadata": {
+        "title": "Liquid Glass",
+        "description": "Trải nghiệm landing hiệu ứng kính lỏng cho ứng dụng."
+      }
+    }
+  },
+  "modules": {
+    "auth": {
+      "pages": {
+        "sign-in": {
+          "title": "Đăng nhập"
+        },
+        "sign-up": {
+          "title": "Đăng ký"
+        },
+        "forgot-password": {
+          "title": "Quên mật khẩu"
+        }
+      }
+    },
+    "main": {
+      "pages": {
+        "app": {
+          "title": "Ứng dụng chính"
+        }
+      }
+    },
+    "legal": {
+      "pages": {
+        "privacy-policy": {
+          "title": "Chính sách quyền riêng tư"
+        },
+        "terms-of-service": {
+          "title": "Điều khoản dịch vụ"
+        }
+      }
+    },
+    "landing": {
+      "pages": {
+        "home": {
+          "badge": "Bộ UI Liquid Glass",
+          "hero": {
+            "eyebrow": "Độ rõ nét thế hệ mới",
+            "title": "Bề mặt kính lỏng cho trải nghiệm sản phẩm cao cấp và nhẹ nhàng.",
+            "subtitle": "Nâng tầm màn ra mắt sản phẩm với lớp trong suốt nhiều tầng, chuyển sắc mềm, và chuyển động phản hồi theo mỗi lần cuộn."
+          },
+          "stats": {
+            "activeSessions": {
+              "label": "Phiên hoạt động",
+              "value": "28,490"
+            },
+            "momentum": {
+              "label": "Động lượng",
+              "value": "+42%"
+            },
+            "latency": {
+              "label": "Độ trễ",
+              "value": "48ms"
+            },
+            "note": "Onboarding mượt mà, cá nhân hóa, và bảo mật đan xen trong một lớp kính thống nhất."
+          },
+          "features": {
+            "clarity": {
+              "title": "Rõ ràng ở mọi lớp",
+              "description": "Các tấm kính nhiều lớp giúp thông tin gọn gàng mà vẫn giữ sự bình tĩnh, cao cấp."
+            },
+            "motion": {
+              "title": "Chuyển động theo ý định",
+              "description": "Hiệu ứng hiện dần khi cuộn và ánh sáng khi hover dẫn hướng mà không gây xao nhãng."
+            },
+            "trust": {
+              "title": "Thiết kế cho sự tin cậy",
+              "description": "Glassmorphism kết hợp kiểu chữ tương phản cao giữ dữ liệu dễ đọc."
+            }
+          },
+          "launch": {
+            "title": "Tối ưu cho những lần ra mắt giàu tín hiệu",
+            "description": "Kết hợp storytelling với số liệu rõ ràng. Trình bày lộ trình, bảo mật, và hành trình onboarding với hiệu ứng hiện dần theo cuộn và thị sai nhẹ.",
+            "tags": {
+              "glassTokens": "Token kính",
+              "scrollCues": "Gợi ý cuộn",
+              "performanceReady": "Sẵn sàng hiệu năng"
+            }
+          },
+          "metrics": {
+            "dataGlow": {
+              "label": "Ánh sáng dữ liệu",
+              "value": "1.8x",
+              "caption": "tương tác cao hơn"
+            },
+            "retentionLift": {
+              "label": "Tăng giữ chân",
+              "value": "+33%",
+              "caption": "trong tháng đầu tiên"
+            }
+          },
+          "story": {
+            "title": "Cuộn theo câu chuyện",
+            "description": "Mỗi phần đều thở cùng câu chuyện của bạn. Nhấn mạnh tốc độ phát triển, bảo mật đáng tin, và onboarding hứng khởi với nhịp điệu có chủ đích.",
+            "pills": {
+              "onboard": "Onboarding trong vài phút",
+              "insights": "Insight hiệu năng trực tiếp",
+              "prompts": "Gợi ý theo ngữ cảnh",
+              "security": "Lớp bảo mật thích ứng"
+            }
+          },
+          "trust": {
+            "eyebrow": "Được các đội ngũ tin dùng",
+            "title": "Mang tín hiệu rõ ràng cho mọi bên liên quan.",
+            "description": "Bề mặt kính khung lại câu chuyện, giúp phần còn lại tập trung vào điều quan trọng nhất: kết quả sản phẩm.",
+            "testimonials": {
+              "nova": {
+                "name": "Nova Labs",
+                "quote": "Giao diện kính mang lại cảm giác tin cậy và bình tĩnh cho lần ra mắt của chúng tôi."
+              },
+              "orion": {
+                "name": "Orion Studio",
+                "quote": "Chúng tôi đã hoàn thiện một landing cao cấp chỉ trong một cuối tuần với bộ kit kính."
+              }
+            }
+          },
+          "cta": {
+            "title": "Sẵn sàng ra mắt với sự rõ ràng?",
+            "description": "Mang thẩm mỹ kính lỏng vào hành trình cốt lõi của sản phẩm. Trải nghiệm ứng dụng chính đã sẵn sàng cho bạn."
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,14 +3,10 @@ import { Link } from "@/application/routing/navigation";
 type SimplePageProps = {
   title: string;
   href?: string;
-  ctaLabel?: string;
+  ctaLabel: string;
 };
 
-export function SimplePage({
-  title,
-  href = "/",
-  ctaLabel = "Back to home",
-}: SimplePageProps) {
+export function SimplePage({ title, href = "/", ctaLabel }: SimplePageProps) {
   return (
     <div className="mx-auto flex min-h-[60vh] w-full max-w-4xl items-center justify-center px-6 py-20">
       <div className="glass-panel rounded-3xl px-8 py-10 text-center">
