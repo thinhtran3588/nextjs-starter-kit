@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
+import { Link } from "@/application/routing/navigation";
 import { AuthLayout } from "@/modules/auth/components/auth-layout";
-import { AuthPageContent } from "@/modules/auth/components/auth-page-content";
 import { SignInPage } from "@/modules/auth/pages/sign-in/page";
 import { SignUpPage } from "@/modules/auth/pages/sign-up/page";
 import { ForgotPasswordPage } from "@/modules/auth/pages/forgot-password/page";
@@ -10,10 +10,12 @@ describe("Auth pages", () => {
   it("renders the shared auth layout shell", () => {
     render(
       <AuthLayout>
-        <AuthPageContent
-          title={messages.modules.auth.pages["sign-in"].title}
-          ctaLabel={messages.common.navigation.backToHome}
-        />
+        <div className="space-y-6">
+          <h1 className="text-3xl font-semibold text-white sm:text-4xl">
+            {messages.modules.auth.pages["sign-in"].title}
+          </h1>
+          <Link href="/">{messages.common.navigation.backToHome}</Link>
+        </div>
       </AuthLayout>,
     );
 

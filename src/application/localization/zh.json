@@ -1,13 +1,15 @@
 {
   "common": {
     "navigation": {
+      "home": "主页",
       "goToApp": "进入主应用",
       "backToHome": "返回主页",
       "signIn": "登录",
       "signUp": "注册",
       "createAccount": "创建账号",
       "privacy": "隐私",
-      "terms": "条款"
+      "terms": "条款",
+      "menu": "菜单"
     },
     "language": {
       "label": "语言",
@@ -63,7 +65,7 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Liquid Glass UI 套件",
+          "badge": "Nextjs Starter Kit",
           "hero": {
             "eyebrow": "更高层次的清晰度",
             "title": "液态玻璃表面带来沉静、优雅的产品体验。",
