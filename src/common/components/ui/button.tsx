@@ -1,6 +1,13 @@
-import * as Slot from "@radix-ui/react-slot";
+"use client";
+
 import { cva, type VariantProps } from "class-variance-authority";
-import { forwardRef } from "react";
+import {
+  type ReactElement,
+  Children,
+  cloneElement,
+  forwardRef,
+  isValidElement,
+} from "react";
 import { cn } from "@/common/utils/cn";
 
 const buttonVariants = cva(
@@ -41,15 +48,48 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot.Root : "button";
+  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+    const slotClassName = cn(buttonVariants({ variant, size, className }));
+    if (asChild) {
+      const childArray = Children.toArray(children);
+      const singleChild =
+        childArray.length === 1 && isValidElement(childArray[0])
+          ? (childArray[0] as ReactElement<{
+              ref?: React.Ref<HTMLButtonElement>;
+              className?: string;
+            }>)
+          : null;
+      if (singleChild) {
+        const childProps = singleChild.props as Record<string, unknown> & {
+          ref?: React.Ref<HTMLButtonElement>;
+          className?: string;
+        };
+        // Ref callback runs on mount/unmount only; refs are not read during render.
+        /* eslint-disable-next-line react-hooks/refs */
+        return cloneElement(singleChild, {
+          ...childProps,
+          ...props,
+          className: cn(slotClassName, childProps.className),
+          ref: (value: HTMLButtonElement | null) => {
+            if (typeof ref === "function") ref(value);
+            else if (ref != null)
+              (
+                ref as React.MutableRefObject<HTMLButtonElement | null>
+              ).current = value;
+            if (typeof childProps.ref === "function") childProps.ref(value);
+            else if (childProps.ref != null)
+              (
+                childProps.ref as React.MutableRefObject<HTMLButtonElement | null>
+              ).current = value;
+          },
+          "data-slot": "button",
+        } as Record<string, unknown>);
+      }
+    }
     return (
-      <Comp
-        ref={ref as React.Ref<HTMLButtonElement>}
-        className={cn(buttonVariants({ variant, size, className }))}
-        data-slot="button"
-        {...props}
-      />
+      <button ref={ref} className={slotClassName} data-slot="button" {...props}>
+        {children}
+      </button>
     );
   },
 );
