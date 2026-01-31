@@ -26,8 +26,8 @@
     },
     "app": {
       "metadata": {
-        "title": "Liquid Glass",
-        "description": "A liquid glass landing experience for the app."
+        "title": "Next.js Starter Kit",
+        "description": "A production-ready Next.js starter kit with Clean Architecture and modular structure for scalable frontend development."
       }
     }
   },
@@ -171,90 +171,81 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Nextjs Starter Kit",
+          "badge": "Next.js Starter Kit",
           "hero": {
-            "eyebrow": "Next-level clarity",
-            "title": "Liquid glass surfaces for a calm, premium product experience.",
-            "subtitle": "Elevate your product launch with layered translucency, soft gradients, and motion that feels responsive to every scroll."
+            "eyebrow": "Production-ready foundation",
+            "title": "Next.js Starter Kit",
+            "subtitle": "A production-ready Next.js starter with Clean Architecture and a modular structure for scalable frontend development. Built with the App Router, TypeScript, and 100% test coverage."
           },
-          "stats": {
-            "activeSessions": {
-              "label": "Active sessions",
-              "value": "28,490"
+          "highlights": {
+            "architecture": {
+              "label": "Clean Architecture",
+              "description": "Explicit layers and dependency boundaries for maintainable, testable code."
             },
-            "momentum": {
-              "label": "Momentum",
-              "value": "+42%"
+            "coverage": {
+              "label": "100% test coverage",
+              "description": "Vitest and React Testing Library with mandatory coverage thresholds."
             },
-            "latency": {
-              "label": "Latency",
-              "value": "48ms"
-            },
-            "note": "Smooth onboarding, personalization, and security all woven into a single glass stack."
+            "i18n": {
+              "label": "i18n ready",
+              "description": "next-intl with locale routing. English, Vietnamese, and Chinese included."
+            }
           },
           "features": {
-            "clarity": {
-              "title": "Clarity at every depth",
-              "description": "Layered glass panels keep information organized while preserving a calm, premium mood."
+            "architecture": {
+              "title": "Clean Architecture",
+              "description": "Domain, application, infrastructure, and presentation layers. Use cases and API client abstraction keep business logic independent of UI and HTTP."
             },
-            "motion": {
-              "title": "Motion that follows intent",
-              "description": "Subtle scroll reveals and hovering glows guide attention without distracting."
+            "modular": {
+              "title": "Modular structure",
+              "description": "Feature-based modules under src/modules/ with domain, application, infrastructure, and presentation. App Router under app/ for routing only."
             },
-            "trust": {
-              "title": "Designed for trust",
-              "description": "Glassmorphism paired with high contrast typography keeps data accessible."
+            "stack": {
+              "title": "Complete stack",
+              "description": "React Hook Form + Zod for forms and validation, Zustand for state, shadcn/ui and Tailwind for UI. next-intl for internationalization."
             }
           },
-          "launch": {
-            "title": "Built for high-signal launches",
-            "description": "Combine storytelling with crisp metrics. Showcase your roadmap, security, and onboarding flows with scroll-triggered reveals and gentle parallax motion.",
+          "techStack": {
+            "title": "Tech stack",
             "tags": {
-              "glassTokens": "Glass tokens",
-              "scrollCues": "Scroll cues",
-              "performanceReady": "Performance ready"
+              "nextjs": "Next.js",
+              "react": "React",
+              "typescript": "TypeScript",
+              "tailwind": "Tailwind CSS",
+              "shadcn": "shadcn/ui",
+              "zustand": "Zustand",
+              "rhf": "React Hook Form",
+              "zod": "Zod",
+              "nextIntl": "next-intl",
+              "vitest": "Vitest"
             }
           },
-          "metrics": {
-            "dataGlow": {
-              "label": "Data glow",
-              "value": "1.8x",
-              "caption": "higher engagement"
-            },
-            "retentionLift": {
-              "label": "Retention lift",
-              "value": "+33%",
-              "caption": "in the first month"
+          "gettingStarted": {
+            "title": "Getting started",
+            "description": "Clone the repo, install dependencies, and run the dev server. Validation runs lint, format check, and tests with coverage.",
+            "steps": {
+              "install": "npm install",
+              "dev": "npm run dev",
+              "validate": "npm run validate"
             }
           },
-          "story": {
-            "title": "A story-driven scroll",
-            "description": "Every section breathes with your narrative. Highlight feature velocity, trusted security, and joyful onboarding sequences with intentional pacing.",
-            "pills": {
-              "onboard": "Onboard in minutes",
-              "insights": "Live performance insights",
-              "prompts": "Context-aware prompts",
-              "security": "Adaptive security layers"
-            }
-          },
-          "trust": {
-            "eyebrow": "Trusted by teams",
-            "title": "Give every stakeholder a clear signal.",
-            "description": "Glass surfaces frame the story while the rest of the canvas stays focused on what matters: your product's outcome.",
-            "testimonials": {
-              "nova": {
-                "name": "Nova Labs",
-                "quote": "The glass interface gave our launch a sense of calm trust."
+          "docs": {
+            "title": "Documentation",
+            "description": "Architecture, development workflow, and testing are documented in the repository.",
+            "items": {
+              "architecture": {
+                "title": "Architecture",
+                "description": "Clean Architecture layers, module structure, data flow, and design patterns."
               },
-              "orion": {
-                "name": "Orion Studio",
-                "quote": "We shipped a premium landing in a weekend with the glass kit."
+              "development": {
+                "title": "Development guide",
+                "description": "Git workflow, adding features, creating modules, and testing guidelines."
+              },
+              "testing": {
+                "title": "Testing guide",
+                "description": "Vitest, React Testing Library, 100% coverage requirement, and best practices."
               }
             }
-          },
-          "cta": {
-            "title": "Ready to launch with clarity?",
-            "description": "Bring the liquid glass aesthetic into your core product journey. The main app experience is ready for you."
           }
         }
       }

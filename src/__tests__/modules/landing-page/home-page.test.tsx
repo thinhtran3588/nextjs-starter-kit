@@ -12,9 +12,9 @@ describe("LandingPage", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getAllByRole("link", {
+      screen.getByRole("link", {
         name: messages.common.navigation.goToApp,
       }),
-    ).toHaveLength(2);
+    ).toBeInTheDocument();
   });
 });

@@ -1,4 +1,12 @@
 import { Link } from "@/application/routing/navigation";
+import { Button } from "@/common/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/common/components/ui/card";
 import { getTranslations } from "next-intl/server";
 import { ScrollReveal } from "./components/scroll-reveal";
 
@@ -8,244 +16,189 @@ export async function LandingPage() {
 
   return (
     <>
-      <div className="flex flex-col gap-24">
-        <section className="hero-grid glass-panel-strong liquid-border rounded-[32px] px-8 py-16 sm:px-14">
+      <div className="flex flex-col gap-20 sm:gap-24">
+        <section className="hero-grid glass-panel-strong liquid-border rounded-2xl sm:rounded-3xl px-6 py-12 sm:px-10 sm:py-16">
           <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-            <div className="space-y-6">
-              <p className="text-sm uppercase tracking-[0.35em] text-[var(--text-muted)]">
+            <div className="space-y-5">
+              <p className="text-xs font-medium uppercase tracking-[0.3em] text-[var(--text-muted)]">
                 {tHome("hero.eyebrow")}
               </p>
-              <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+              <h1 className="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
                 {tHome("hero.title")}
               </h1>
-              <p className="max-w-xl text-lg text-[var(--text-muted)]">
+              <p className="max-w-xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">
                 {tHome("hero.subtitle")}
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  className="glass-panel rounded-full px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(139,184,255,0.25)] transition hover:translate-y-[-2px] hover:shadow-[0_18px_40px_rgba(139,184,255,0.35)]"
-                  href="/app"
-                >
-                  {tCommon("navigation.goToApp")}
-                </Link>
-                <Link
-                  className="glass-panel rounded-full px-6 py-3 text-sm font-semibold text-[var(--text-muted)] transition hover:text-white"
-                  href="/auth/sign-up"
-                >
-                  {tCommon("navigation.createAccount")}
-                </Link>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild variant="default">
+                  <Link href="/app">{tCommon("navigation.goToApp")}</Link>
+                </Button>
+                <Button asChild variant="secondary">
+                  <Link href="/auth/sign-up">
+                    {tCommon("navigation.createAccount")}
+                  </Link>
+                </Button>
               </div>
             </div>
-            <div className="glass-panel rounded-3xl p-6">
-              <div className="space-y-5">
-                <div className="glass-panel-strong rounded-2xl px-5 py-4">
-                  <p className="text-sm text-[var(--text-muted)]">
-                    {tHome("stats.activeSessions.label")}
-                  </p>
-                  <p className="mt-2 text-3xl font-semibold text-white">
-                    {tHome("stats.activeSessions.value")}
-                  </p>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="glass-panel rounded-2xl px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-muted)]">
-                      {tHome("stats.momentum.label")}
-                    </p>
-                    <p className="mt-3 text-lg font-semibold text-white">
-                      {tHome("stats.momentum.value")}
-                    </p>
-                  </div>
-                  <div className="glass-panel rounded-2xl px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-muted)]">
-                      {tHome("stats.latency.label")}
-                    </p>
-                    <p className="mt-3 text-lg font-semibold text-white">
-                      {tHome("stats.latency.value")}
-                    </p>
-                  </div>
-                </div>
-                <div className="glass-panel rounded-2xl px-4 py-5">
-                  <p className="text-sm text-[var(--text-muted)]">
-                    {tHome("stats.note")}
-                  </p>
-                </div>
-              </div>
+            <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+              {[
+                {
+                  label: tHome("highlights.architecture.label"),
+                  description: tHome("highlights.architecture.description"),
+                },
+                {
+                  label: tHome("highlights.coverage.label"),
+                  description: tHome("highlights.coverage.description"),
+                },
+                {
+                  label: tHome("highlights.i18n.label"),
+                  description: tHome("highlights.i18n.description"),
+                },
+              ].map((item) => (
+                <Card key={item.label} className="px-4 py-4 sm:px-5 sm:py-5">
+                  <CardHeader className="space-y-0 pb-0">
+                    <CardTitle className="text-sm">{item.label}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <CardDescription className="text-xs">
+                      {item.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
 
         <ScrollReveal>
-          <section className="grid gap-6 lg:grid-cols-3">
-            {[
-              {
-                title: tHome("features.clarity.title"),
-                description: tHome("features.clarity.description"),
-              },
-              {
-                title: tHome("features.motion.title"),
-                description: tHome("features.motion.description"),
-              },
-              {
-                title: tHome("features.trust.title"),
-                description: tHome("features.trust.description"),
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="glass-panel rounded-3xl px-6 py-8"
-              >
-                <h3 className="text-lg font-semibold text-white">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm text-[var(--text-muted)]">
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <section className="grid gap-8 lg:grid-cols-[0.65fr_0.35fr] lg:items-center">
-            <div className="glass-panel-strong rounded-[28px] px-8 py-10">
-              <h2 className="text-3xl font-semibold text-white">
-                {tHome("launch.title")}
-              </h2>
-              <p className="mt-4 text-base text-[var(--text-muted)]">
-                {tHome("launch.description")}
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
-                <span className="glass-panel rounded-full px-4 py-2">
-                  {tHome("launch.tags.glassTokens")}
-                </span>
-                <span className="glass-panel rounded-full px-4 py-2">
-                  {tHome("launch.tags.scrollCues")}
-                </span>
-                <span className="glass-panel rounded-full px-4 py-2">
-                  {tHome("launch.tags.performanceReady")}
-                </span>
-              </div>
-            </div>
-            <div className="glass-panel rounded-[28px] px-6 py-8">
-              <div className="space-y-6">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-muted)]">
-                    {tHome("metrics.dataGlow.label")}
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold text-white">
-                    {tHome("metrics.dataGlow.value")}
-                  </p>
-                  <p className="text-sm text-[var(--text-muted)]">
-                    {tHome("metrics.dataGlow.caption")}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-muted)]">
-                    {tHome("metrics.retentionLift.label")}
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold text-white">
-                    {tHome("metrics.retentionLift.value")}
-                  </p>
-                  <p className="text-sm text-[var(--text-muted)]">
-                    {tHome("metrics.retentionLift.caption")}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <section className="glass-panel-strong rounded-[32px] px-8 py-12">
-            <div className="grid gap-8 lg:grid-cols-2">
-              <div className="space-y-4">
-                <h2 className="text-3xl font-semibold text-white">
-                  {tHome("story.title")}
-                </h2>
-                <p className="text-base text-[var(--text-muted)]">
-                  {tHome("story.description")}
-                </p>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {[
-                  tHome("story.pills.onboard"),
-                  tHome("story.pills.insights"),
-                  tHome("story.pills.prompts"),
-                  tHome("story.pills.security"),
-                ].map((label) => (
-                  <div
-                    key={label}
-                    className="glass-panel rounded-2xl px-4 py-5 text-sm text-white"
-                  >
-                    {label}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <section className="glass-panel rounded-[32px] px-8 py-12">
-            <div className="grid gap-8 lg:grid-cols-[0.45fr_0.55fr] lg:items-center">
-              <div className="space-y-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
-                  {tHome("trust.eyebrow")}
-                </p>
-                <h2 className="text-3xl font-semibold text-white">
-                  {tHome("trust.title")}
-                </h2>
-                <p className="text-base text-[var(--text-muted)]">
-                  {tHome("trust.description")}
-                </p>
-              </div>
-              <div className="grid gap-4">
-                {[
-                  {
-                    name: tHome("trust.testimonials.nova.name"),
-                    quote: tHome("trust.testimonials.nova.quote"),
-                  },
-                  {
-                    name: tHome("trust.testimonials.orion.name"),
-                    quote: tHome("trust.testimonials.orion.quote"),
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.name}
-                    className="glass-panel-strong rounded-2xl px-6 py-6"
-                  >
-                    <p className="text-sm text-white">“{item.quote}”</p>
-                    <p className="mt-3 text-xs uppercase tracking-[0.25em] text-[var(--text-muted)]">
-                      {item.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <section className="glass-panel-strong rounded-[32px] px-8 py-12 text-center">
-            <h2 className="text-3xl font-semibold text-white">
-              {tHome("cta.title")}
+          <section className="space-y-6">
+            <h2 className="text-xl font-semibold text-white sm:text-2xl">
+              {tHome("features.architecture.title")}
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-[var(--text-muted)]">
-              {tHome("cta.description")}
+            <p className="max-w-2xl text-sm text-[var(--text-muted)] sm:text-base">
+              {tHome("features.architecture.description")}
             </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-4">
-              <Link
-                className="glass-panel rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:translate-y-[-2px]"
-                href="/app"
-              >
-                {tCommon("navigation.goToApp")}
-              </Link>
-              <Link
-                className="glass-panel rounded-full px-6 py-3 text-sm font-semibold text-[var(--text-muted)] transition hover:text-white"
-                href="/auth/sign-in"
-              >
-                {tCommon("navigation.signIn")}
-              </Link>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                {
+                  title: tHome("features.modular.title"),
+                  description: tHome("features.modular.description"),
+                },
+                {
+                  title: tHome("features.stack.title"),
+                  description: tHome("features.stack.description"),
+                },
+              ].map((item) => (
+                <Card key={item.title} className="px-5 py-5 sm:rounded-2xl">
+                  <CardHeader className="space-y-0 pb-0">
+                    <CardTitle>{item.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <CardDescription>{item.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <Card
+            variant="strong"
+            className="rounded-2xl px-6 py-10 sm:rounded-3xl sm:px-10 sm:py-12"
+          >
+            <h2 className="text-xl font-semibold text-white sm:text-2xl">
+              {tHome("techStack.title")}
+            </h2>
+            <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+              {[
+                "nextjs",
+                "react",
+                "typescript",
+                "tailwind",
+                "shadcn",
+                "zustand",
+                "rhf",
+                "zod",
+                "nextIntl",
+                "vitest",
+              ].map((key) => (
+                <li
+                  key={key}
+                  className="flex items-center gap-3 text-sm text-[var(--text-muted)]"
+                >
+                  <span
+                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs text-white"
+                    aria-hidden
+                  >
+                    ✓
+                  </span>
+                  {tHome(`techStack.tags.${key}`)}
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <section className="grid gap-8 lg:grid-cols-[0.5fr_0.5fr] lg:items-start">
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-white sm:text-2xl">
+                {tHome("gettingStarted.title")}
+              </h2>
+              <p className="text-sm text-[var(--text-muted)] sm:text-base">
+                {tHome("gettingStarted.description")}
+              </p>
+            </div>
+            <div className="space-y-3">
+              <code className="block rounded-lg bg-black/30 px-4 py-3 font-mono text-sm text-white">
+                {tHome("gettingStarted.steps.install")}
+              </code>
+              <code className="block rounded-lg bg-black/30 px-4 py-3 font-mono text-sm text-white">
+                {tHome("gettingStarted.steps.dev")}
+              </code>
+              <code className="block rounded-lg bg-black/30 px-4 py-3 font-mono text-sm text-white">
+                {tHome("gettingStarted.steps.validate")}
+              </code>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <section className="space-y-6">
+            <h2 className="text-xl font-semibold text-white sm:text-2xl">
+              {tHome("docs.title")}
+            </h2>
+            <p className="max-w-2xl text-sm text-[var(--text-muted)] sm:text-base">
+              {tHome("docs.description")}
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  key: "architecture",
+                  titleKey: "docs.items.architecture.title",
+                  descKey: "docs.items.architecture.description",
+                },
+                {
+                  key: "development",
+                  titleKey: "docs.items.development.title",
+                  descKey: "docs.items.development.description",
+                },
+                {
+                  key: "testing",
+                  titleKey: "docs.items.testing.title",
+                  descKey: "docs.items.testing.description",
+                },
+              ].map(({ key: itemKey, titleKey, descKey }) => (
+                <Card key={itemKey} className="px-5 py-5 sm:rounded-2xl">
+                  <CardHeader className="space-y-0 pb-0">
+                    <CardTitle>{tHome(titleKey)}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <CardDescription>{tHome(descKey)}</CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </section>
         </ScrollReveal>

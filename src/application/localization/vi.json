@@ -26,8 +26,8 @@
     },
     "app": {
       "metadata": {
-        "title": "Liquid Glass",
-        "description": "Trải nghiệm landing hiệu ứng kính lỏng cho ứng dụng."
+        "title": "Next.js Starter Kit",
+        "description": "Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và cấu trúc module cho phát triển frontend mở rộng."
       }
     }
   },
@@ -171,90 +171,81 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Nextjs Starter Kit",
+          "badge": "Next.js Starter Kit",
           "hero": {
-            "eyebrow": "Độ rõ nét thế hệ mới",
-            "title": "Bề mặt kính lỏng cho trải nghiệm sản phẩm cao cấp và nhẹ nhàng.",
-            "subtitle": "Nâng tầm màn ra mắt sản phẩm với lớp trong suốt nhiều tầng, chuyển sắc mềm, và chuyển động phản hồi theo mỗi lần cuộn."
+            "eyebrow": "Nền tảng sẵn sàng production",
+            "title": "Next.js Starter Kit",
+            "subtitle": "Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và cấu trúc module cho phát triển frontend mở rộng. Xây trên App Router, TypeScript và 100% test coverage."
           },
-          "stats": {
-            "activeSessions": {
-              "label": "Phiên hoạt động",
-              "value": "28,490"
+          "highlights": {
+            "architecture": {
+              "label": "Clean Architecture",
+              "description": "Các lớp rõ ràng và ranh giới phụ thuộc cho mã dễ bảo trì, dễ kiểm thử."
             },
-            "momentum": {
-              "label": "Động lượng",
-              "value": "+42%"
+            "coverage": {
+              "label": "100% test coverage",
+              "description": "Vitest và React Testing Library với ngưỡng coverage bắt buộc."
             },
-            "latency": {
-              "label": "Độ trễ",
-              "value": "48ms"
-            },
-            "note": "Onboarding mượt mà, cá nhân hóa, và bảo mật đan xen trong một lớp kính thống nhất."
+            "i18n": {
+              "label": "Sẵn sàng i18n",
+              "description": "next-intl với locale routing. Đã có tiếng Anh, Việt và Trung."
+            }
           },
           "features": {
-            "clarity": {
-              "title": "Rõ ràng ở mọi lớp",
-              "description": "Các tấm kính nhiều lớp giúp thông tin gọn gàng mà vẫn giữ sự bình tĩnh, cao cấp."
+            "architecture": {
+              "title": "Clean Architecture",
+              "description": "Các lớp domain, application, infrastructure và presentation. Use case và API client abstraction tách logic nghiệp vụ khỏi UI và HTTP."
             },
-            "motion": {
-              "title": "Chuyển động theo ý định",
-              "description": "Hiệu ứng hiện dần khi cuộn và ánh sáng khi hover dẫn hướng mà không gây xao nhãng."
+            "modular": {
+              "title": "Cấu trúc module",
+              "description": "Module theo tính năng dưới src/modules/ với domain, application, infrastructure và presentation. App Router dưới app/ chỉ dùng cho routing."
             },
-            "trust": {
-              "title": "Thiết kế cho sự tin cậy",
-              "description": "Glassmorphism kết hợp kiểu chữ tương phản cao giữ dữ liệu dễ đọc."
+            "stack": {
+              "title": "Stack đầy đủ",
+              "description": "React Hook Form + Zod cho form và validation, Zustand cho state, shadcn/ui và Tailwind cho UI. next-intl cho quốc tế hóa."
             }
           },
-          "launch": {
-            "title": "Tối ưu cho những lần ra mắt giàu tín hiệu",
-            "description": "Kết hợp storytelling với số liệu rõ ràng. Trình bày lộ trình, bảo mật, và hành trình onboarding với hiệu ứng hiện dần theo cuộn và thị sai nhẹ.",
+          "techStack": {
+            "title": "Tech stack",
             "tags": {
-              "glassTokens": "Token kính",
-              "scrollCues": "Gợi ý cuộn",
-              "performanceReady": "Sẵn sàng hiệu năng"
+              "nextjs": "Next.js",
+              "react": "React",
+              "typescript": "TypeScript",
+              "tailwind": "Tailwind CSS",
+              "shadcn": "shadcn/ui",
+              "zustand": "Zustand",
+              "rhf": "React Hook Form",
+              "zod": "Zod",
+              "nextIntl": "next-intl",
+              "vitest": "Vitest"
             }
           },
-          "metrics": {
-            "dataGlow": {
-              "label": "Ánh sáng dữ liệu",
-              "value": "1.8x",
-              "caption": "tương tác cao hơn"
-            },
-            "retentionLift": {
-              "label": "Tăng giữ chân",
-              "value": "+33%",
-              "caption": "trong tháng đầu tiên"
+          "gettingStarted": {
+            "title": "Bắt đầu",
+            "description": "Clone repo, cài dependency và chạy dev server. Validate chạy lint, kiểm tra format và test với coverage.",
+            "steps": {
+              "install": "npm install",
+              "dev": "npm run dev",
+              "validate": "npm run validate"
             }
           },
-          "story": {
-            "title": "Cuộn theo câu chuyện",
-            "description": "Mỗi phần đều thở cùng câu chuyện của bạn. Nhấn mạnh tốc độ phát triển, bảo mật đáng tin, và onboarding hứng khởi với nhịp điệu có chủ đích.",
-            "pills": {
-              "onboard": "Onboarding trong vài phút",
-              "insights": "Insight hiệu năng trực tiếp",
-              "prompts": "Gợi ý theo ngữ cảnh",
-              "security": "Lớp bảo mật thích ứng"
-            }
-          },
-          "trust": {
-            "eyebrow": "Được các đội ngũ tin dùng",
-            "title": "Mang tín hiệu rõ ràng cho mọi bên liên quan.",
-            "description": "Bề mặt kính khung lại câu chuyện, giúp phần còn lại tập trung vào điều quan trọng nhất: kết quả sản phẩm.",
-            "testimonials": {
-              "nova": {
-                "name": "Nova Labs",
-                "quote": "Giao diện kính mang lại cảm giác tin cậy và bình tĩnh cho lần ra mắt của chúng tôi."
+          "docs": {
+            "title": "Tài liệu",
+            "description": "Kiến trúc, quy trình phát triển và testing được mô tả trong repository.",
+            "items": {
+              "architecture": {
+                "title": "Kiến trúc",
+                "description": "Các lớp Clean Architecture, cấu trúc module, luồng dữ liệu và design patterns."
               },
-              "orion": {
-                "name": "Orion Studio",
-                "quote": "Chúng tôi đã hoàn thiện một landing cao cấp chỉ trong một cuối tuần với bộ kit kính."
+              "development": {
+                "title": "Hướng dẫn phát triển",
+                "description": "Git workflow, thêm tính năng, tạo module và hướng dẫn testing."
+              },
+              "testing": {
+                "title": "Hướng dẫn testing",
+                "description": "Vitest, React Testing Library, yêu cầu 100% coverage và best practices."
               }
             }
-          },
-          "cta": {
-            "title": "Sẵn sàng ra mắt với sự rõ ràng?",
-            "description": "Mang thẩm mỹ kính lỏng vào hành trình cốt lõi của sản phẩm. Trải nghiệm ứng dụng chính đã sẵn sàng cho bạn."
           }
         }
       }

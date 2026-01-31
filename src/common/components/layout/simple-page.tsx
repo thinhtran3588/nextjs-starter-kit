@@ -1,4 +1,6 @@
 import { Link } from "@/application/routing/navigation";
+import { Button } from "@/common/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/common/components/ui/card";
 
 type SimplePageProps = {
   title: string;
@@ -9,17 +11,18 @@ type SimplePageProps = {
 export function SimplePage({ title, href = "/", ctaLabel }: SimplePageProps) {
   return (
     <div className="mx-auto flex min-h-[60vh] w-full max-w-4xl items-center justify-center px-6 py-20">
-      <div className="glass-panel rounded-3xl px-8 py-10 text-center">
-        <h1 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
-          {title}
-        </h1>
-        <Link
-          className="glass-panel mt-6 inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:translate-y-[-2px]"
-          href={href}
-        >
-          {ctaLabel}
-        </Link>
-      </div>
+      <Card className="rounded-3xl px-8 py-10 text-center">
+        <CardHeader className="space-y-0 pb-0">
+          <h1 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
+            {title}
+          </h1>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <Button asChild variant="default">
+            <Link href={href}>{ctaLabel}</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
