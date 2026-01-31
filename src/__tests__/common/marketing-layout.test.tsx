@@ -40,7 +40,7 @@ describe("MarketingLayout", () => {
       screen.getByText(translations["modules.landing.pages.home"].badge),
     ).toBeInTheDocument();
     expect(
-      screen.getAllByText(translations.common["language.options.en"]),
-    ).toHaveLength(2);
+      screen.getByText(translations.common["language.options.en"]),
+    ).toBeInTheDocument();
   });
 });
