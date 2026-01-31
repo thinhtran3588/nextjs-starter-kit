@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/application/routing/navigation";
+import { Button } from "@/common/components/ui/button";
 import type { LocaleOption } from "@/common/components/layout/language-selector";
 import { LanguageSelector } from "@/common/components/layout/language-selector";
 import Image from "next/image";
@@ -111,15 +112,19 @@ export function MarketingHeader({
               currentLocale={currentLocale}
               localeOptions={localeOptions}
             />
-            <Link
-              className="glass-panel hidden items-center justify-center rounded-full px-4 py-2 text-xs font-semibold text-white transition hover:translate-y-[-1px] sm:inline-flex"
-              href="/auth/sign-in"
+            <Button
+              asChild
+              variant="default"
+              size="sm"
+              className="hidden sm:inline-flex"
             >
-              {signInLabel}
-            </Link>
-            <button
-              className="glass-panel flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition hover:scale-[1.02] sm:hidden"
+              <Link href="/auth/sign-in">{signInLabel}</Link>
+            </Button>
+            <Button
               type="button"
+              variant="default"
+              size="icon"
+              className="sm:hidden"
               aria-label={menuLabel}
               aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen((value) => !value)}
@@ -137,7 +142,7 @@ export function MarketingHeader({
                 <path d="M4 12h16" />
                 <path d="M4 17h16" />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
         {isMenuOpen ? (
@@ -149,12 +154,9 @@ export function MarketingHeader({
               <Link className="transition hover:text-white/80" href="/">
                 {homeLabel}
               </Link>
-              <Link
-                className="glass-panel inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-semibold text-white transition hover:translate-y-[-1px]"
-                href="/auth/sign-in"
-              >
-                {signInLabel}
-              </Link>
+              <Button asChild variant="default" size="sm">
+                <Link href="/auth/sign-in">{signInLabel}</Link>
+              </Button>
               <Link
                 className="transition hover:text-white/80"
                 href="/privacy-policy"

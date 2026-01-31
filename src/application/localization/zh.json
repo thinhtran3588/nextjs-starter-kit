@@ -26,8 +26,8 @@
     },
     "app": {
       "metadata": {
-        "title": "Liquid Glass",
-        "description": "面向应用的液态玻璃着陆体验。"
+        "title": "Next.js Starter Kit",
+        "description": "生产就绪的 Next.js 入门套件，采用 Clean Architecture 与模块化结构，支持可扩展的前端开发。"
       }
     }
   },
@@ -171,90 +171,81 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Nextjs Starter Kit",
+          "badge": "Next.js Starter Kit",
           "hero": {
-            "eyebrow": "更高层次的清晰度",
-            "title": "液态玻璃表面带来沉静、优雅的产品体验。",
-            "subtitle": "以多层半透明、柔和渐变与随滚动响应的动效，提升你的产品发布。"
+            "eyebrow": "生产就绪的基础",
+            "title": "Next.js Starter Kit",
+            "subtitle": "生产就绪的 Next.js 入门套件，采用 Clean Architecture 与模块化结构，支持可扩展的前端开发。基于 App Router、TypeScript 与 100% 测试覆盖率构建。"
           },
-          "stats": {
-            "activeSessions": {
-              "label": "活跃会话",
-              "value": "28,490"
+          "highlights": {
+            "architecture": {
+              "label": "Clean Architecture",
+              "description": "清晰的分层与依赖边界，便于维护与测试。"
             },
-            "momentum": {
-              "label": "动能",
-              "value": "+42%"
+            "coverage": {
+              "label": "100% 测试覆盖率",
+              "description": "Vitest 与 React Testing Library，强制覆盖率阈值。"
             },
-            "latency": {
-              "label": "延迟",
-              "value": "48ms"
-            },
-            "note": "顺滑的引导、个性化与安全性融为一体，构成完整的玻璃体验。"
+            "i18n": {
+              "label": "i18n 就绪",
+              "description": "next-intl 与 locale 路由。已包含英语、越南语与中文。"
+            }
           },
           "features": {
-            "clarity": {
-              "title": "层层清晰",
-              "description": "分层玻璃面板让信息更有序，同时保持平静、高级的氛围。"
+            "architecture": {
+              "title": "Clean Architecture",
+              "description": "Domain、Application、Infrastructure 与 Presentation 四层。用例与 API 客户端抽象使业务逻辑独立于 UI 与 HTTP。"
             },
-            "motion": {
-              "title": "意图驱动的动效",
-              "description": "细腻的滚动显现与悬浮光晕引导注意力而不分散。"
+            "modular": {
+              "title": "模块化结构",
+              "description": "按功能组织的模块位于 src/modules/，含 domain、application、infrastructure 与 presentation。app/ 下仅用于 App Router 路由。"
             },
-            "trust": {
-              "title": "为信任而设计",
-              "description": "玻璃拟态与高对比排版结合，保持数据可读。"
+            "stack": {
+              "title": "完整技术栈",
+              "description": "React Hook Form + Zod 处理表单与校验，Zustand 管理状态，shadcn/ui 与 Tailwind 构建 UI，next-intl 实现国际化。"
             }
           },
-          "launch": {
-            "title": "为高信号发布而生",
-            "description": "将故事叙述与清晰指标结合。用滚动触发的呈现与柔和视差动效展示你的路线图、安全与引导流程。",
+          "techStack": {
+            "title": "技术栈",
             "tags": {
-              "glassTokens": "玻璃样式令牌",
-              "scrollCues": "滚动提示",
-              "performanceReady": "性能就绪"
+              "nextjs": "Next.js",
+              "react": "React",
+              "typescript": "TypeScript",
+              "tailwind": "Tailwind CSS",
+              "shadcn": "shadcn/ui",
+              "zustand": "Zustand",
+              "rhf": "React Hook Form",
+              "zod": "Zod",
+              "nextIntl": "next-intl",
+              "vitest": "Vitest"
             }
           },
-          "metrics": {
-            "dataGlow": {
-              "label": "数据光晕",
-              "value": "1.8x",
-              "caption": "互动更高"
-            },
-            "retentionLift": {
-              "label": "留存提升",
-              "value": "+33%",
-              "caption": "首月"
+          "gettingStarted": {
+            "title": "快速开始",
+            "description": "克隆仓库、安装依赖并启动开发服务器。validate 会执行 lint、格式检查与带覆盖率的测试。",
+            "steps": {
+              "install": "npm install",
+              "dev": "npm run dev",
+              "validate": "npm run validate"
             }
           },
-          "story": {
-            "title": "故事驱动的滚动",
-            "description": "每个版块都为你的叙事呼吸。以有节奏的铺陈强调功能速度、可信安全与愉悦的引导流程。",
-            "pills": {
-              "onboard": "几分钟完成引导",
-              "insights": "实时性能洞察",
-              "prompts": "情境化提示",
-              "security": "自适应安全层"
-            }
-          },
-          "trust": {
-            "eyebrow": "团队信赖",
-            "title": "让每位干系人都看见清晰信号。",
-            "description": "玻璃表面勾勒故事，其余画布聚焦于最重要的结果：你的产品成果。",
-            "testimonials": {
-              "nova": {
-                "name": "Nova Labs",
-                "quote": "玻璃界面让我们的发布更显沉稳与可信。"
+          "docs": {
+            "title": "文档",
+            "description": "架构、开发流程与测试说明均在仓库文档中。",
+            "items": {
+              "architecture": {
+                "title": "架构",
+                "description": "Clean Architecture 分层、模块结构、数据流与设计模式。"
               },
-              "orion": {
-                "name": "Orion Studio",
-                "quote": "我们用玻璃套件在一个周末完成了高质感落地页。"
+              "development": {
+                "title": "开发指南",
+                "description": "Git 工作流、添加功能、创建模块与测试规范。"
+              },
+              "testing": {
+                "title": "测试指南",
+                "description": "Vitest、React Testing Library、100% 覆盖率要求与最佳实践。"
               }
             }
-          },
-          "cta": {
-            "title": "准备以清晰开启发布？",
-            "description": "将液态玻璃美学带入核心产品旅程。主应用体验已为你准备就绪。"
           }
         }
       }

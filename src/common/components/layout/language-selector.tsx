@@ -1,6 +1,7 @@
 "use client";
 
 import { Link, usePathname } from "@/application/routing/navigation";
+import { Button } from "@/common/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 
 export type LocaleOption = {
@@ -58,9 +59,11 @@ export function LanguageSelector({
 
   return (
     <div className="relative" ref={containerRef}>
-      <button
+      <Button
         type="button"
-        className="glass-panel flex cursor-pointer list-none items-center gap-2 rounded-full px-2 py-2 text-xs font-semibold text-[var(--text-muted)] transition hover:text-white sm:px-3"
+        variant="secondary"
+        size="sm"
+        className="gap-2 px-2 sm:px-3"
         aria-label={`${languageLabel}: ${currentLocaleOption?.label ?? ""}`}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
@@ -80,7 +83,7 @@ export function LanguageSelector({
         >
           <path d="M5 7l5 5 5-5" />
         </svg>
-      </button>
+      </Button>
       {isOpen ? (
         <div
           className="glass-panel-strong pointer-events-auto absolute right-0 z-40 mt-2 flex w-44 flex-col gap-1 rounded-2xl bg-[rgba(8,12,24,0.9)] px-2 py-2 text-xs text-white shadow-[0_20px_55px_rgba(0,0,0,0.45)] backdrop-blur"

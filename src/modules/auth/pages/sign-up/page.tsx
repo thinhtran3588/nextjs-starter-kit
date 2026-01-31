@@ -1,4 +1,5 @@
 import { Link } from "@/application/routing/navigation";
+import { Button } from "@/common/components/ui/button";
 import { getTranslations } from "next-intl/server";
 
 export async function SignUpPage() {
@@ -10,12 +11,9 @@ export async function SignUpPage() {
       <h1 className="text-3xl font-semibold text-white sm:text-4xl">
         {tSignUp("title")}
       </h1>
-      <Link
-        className="glass-panel inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:translate-y-[-2px]"
-        href="/"
-      >
-        {tCommon("navigation.backToHome")}
-      </Link>
+      <Button asChild variant="default">
+        <Link href="/">{tCommon("navigation.backToHome")}</Link>
+      </Button>
     </div>
   );
 }
