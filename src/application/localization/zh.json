@@ -9,6 +9,12 @@
       "createAccount": "创建账号",
       "privacy": "隐私",
       "terms": "条款",
+      "documents": "文档",
+      "docs": {
+        "architecture": "架构",
+        "developmentGuide": "开发指南",
+        "testingGuide": "测试指南"
+      },
       "menu": "菜单"
     },
     "language": {

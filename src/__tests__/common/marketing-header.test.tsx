@@ -18,6 +18,12 @@ const baseProps = {
   signInLabel: "Sign in",
   privacyLabel: "Privacy",
   termsLabel: "Terms",
+  documentsLabel: "Documents",
+  docItems: [
+    { label: "Architecture", href: "/docs/architecture" },
+    { label: "Development guide", href: "/docs/development-guide" },
+    { label: "Testing guide", href: "/docs/testing-guide" },
+  ],
   languageLabel: "Language",
   menuLabel: "Menu",
   currentLocale: "en",
@@ -119,6 +125,30 @@ describe("MarketingHeader", () => {
       within(mobileMenu).getByRole("link", { name: baseProps.homeLabel }),
     );
     expect(screen.queryByTestId("mobile-menu")).not.toBeInTheDocument();
+  });
+
+  it("closes mobile menu when a document link is clicked", () => {
+    render(<MarketingHeader {...baseProps} />);
+    fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
+    const mobileMenu = screen.getByTestId("mobile-menu");
+    expect(mobileMenu).toBeInTheDocument();
+
+    fireEvent.click(
+      within(mobileMenu).getByRole("link", { name: "Architecture" }),
+    );
+    expect(screen.queryByTestId("mobile-menu")).not.toBeInTheDocument();
+  });
+
+  it("highlights current document in mobile menu when on docs page", () => {
+    mockPathname = "/docs/architecture";
+    render(<MarketingHeader {...baseProps} />);
+    fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
+
+    const architectureLinks = within(
+      screen.getByTestId("mobile-menu"),
+    ).getAllByRole("link", { name: "Architecture" });
+    expect(architectureLinks.length).toBe(1);
+    expect(architectureLinks[0]).toHaveClass("font-bold");
   });
 
   it("highlights Home in mobile menu when on home page", () => {
