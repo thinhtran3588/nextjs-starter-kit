@@ -45,12 +45,12 @@ flowchart TD
     CreateTag --> MergeToMain[Merge develop into main]
     MergeToMain --> End([Release Complete])
 
-    style Start fill:#e1f5ff
-    style End fill:#d4edda
-    style CreateFeatureBranch fill:#fff3cd
-    style SquashMerge fill:#d1ecf1
-    style CreateTag fill:#f8d7da
-    style MergeToMain fill:#d4edda
+    style Start fill:#1565c0,color:#fff
+    style End fill:#2e7d32,color:#fff
+    style CreateFeatureBranch fill:#ef6c00,color:#fff
+    style SquashMerge fill:#00838f,color:#fff
+    style CreateTag fill:#c62828,color:#fff
+    style MergeToMain fill:#1b5e20,color:#fff
 ```
 
 ### Workflow Steps

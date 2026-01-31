@@ -3,6 +3,8 @@
 import { Link, usePathname } from "@/application/routing/navigation";
 import { Button } from "@/common/components/ui/button";
 import { cn } from "@/common/utils/cn";
+import type { DocItem } from "@/common/components/layout/documents-dropdown";
+import { DocumentsDropdown } from "@/common/components/layout/documents-dropdown";
 import type { LocaleOption } from "@/common/components/layout/language-selector";
 import { LanguageSelector } from "@/common/components/layout/language-selector";
 import Image from "next/image";
@@ -14,6 +16,8 @@ type MarketingHeaderProps = {
   signInLabel: string;
   privacyLabel: string;
   termsLabel: string;
+  documentsLabel: string;
+  docItems: DocItem[];
   languageLabel: string;
   menuLabel: string;
   currentLocale: string;
@@ -29,6 +33,8 @@ export function MarketingHeader({
   signInLabel,
   privacyLabel,
   termsLabel,
+  documentsLabel,
+  docItems,
   languageLabel,
   menuLabel,
   currentLocale,
@@ -108,6 +114,10 @@ export function MarketingHeader({
               >
                 {homeLabel}
               </Link>
+              <DocumentsDropdown
+                documentsLabel={documentsLabel}
+                items={docItems}
+              />
               <Link
                 className={cn(
                   "relative py-1 transition hover:text-white nav-link-indicator",
@@ -192,6 +202,20 @@ export function MarketingHeader({
               >
                 {homeLabel}
               </Link>
+              <span className="py-1 text-white/60">{documentsLabel}</span>
+              {docItems.map((item) => (
+                <Link
+                  key={item.href}
+                  className={cn(
+                    "py-1 pl-3 transition hover:text-white/80",
+                    isActive(item.href) && "text-white font-bold",
+                  )}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
               <Link
                 className={cn(
                   "py-1 transition hover:text-white/80",

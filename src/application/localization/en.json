@@ -9,6 +9,12 @@
       "createAccount": "Create an account",
       "privacy": "Privacy",
       "terms": "Terms",
+      "documents": "Documents",
+      "docs": {
+        "architecture": "Architecture",
+        "developmentGuide": "Development guide",
+        "testingGuide": "Testing guide"
+      },
       "menu": "Menu"
     },
     "language": {

@@ -9,6 +9,12 @@
       "createAccount": "Tạo tài khoản",
       "privacy": "Quyền riêng tư",
       "terms": "Điều khoản",
+      "documents": "Tài liệu",
+      "docs": {
+        "architecture": "Kiến trúc",
+        "developmentGuide": "Hướng dẫn phát triển",
+        "testingGuide": "Hướng dẫn kiểm thử"
+      },
       "menu": "Menu"
     },
     "language": {
