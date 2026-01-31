@@ -66,12 +66,10 @@ describe("MarketingHeader", () => {
   });
 
   it("renders an empty locale label when missing", () => {
-    const { container } = render(
-      <MarketingHeader {...baseProps} currentLocale="fr" />,
-    );
+    render(<MarketingHeader {...baseProps} currentLocale="fr" />);
 
-    const summary = container.querySelector("summary");
-    expect(summary).toHaveAttribute("aria-label", "Language: ");
+    const languageButton = screen.getByRole("button", { name: /^Language:/ });
+    expect(languageButton).toHaveAttribute("aria-label", "Language: ");
   });
 
   it("toggles the mobile menu", () => {
