@@ -1,7 +1,8 @@
 "use client";
 
-import { Link } from "@/application/routing/navigation";
+import { Link, usePathname } from "@/application/routing/navigation";
 import { Button } from "@/common/components/ui/button";
+import { cn } from "@/common/utils/cn";
 import type { LocaleOption } from "@/common/components/layout/language-selector";
 import { LanguageSelector } from "@/common/components/layout/language-selector";
 import Image from "next/image";
@@ -33,9 +34,13 @@ export function MarketingHeader({
   currentLocale,
   localeOptions,
 }: MarketingHeaderProps) {
+  const pathname = usePathname();
   const [isHidden, setIsHidden] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
+
+  const isActive = (path: string) =>
+    path === "/" ? pathname === "/" || pathname === "" : pathname === path;
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -91,17 +96,38 @@ export function MarketingHeader({
           </Link>
           <div className="flex items-center gap-3 text-sm text-[var(--text-muted)]">
             <nav className="hidden items-center gap-4 sm:flex">
-              <Link className="transition hover:text-white" href="/">
+              <Link
+                className={cn(
+                  "relative py-1 transition hover:text-white nav-link-indicator",
+                  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
+                  isActive("/")
+                    ? "text-white font-bold after:scale-x-100"
+                    : "after:scale-x-0",
+                )}
+                href="/"
+              >
                 {homeLabel}
               </Link>
               <Link
-                className="transition hover:text-white"
+                className={cn(
+                  "relative py-1 transition hover:text-white nav-link-indicator",
+                  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
+                  isActive("/privacy-policy")
+                    ? "text-white font-bold after:scale-x-100"
+                    : "after:scale-x-0",
+                )}
                 href="/privacy-policy"
               >
                 {privacyLabel}
               </Link>
               <Link
-                className="transition hover:text-white"
+                className={cn(
+                  "relative py-1 transition hover:text-white nav-link-indicator",
+                  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
+                  isActive("/terms-of-service")
+                    ? "text-white font-bold after:scale-x-100"
+                    : "after:scale-x-0",
+                )}
                 href="/terms-of-service"
               >
                 {termsLabel}
@@ -147,24 +173,39 @@ export function MarketingHeader({
         </div>
         {isMenuOpen ? (
           <div
-            className="glass-panel-strong absolute left-6 right-6 top-full z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
+            className="mobile-menu-panel absolute left-6 right-6 top-full z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
             data-testid="mobile-menu"
           >
-            <nav className="flex flex-col gap-3">
-              <Link className="transition hover:text-white/80" href="/">
-                {homeLabel}
-              </Link>
+            <nav
+              className="flex flex-col gap-3"
+              onClick={() => setIsMenuOpen(false)}
+            >
               <Button asChild variant="default" size="sm">
                 <Link href="/auth/sign-in">{signInLabel}</Link>
               </Button>
               <Link
-                className="transition hover:text-white/80"
+                className={cn(
+                  "py-1 transition hover:text-white/80",
+                  isActive("/") && "text-white font-bold",
+                )}
+                href="/"
+              >
+                {homeLabel}
+              </Link>
+              <Link
+                className={cn(
+                  "py-1 transition hover:text-white/80",
+                  isActive("/privacy-policy") && "text-white font-bold",
+                )}
                 href="/privacy-policy"
               >
                 {privacyLabel}
               </Link>
               <Link
-                className="transition hover:text-white/80"
+                className={cn(
+                  "py-1 transition hover:text-white/80",
+                  isActive("/terms-of-service") && "text-white font-bold",
+                )}
                 href="/terms-of-service"
               >
                 {termsLabel}
