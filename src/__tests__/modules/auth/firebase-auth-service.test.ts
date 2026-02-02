@@ -155,4 +155,80 @@ describe("FirebaseAuthenticationService", () => {
     unsubscribe();
     expect(mockUnsubscribe).toHaveBeenCalled();
   });
+
+  it("subscribeToAuthState callback maps firebase user to AuthUser", () => {
+    const mockAuth = {} as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    let stateCallback: (user: unknown) => void = () => {};
+    vi.mocked(onAuthStateChanged).mockImplementation((_auth, cb) => {
+      stateCallback = cb as (user: unknown) => void;
+      return mockUnsubscribe;
+    });
+    const callback = vi.fn();
+    service.subscribeToAuthState(callback);
+    stateCallback({
+      uid: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: "https://photo.url",
+    });
+    expect(callback).toHaveBeenCalledWith({
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: "https://photo.url",
+    });
+  });
+
+  it("subscribeToAuthState callback maps firebase user with null fields to AuthUser", () => {
+    const mockAuth = {} as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    let stateCallback: (user: unknown) => void = () => {};
+    vi.mocked(onAuthStateChanged).mockImplementation((_auth, cb) => {
+      stateCallback = cb as (user: unknown) => void;
+      return mockUnsubscribe;
+    });
+    const callback = vi.fn();
+    service.subscribeToAuthState(callback);
+    stateCallback({
+      uid: "uid-1",
+      email: null,
+      displayName: null,
+      photoURL: null,
+    });
+    expect(callback).toHaveBeenCalledWith({
+      id: "uid-1",
+      email: null,
+      displayName: null,
+      photoURL: null,
+    });
+  });
+
+  it("subscribeToAuthState callback receives null when firebase user is null", () => {
+    const mockAuth = {} as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    let stateCallback: (user: unknown) => void = () => {};
+    vi.mocked(onAuthStateChanged).mockImplementation((_auth, cb) => {
+      stateCallback = cb as (user: unknown) => void;
+      return mockUnsubscribe;
+    });
+    const callback = vi.fn();
+    service.subscribeToAuthState(callback);
+    stateCallback(null);
+    expect(callback).toHaveBeenCalledWith(null);
+  });
+
+  it("signUpWithEmail trims displayName when provided with spaces", async () => {
+    const mockAuth = {} as import("firebase/auth").Auth;
+    const mockUser = { uid: "1" };
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.mocked(createUserWithEmailAndPassword).mockResolvedValue({
+      user: mockUser as never,
+    } as never);
+    vi.mocked(updateProfile).mockResolvedValue(undefined as never);
+    await service.signUpWithEmail("a@b.com", "pass", "  Alice  ");
+    expect(updateProfile).toHaveBeenCalledWith(mockUser, {
+      displayName: "Alice",
+    });
+  });
 });

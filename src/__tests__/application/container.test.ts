@@ -1,10 +1,34 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { getContainer } from "@/common/utils/container";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { getContainer, getContainerOrNull } from "@/common/utils/container";
 import { initializeContainer } from "@/application/register-container";
 
 describe("container", () => {
   beforeEach(() => {
     initializeContainer();
+  });
+
+  it("getContainer throws when container not initialized", async () => {
+    vi.resetModules();
+    const mod = await import("@/common/utils/container");
+    expect(() => mod.getContainer()).toThrow("Container not initialized");
+  });
+
+  it("getContainerOrNull returns null when container not initialized", async () => {
+    vi.resetModules();
+    const mod = await import("@/common/utils/container");
+    expect(mod.getContainerOrNull()).toBeNull();
+  });
+
+  it("setContainer and getContainerOrNull return the set container", async () => {
+    vi.resetModules();
+    const mod = await import("@/common/utils/container");
+    const c = mod.createContainer();
+    mod.setContainer(c);
+    expect(mod.getContainerOrNull()).toBe(c);
+  });
+
+  it("getContainerOrNull returns container after initializeContainer", () => {
+    expect(getContainerOrNull()).not.toBeNull();
   });
 
   it("returns a container that resolves authService", () => {
