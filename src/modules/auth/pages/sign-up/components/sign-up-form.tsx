@@ -1,11 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/common/routing/navigation";
-import { Link } from "@/common/routing/navigation";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+
 import { Button } from "@/common/components/button";
 import {
   Form,
@@ -17,11 +16,12 @@ import {
 } from "@/common/components/form";
 import { Input } from "@/common/components/input";
 import { useContainer } from "@/common/hooks/use-container";
-import type { AuthErrorCode } from "@/modules/auth/domain/types";
+import { Link, useRouter } from "@/common/routing/navigation";
 import {
   getSignUpSchema,
   type SignUpInput,
 } from "@/modules/auth/domain/schemas";
+import type { AuthErrorCode } from "@/modules/auth/domain/types";
 import type { SignUpWithEmailUseCase } from "@/modules/auth/use-cases/sign-up-with-email-use-case";
 
 const ERROR_KEY_MAP: Record<AuthErrorCode, string> = {

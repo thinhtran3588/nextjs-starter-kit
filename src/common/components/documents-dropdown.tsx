@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
+import { ChevronDownIcon } from "@/common/components/icons";
 import { Link, usePathname } from "@/common/routing/navigation";
 import { cn } from "@/common/utils/cn";
-import { useEffect, useRef, useState } from "react";
 
 export type DocItem = {
   label: string;
@@ -57,10 +59,10 @@ export function DocumentsDropdown({
       <button
         type="button"
         className={cn(
-          "relative flex items-center gap-1 py-1 transition hover:text-white nav-link-indicator",
-          "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
+          "nav-link-indicator relative flex items-center gap-1 py-1 transition hover:text-white",
+          "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:origin-left after:bg-white after:transition-transform after:duration-300 after:content-['']",
           isActive
-            ? "text-white font-bold after:scale-x-100"
+            ? "font-bold text-white after:scale-x-100"
             : "after:scale-x-0",
         )}
         aria-label={documentsLabel}
@@ -69,18 +71,9 @@ export function DocumentsDropdown({
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {documentsLabel}
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 20 20"
+        <ChevronDownIcon
           className={cn("h-3 w-3 transition-transform", isOpen && "rotate-180")}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M5 7l5 5 5-5" />
-        </svg>
+        />
       </button>
       {isOpen ? (
         <div

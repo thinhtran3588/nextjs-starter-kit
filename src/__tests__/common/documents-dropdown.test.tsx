@@ -1,5 +1,6 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
+
 import { DocumentsDropdown } from "@/common/components/documents-dropdown";
 
 let mockPathname = "/";

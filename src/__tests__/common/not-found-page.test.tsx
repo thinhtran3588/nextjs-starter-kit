@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import NotFoundPage from "@/common/pages/not-found-page";
+
 import messages from "@/application/localization/en.json";
+import NotFoundPage from "@/common/pages/not-found-page";
 
 describe("NotFoundPage", () => {
   it("renders not found title and description from translations", () => {

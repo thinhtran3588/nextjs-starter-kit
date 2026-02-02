@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 
 describe("useAuthUserStore", () => {
@@ -17,6 +18,7 @@ describe("useAuthUserStore", () => {
       email: "a@b.com",
       displayName: "Alice",
       photoURL: null,
+      authType: "email" as const,
     };
 
     useAuthUserStore.getState().setAuthState(user, false);

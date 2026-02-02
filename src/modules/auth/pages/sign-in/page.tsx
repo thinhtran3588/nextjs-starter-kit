@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+
 import { SignInForm } from "./components/sign-in-form";
 
 export async function SignInPage() {

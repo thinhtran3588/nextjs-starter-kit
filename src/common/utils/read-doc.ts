@@ -1,6 +1,7 @@
-import type { Locale } from "@/common/routing/routing";
 import { readFile } from "node:fs/promises";
 import path from "path";
+
+import type { Locale } from "@/common/routing/routing";
 
 function getDocFilename(slug: string, locale: Locale): string {
   if (locale === "en") {

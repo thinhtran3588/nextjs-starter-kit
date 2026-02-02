@@ -1,8 +1,9 @@
-import { render, screen, fireEvent, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { vi } from "vitest";
-import { Link } from "@/common/routing/navigation";
+
 import { MainHeader } from "@/common/components/main-header";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import { Link } from "@/common/routing/navigation";
 
 let mockPathname = "/";
 vi.mock("@/common/routing/navigation", async (importOriginal) => {

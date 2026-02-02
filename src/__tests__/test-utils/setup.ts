@@ -1,8 +1,10 @@
 import "@testing-library/jest-dom/vitest";
+
 import { vi } from "vitest";
+
 import messages from "@/application/localization/en.json";
-import { getContainerOrNull } from "@/common/utils/container";
 import { initializeContainer } from "@/application/register-container";
+import { getContainerOrNull } from "@/common/utils/container";
 
 vi.mock("@/application/config/firebase-config", () => ({
   getAuthInstance: vi.fn(() => null),
@@ -11,12 +13,15 @@ vi.mock("@/application/config/firebase-config", () => ({
 vi.mock("firebase/auth", () => ({
   getAuth: vi.fn(),
   GoogleAuthProvider: vi.fn(),
+  EmailAuthProvider: { credential: vi.fn() },
   createUserWithEmailAndPassword: vi.fn(),
   onAuthStateChanged: vi.fn(() => () => {}),
+  reauthenticateWithCredential: vi.fn(),
   sendPasswordResetEmail: vi.fn(),
   signInWithEmailAndPassword: vi.fn(),
   signInWithPopup: vi.fn(),
   signOut: vi.fn(),
+  updatePassword: vi.fn(),
   updateProfile: vi.fn(),
 }));
 

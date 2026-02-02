@@ -1,18 +1,27 @@
 "use client";
 
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  signOut as firebaseSignOut,
+  updatePassword as firebaseUpdatePassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut as firebaseSignOut,
   updateProfile,
+  type Auth,
 } from "firebase/auth";
-import type { Auth } from "firebase/auth";
+
+import {
+  AuthType,
+  type AuthResult,
+  type AuthUser,
+} from "@/modules/auth/domain/types";
 import type { BaseAuthenticationService } from "@/modules/auth/interfaces/base-authentication-service";
-import type { AuthUser } from "@/modules/auth/domain/types";
+import { mapAuthErrorCode } from "@/modules/auth/utils/map-auth-error";
 
 export type GetAuthInstance = () => Auth | null;
 
@@ -22,17 +31,27 @@ function getAuthOrThrow(getAuthInstance: GetAuthInstance): Auth {
   return auth;
 }
 
+function providerIdToAuthType(providerId: string | undefined): AuthType {
+  if (providerId === "password") return AuthType.Email;
+  if (providerId === "google.com") return AuthType.Google;
+  if (providerId === "apple.com") return AuthType.Apple;
+  return AuthType.Other;
+}
+
 function mapFirebaseUserToAuthUser(user: {
   uid: string;
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  providerData?: Array<{ providerId?: string }>;
 }): AuthUser {
+  const authType = providerIdToAuthType(user.providerData?.[0]?.providerId);
   return {
     id: user.uid,
     email: user.email ?? null,
     displayName: user.displayName ?? null,
     photoURL: user.photoURL ?? null,
+    authType,
   };
 }
 
@@ -88,5 +107,42 @@ export class FirebaseAuthenticationService implements BaseAuthenticationService 
     return onAuthStateChanged(auth, (firebaseUser) => {
       callback(firebaseUser ? mapFirebaseUserToAuthUser(firebaseUser) : null);
     });
+  }
+
+  async updateDisplayName(
+    displayName: string,
+  ): Promise<import("@/modules/auth/domain/types").AuthResult> {
+    const auth = getAuthOrThrow(this.getAuthInstance);
+    const user = auth.currentUser;
+    if (!user) return { success: false, error: "generic" };
+    try {
+      await updateProfile(user, { displayName: displayName.trim() });
+      return { success: true };
+    } catch (err: unknown) {
+      return {
+        success: false,
+        error: mapAuthErrorCode((err as { code?: string })?.code),
+      };
+    }
+  }
+
+  async updatePassword(
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<AuthResult> {
+    const auth = getAuthOrThrow(this.getAuthInstance);
+    const user = auth.currentUser;
+    if (!user?.email) return { success: false, error: "generic" };
+    try {
+      const credential = EmailAuthProvider.credential(user.email, oldPassword);
+      await reauthenticateWithCredential(user, credential);
+      await firebaseUpdatePassword(user, newPassword);
+      return { success: true };
+    } catch (err: unknown) {
+      return {
+        success: false,
+        error: mapAuthErrorCode((err as { code?: string })?.code),
+      };
+    }
   }
 }

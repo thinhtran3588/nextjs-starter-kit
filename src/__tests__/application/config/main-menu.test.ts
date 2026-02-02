@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
+
 import {
-  DOC_SLUGS,
   DOC_I18N_KEYS,
+  DOC_SLUGS,
   getMainMenuConfig,
   type DocSlug,
 } from "@/application/config/main-menu";

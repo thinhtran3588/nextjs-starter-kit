@@ -1,13 +1,17 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  updatePassword as firebaseUpdatePassword,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import {
   FirebaseAuthenticationService,
   type GetAuthInstance,
@@ -28,6 +32,8 @@ describe("FirebaseAuthenticationService", () => {
     vi.mocked(sendPasswordResetEmail).mockReset();
     vi.mocked(signOut).mockReset();
     vi.mocked(onAuthStateChanged).mockReset().mockReturnValue(mockUnsubscribe);
+    vi.mocked(reauthenticateWithCredential).mockReset();
+    vi.mocked(firebaseUpdatePassword).mockReset();
     service = new FirebaseAuthenticationService(mockGetAuthInstance);
   });
 
@@ -177,6 +183,85 @@ describe("FirebaseAuthenticationService", () => {
       email: "a@b.com",
       displayName: "Alice",
       photoURL: "https://photo.url",
+      authType: "other",
+    });
+  });
+
+  it("subscribeToAuthState callback maps firebase user with google.com provider to authType google", () => {
+    const mockAuth = {} as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    let stateCallback: (user: unknown) => void = () => {};
+    vi.mocked(onAuthStateChanged).mockImplementation((_auth, cb) => {
+      stateCallback = cb as (user: unknown) => void;
+      return mockUnsubscribe;
+    });
+    const callback = vi.fn();
+    service.subscribeToAuthState(callback);
+    stateCallback({
+      uid: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: "https://photo.url",
+      providerData: [{ providerId: "google.com" }],
+    });
+    expect(callback).toHaveBeenCalledWith({
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: "https://photo.url",
+      authType: "google",
+    });
+  });
+
+  it("subscribeToAuthState callback maps firebase user with apple.com provider to authType apple", () => {
+    const mockAuth = {} as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    let stateCallback: (user: unknown) => void = () => {};
+    vi.mocked(onAuthStateChanged).mockImplementation((_auth, cb) => {
+      stateCallback = cb as (user: unknown) => void;
+      return mockUnsubscribe;
+    });
+    const callback = vi.fn();
+    service.subscribeToAuthState(callback);
+    stateCallback({
+      uid: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: null,
+      providerData: [{ providerId: "apple.com" }],
+    });
+    expect(callback).toHaveBeenCalledWith({
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: null,
+      authType: "apple",
+    });
+  });
+
+  it("subscribeToAuthState callback maps firebase user with password provider to authType email", () => {
+    const mockAuth = {} as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    let stateCallback: (user: unknown) => void = () => {};
+    vi.mocked(onAuthStateChanged).mockImplementation((_auth, cb) => {
+      stateCallback = cb as (user: unknown) => void;
+      return mockUnsubscribe;
+    });
+    const callback = vi.fn();
+    service.subscribeToAuthState(callback);
+    stateCallback({
+      uid: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: null,
+      providerData: [{ providerId: "password" }],
+    });
+    expect(callback).toHaveBeenCalledWith({
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: null,
+      authType: "email",
     });
   });
 
@@ -201,6 +286,7 @@ describe("FirebaseAuthenticationService", () => {
       email: null,
       displayName: null,
       photoURL: null,
+      authType: "other",
     });
   });
 
@@ -230,5 +316,128 @@ describe("FirebaseAuthenticationService", () => {
     expect(updateProfile).toHaveBeenCalledWith(mockUser, {
       displayName: "Alice",
     });
+  });
+
+  it("updateDisplayName throws when auth is not available", async () => {
+    mockGetAuthInstance.mockReturnValue(null);
+    await expect(service.updateDisplayName("Alice")).rejects.toThrow(
+      "Auth not available",
+    );
+  });
+
+  it("updateDisplayName returns generic error when currentUser is null", async () => {
+    const mockAuth = {
+      currentUser: null,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    const result = await service.updateDisplayName("Alice");
+    expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("updateDisplayName calls updateProfile and returns success", async () => {
+    const mockUser = { uid: "1" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.mocked(updateProfile).mockResolvedValue(undefined as never);
+    const result = await service.updateDisplayName("Alice");
+    expect(updateProfile).toHaveBeenCalledWith(mockUser, {
+      displayName: "Alice",
+    });
+    expect(result).toEqual({ success: true });
+  });
+
+  it("updateDisplayName returns mapped error when updateProfile throws", async () => {
+    const mockUser = { uid: "1" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.mocked(updateProfile).mockRejectedValue({
+      code: "auth/too-many-requests",
+    });
+    const result = await service.updateDisplayName("Alice");
+    expect(result).toEqual({ success: false, error: "too-many-requests" });
+  });
+
+  it("updatePassword returns generic error when currentUser is null", async () => {
+    const mockAuth = {
+      currentUser: null,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    const result = await service.updatePassword("old", "new");
+    expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("updatePassword returns generic error when user has no email", async () => {
+    const mockUser = { email: null };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    const result = await service.updatePassword("old", "new");
+    expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("updatePassword reauthenticates then updates password and returns success", async () => {
+    const mockCredential = {};
+    const mockUser = { email: "a@b.com" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.spyOn(EmailAuthProvider, "credential").mockReturnValue(
+      mockCredential as never,
+    );
+    vi.mocked(reauthenticateWithCredential).mockResolvedValue(
+      undefined as never,
+    );
+    vi.mocked(firebaseUpdatePassword).mockResolvedValue(undefined as never);
+    const result = await service.updatePassword("oldPass", "newPass");
+    expect(EmailAuthProvider.credential).toHaveBeenCalledWith(
+      "a@b.com",
+      "oldPass",
+    );
+    expect(reauthenticateWithCredential).toHaveBeenCalledWith(
+      mockUser,
+      mockCredential,
+    );
+    expect(firebaseUpdatePassword).toHaveBeenCalledWith(mockUser, "newPass");
+    expect(result).toEqual({ success: true });
+  });
+
+  it("updatePassword returns mapped error when reauthenticateWithCredential throws", async () => {
+    const mockUser = { email: "a@b.com" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.spyOn(EmailAuthProvider, "credential").mockReturnValue({} as never);
+    vi.mocked(reauthenticateWithCredential).mockRejectedValue({
+      code: "auth/invalid-credential",
+    });
+    const result = await service.updatePassword("old", "new");
+    expect(result).toEqual({ success: false, error: "invalid-credentials" });
+  });
+
+  it("updatePassword returns mapped error when firebaseUpdatePassword throws", async () => {
+    const mockCredential = {};
+    const mockUser = { email: "a@b.com" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.spyOn(EmailAuthProvider, "credential").mockReturnValue(
+      mockCredential as never,
+    );
+    vi.mocked(reauthenticateWithCredential).mockResolvedValue(
+      undefined as never,
+    );
+    vi.mocked(firebaseUpdatePassword).mockRejectedValue({
+      code: "auth/weak-password",
+    });
+    const result = await service.updatePassword("old", "new");
+    expect(result).toEqual({ success: false, error: "generic" });
   });
 });

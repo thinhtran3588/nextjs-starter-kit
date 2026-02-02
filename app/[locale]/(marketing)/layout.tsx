@@ -1,8 +1,9 @@
+import { getTranslations } from "next-intl/server";
+
 import { getMainMenuConfig } from "@/application/config/main-menu";
 import { MainLayout } from "@/common/components/main-layout";
 import { resolveMenuItems } from "@/common/utils/menu";
 import { AuthHeaderSlot } from "@/modules/auth/components/auth-header-slot";
-import { getTranslations } from "next-intl/server";
 
 export default async function Layout({
   children,

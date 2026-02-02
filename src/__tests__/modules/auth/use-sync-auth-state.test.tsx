@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import type { AuthUser } from "@/modules/auth/domain/types";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 import { useSyncAuthState } from "@/modules/auth/hooks/use-sync-auth-state";
@@ -24,14 +25,7 @@ describe("useSyncAuthState", () => {
   });
 
   it("subscribes to auth state and updates store when callback fires", () => {
-    let callback: (
-      user: {
-        id: string;
-        email: string | null;
-        displayName: string | null;
-        photoURL: string | null;
-      } | null,
-    ) => void = () => {};
+    let callback: (user: AuthUser | null) => void = () => {};
     mockResolve = (key: string) => {
       if (key === "getAuthStateSubscriptionUseCase") {
         return {
@@ -55,6 +49,7 @@ describe("useSyncAuthState", () => {
       email: "a@b.com",
       displayName: "Alice",
       photoURL: null,
+      authType: "email",
     });
 
     expect(useAuthUserStore.getState().user).toEqual({
@@ -62,6 +57,7 @@ describe("useSyncAuthState", () => {
       email: "a@b.com",
       displayName: "Alice",
       photoURL: null,
+      authType: "email",
     });
     expect(useAuthUserStore.getState().loading).toBe(false);
   });

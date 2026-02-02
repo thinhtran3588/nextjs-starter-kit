@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+
 import { SignUpForm } from "@/modules/auth/pages/sign-up/components/sign-up-form";
 
 const mockReplace = vi.fn();

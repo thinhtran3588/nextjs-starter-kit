@@ -1,6 +1,7 @@
 import path from "node:path";
-import { defineConfig } from "vitest/config";
+
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [react()],
@@ -47,6 +48,10 @@ export default defineConfig({
         "src/modules/auth/domain/types.ts",
         "src/common/interfaces/menu-item.ts",
         "src/application/config/firebase-config.ts",
+        "src/common/components/app-initializer.tsx",
+        "src/common/components/toaster.tsx",
+        "src/common/components/dialog.tsx",
+        "src/common/components/icons.tsx",
       ],
     },
   },

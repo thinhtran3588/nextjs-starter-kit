@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useContainer } from "@/common/hooks/use-container";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 import type { GetAuthStateSubscriptionUseCase } from "@/modules/auth/use-cases/get-auth-state-subscription-use-case";

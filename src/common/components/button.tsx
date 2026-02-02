@@ -2,12 +2,14 @@
 
 import { cva, type VariantProps } from "class-variance-authority";
 import {
-  type ReactElement,
   Children,
   cloneElement,
   forwardRef,
   isValidElement,
+  type ReactElement,
 } from "react";
+
+import { LoaderIcon } from "@/common/components/icons";
 import { cn } from "@/common/utils/cn";
 
 const buttonVariants = cva(
@@ -41,29 +43,6 @@ const buttonVariants = cva(
     },
   },
 );
-
-function LoaderIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path
-        d="M21 12a9 9 0 1 1-6.219-8.56"
-        className="animate-spin origin-center"
-      />
-    </svg>
-  );
-}
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { AppPage } from "@/modules/main/pages/app/page";
+
 import messages from "@/application/localization/en.json";
+import { AppPage } from "@/modules/main/pages/app/page";
 
 describe("AppPage", () => {
   it("renders placeholder title and navigation", async () => {

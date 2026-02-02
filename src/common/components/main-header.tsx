@@ -1,14 +1,18 @@
 "use client";
 
-import { Link, usePathname } from "@/common/routing/navigation";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+
 import { Button } from "@/common/components/button";
-import { cn } from "@/common/utils/cn";
 import { DocumentsDropdown } from "@/common/components/documents-dropdown";
-import type { LocaleOption } from "@/common/components/language-selector";
-import { LanguageSelector } from "@/common/components/language-selector";
+import { MenuIcon } from "@/common/components/icons";
+import {
+  LanguageSelector,
+  type LocaleOption,
+} from "@/common/components/language-selector";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import { Link, usePathname } from "@/common/routing/navigation";
+import { cn } from "@/common/utils/cn";
 
 type MainHeaderProps = {
   badge: string;
@@ -77,7 +81,7 @@ export function MainHeader({
     <header
       className={`fixed inset-x-0 top-0 z-50 bg-[rgba(6,10,20,0.6)] backdrop-blur-sm transition-all duration-300 ${
         isHidden
-          ? "-translate-y-full opacity-0 pointer-events-none"
+          ? "pointer-events-none -translate-y-full opacity-0"
           : "translate-y-0 opacity-100"
       }`}
     >
@@ -115,7 +119,7 @@ export function MainHeader({
                     className={cn(
                       navLinkClass,
                       isActive(item.href)
-                        ? "text-white font-bold after:scale-x-100"
+                        ? "font-bold text-white after:scale-x-100"
                         : "after:scale-x-0",
                     )}
                     href={item.href}
@@ -142,25 +146,13 @@ export function MainHeader({
               aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen((value) => !value)}
             >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <path d="M4 7h16" />
-                <path d="M4 12h16" />
-                <path d="M4 17h16" />
-              </svg>
+              <MenuIcon className="h-4 w-4" />
             </Button>
           </div>
         </div>
         {isMenuOpen ? (
           <div
-            className="mobile-menu-panel absolute left-6 right-6 top-full z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
+            className="mobile-menu-panel absolute top-full right-6 left-6 z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
             data-testid="mobile-menu"
           >
             <nav
@@ -179,7 +171,7 @@ export function MainHeader({
                         key={child.id}
                         className={cn(
                           "py-1 pl-3 transition hover:text-white/80",
-                          isActive(child.href) && "text-white font-bold",
+                          isActive(child.href) && "font-bold text-white",
                         )}
                         href={child.href}
                       >
@@ -192,7 +184,7 @@ export function MainHeader({
                     key={item.id}
                     className={cn(
                       "py-1 transition hover:text-white/80",
-                      isActive(item.href) && "text-white font-bold",
+                      isActive(item.href) && "font-bold text-white",
                     )}
                     href={item.href}
                   >

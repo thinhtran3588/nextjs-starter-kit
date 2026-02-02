@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getContainer, getContainerOrNull } from "@/common/utils/container";
+
 import { initializeContainer } from "@/application/register-container";
+import { getContainer, getContainerOrNull } from "@/common/utils/container";
 
 describe("container", () => {
   beforeEach(() => {

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { AuthHeaderSlot } from "@/modules/auth/components/auth-header-slot";
 
 const mockSignOutExecute = vi.fn().mockResolvedValue(undefined);
@@ -16,6 +17,7 @@ let mockUser: {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  authType: "email" | "google" | "apple" | "other";
 } | null = null;
 let mockLoading = false;
 
@@ -53,6 +55,7 @@ describe("AuthHeaderSlot", () => {
       email: "a@b.com",
       displayName: "Alice",
       photoURL: null,
+      authType: "email",
     };
 
     render(<AuthHeaderSlot />);
@@ -66,6 +69,7 @@ describe("AuthHeaderSlot", () => {
       email: "a@b.com",
       displayName: null,
       photoURL: null,
+      authType: "email",
     };
 
     render(<AuthHeaderSlot />);
@@ -79,11 +83,30 @@ describe("AuthHeaderSlot", () => {
       email: null,
       displayName: null,
       photoURL: null,
+      authType: "other",
     };
 
     render(<AuthHeaderSlot />);
 
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
+  });
+
+  it("renders profile link when user is set and dropdown is open", async () => {
+    const user = (await import("@testing-library/user-event")).default.setup();
+    mockUser = {
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: null,
+      authType: "email",
+    };
+
+    render(<AuthHeaderSlot />);
+    await user.click(screen.getByRole("button", { name: "Alice" }));
+    const profileLink = await screen.findByRole("menuitem", {
+      name: "Profile",
+    });
+    expect(profileLink).toHaveAttribute("href", "/auth/profile");
   });
 
   it("calls signOut when sign out is clicked", async () => {
@@ -93,6 +116,7 @@ describe("AuthHeaderSlot", () => {
       email: "a@b.com",
       displayName: "Alice",
       photoURL: null,
+      authType: "email",
     };
     mockSignOutExecute.mockClear();
 

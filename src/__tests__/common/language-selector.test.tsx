@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+
 import { LanguageSelector } from "@/common/components/language-selector";
 
 const defaultProps = {

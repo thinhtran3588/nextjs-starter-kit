@@ -1,7 +1,7 @@
 "use client";
 
-import { Link } from "@/common/routing/navigation";
-import { useContainer } from "@/common/hooks/use-container";
+import { useTranslations } from "next-intl";
+
 import { Button } from "@/common/components/button";
 import {
   DropdownMenu,
@@ -9,9 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/common/components/dropdown-menu";
+import { useContainer } from "@/common/hooks/use-container";
+import { Link } from "@/common/routing/navigation";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 import type { SignOutUseCase } from "@/modules/auth/use-cases/sign-out-use-case";
-import { useTranslations } from "next-intl";
 
 export function AuthHeaderSlot() {
   const t = useTranslations("common");
@@ -47,7 +48,7 @@ export function AuthHeaderSlot() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48 sm:w-auto">
           <DropdownMenuItem asChild>
-            <Link href="/app/profile">{profileLabel}</Link>
+            <Link href="/auth/profile">{profileLabel}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleSignOut}>
             {signOutLabel}

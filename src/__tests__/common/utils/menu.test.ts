@@ -1,6 +1,7 @@
-import { describe, it, expect } from "vitest";
-import { resolveMenuItems } from "@/common/utils/menu";
+import { describe, expect, it } from "vitest";
+
 import type { MenuItem } from "@/common/interfaces/menu-item";
+import { resolveMenuItems } from "@/common/utils/menu";
 
 describe("resolveMenuItems", () => {
   it("resolves flat menu items with translation function", () => {

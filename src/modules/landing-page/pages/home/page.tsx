@@ -1,4 +1,5 @@
-import { Link } from "@/common/routing/navigation";
+import { getTranslations } from "next-intl/server";
+
 import { Button } from "@/common/components/button";
 import {
   Card,
@@ -7,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/common/components/card";
-import { getTranslations } from "next-intl/server";
+import { Link } from "@/common/routing/navigation";
 import { ScrollReveal } from "./components/scroll-reveal";
 
 export async function LandingPage() {
@@ -17,13 +18,13 @@ export async function LandingPage() {
   return (
     <>
       <div className="flex flex-col gap-20 sm:gap-24">
-        <section className="hero-grid glass-panel-strong liquid-border rounded-2xl sm:rounded-3xl px-6 py-12 sm:px-10 sm:py-16">
+        <section className="hero-grid glass-panel-strong liquid-border rounded-2xl px-6 py-12 sm:rounded-3xl sm:px-10 sm:py-16">
           <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div className="space-y-5">
-              <p className="text-xs font-medium uppercase tracking-[0.3em] text-[var(--text-muted)]">
+              <p className="text-xs font-medium tracking-[0.3em] text-[var(--text-muted)] uppercase">
                 {tHome("hero.eyebrow")}
               </p>
-              <h1 className="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
+              <h1 className="text-3xl leading-tight font-semibold text-white sm:text-4xl lg:text-5xl">
                 {tHome("hero.title")}
               </h1>
               <p className="max-w-xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">

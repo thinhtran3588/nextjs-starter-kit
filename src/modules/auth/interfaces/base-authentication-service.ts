@@ -1,4 +1,7 @@
-import type { AuthStateCallback } from "@/modules/auth/domain/types";
+import type {
+  AuthResult,
+  AuthStateCallback,
+} from "@/modules/auth/domain/types";
 
 export interface BaseAuthenticationService {
   signInWithGoogle(): Promise<void>;
@@ -11,4 +14,6 @@ export interface BaseAuthenticationService {
   sendPasswordReset(email: string): Promise<void>;
   signOut(): Promise<void>;
   subscribeToAuthState(callback: AuthStateCallback): () => void;
+  updateDisplayName(displayName: string): Promise<AuthResult>;
+  updatePassword(oldPassword: string, newPassword: string): Promise<AuthResult>;
 }

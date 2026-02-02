@@ -129,13 +129,38 @@
         },
         "profile": {
           "title": "Profile",
-          "displayNameLabel": "Display name",
           "emailLabel": "Email",
+          "fullNameLabel": "Full name",
+          "signInTypeLabel": "Sign-in type",
+          "signInTypeEmail": "Email",
+          "signInTypeGoogle": "Google",
+          "signInTypeApple": "Apple",
+          "signInTypeOther": "Other",
           "saveButton": "Save",
+          "passwordSectionTitle": "Update password",
+          "oldPasswordLabel": "Current password",
+          "newPasswordLabel": "New password",
+          "confirmPasswordLabel": "Confirm new password",
+          "cancelButton": "Cancel",
+          "changePasswordButton": "Change password",
+          "updatePasswordButton": "Update password",
           "backToApp": "Back to app",
           "successMessage": "Profile updated.",
+          "passwordSuccessMessage": "Password updated.",
+          "validation": {
+            "fullNameMaxLength": "Full name must be at most 200 characters",
+            "oldPasswordRequired": "Current password is required",
+            "minLength": "At least 8 characters",
+            "passwordMaxLength": "Password must be at most 20 characters",
+            "uppercase": "At least one uppercase letter",
+            "lowercase": "At least one lowercase letter",
+            "number": "At least one number",
+            "specialChar": "At least one special character",
+            "passwordsDoNotMatch": "Passwords do not match"
+          },
           "errors": {
-            "generic": "Something went wrong. Please try again."
+            "generic": "Something went wrong. Please try again.",
+            "invalidCredentials": "Current password is incorrect."
           }
         }
       }

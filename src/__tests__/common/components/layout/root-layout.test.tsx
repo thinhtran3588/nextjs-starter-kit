@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
 import { RootLayout } from "@/common/components/layout/root-layout";
 
 describe("RootLayout (layout)", () => {

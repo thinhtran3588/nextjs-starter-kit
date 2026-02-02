@@ -1,15 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+
+import { Button } from "@/common/components/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/common/components/dropdown-menu";
-import { Button } from "@/common/components/button";
 
 describe("DropdownMenu (common/components)", () => {
   it("opens and shows content, label, separator and items when trigger is clicked", async () => {

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { Link } from "@/common/routing/navigation";
+
 import { ErrorPageView } from "@/common/components/error-page-view";
+import { Link } from "@/common/routing/navigation";
 
 describe("ErrorPageView", () => {
   it("renders title and description", () => {

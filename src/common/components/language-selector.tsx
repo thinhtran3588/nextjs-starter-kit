@@ -1,8 +1,10 @@
 "use client";
 
-import { Link, usePathname } from "@/common/routing/navigation";
-import { Button } from "@/common/components/button";
 import { useEffect, useRef, useState } from "react";
+
+import { Button } from "@/common/components/button";
+import { ChevronDownIcon } from "@/common/components/icons";
+import { Link, usePathname } from "@/common/routing/navigation";
 
 export type LocaleOption = {
   locale: string;
@@ -71,18 +73,7 @@ export function LanguageSelector({
       >
         <span className="text-sm">{currentLocaleOption?.flag}</span>
         <span className="hidden sm:inline">{currentLocaleOption?.label}</span>
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 20 20"
-          className="h-3 w-3"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M5 7l5 5 5-5" />
-        </svg>
+        <ChevronDownIcon className="h-3 w-3" />
       </Button>
       {isOpen ? (
         <div
