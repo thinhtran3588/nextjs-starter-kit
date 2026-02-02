@@ -2,23 +2,41 @@ import { getAnalytics } from "firebase/analytics";
 import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDcy6bpj1GgXl0fVrD8iAg48TCZZwvGooU",
-  authDomain: "gem-signal-starter-kit.firebaseapp.com",
-  projectId: "gem-signal-starter-kit",
-  storageBucket: "gem-signal-starter-kit.firebasestorage.app",
-  messagingSenderId: "528896603302",
-  appId: "1:528896603302:web:eaf9d60df93df1d461b067",
-  measurementId: "G-BRV7JQ5NJ4",
-};
+function getFirebaseConfig(): {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+  measurementId: string;
+} | null {
+  const raw = process.env.NEXT_PUBLIC_FIREBASE_CONFIG;
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as {
+      apiKey: string;
+      authDomain: string;
+      projectId: string;
+      storageBucket: string;
+      messagingSenderId: string;
+      appId: string;
+      measurementId: string;
+    };
+  } catch {
+    return null;
+  }
+}
 
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 
 function getFirebaseApp(): FirebaseApp | null {
   if (typeof window === "undefined") return null;
+  const config = getFirebaseConfig();
+  if (!config) return null;
   if (!app) {
-    app = initializeApp(firebaseConfig);
+    app = initializeApp(config);
     getAnalytics(app);
   }
   return app;
