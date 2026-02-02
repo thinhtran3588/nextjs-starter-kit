@@ -9,6 +9,7 @@ vi.mock("@/application/config/firebase-config", () => ({
 }));
 
 vi.mock("firebase/auth", () => ({
+  getAuth: vi.fn(),
   GoogleAuthProvider: vi.fn(),
   createUserWithEmailAndPassword: vi.fn(),
   onAuthStateChanged: vi.fn(() => () => {}),

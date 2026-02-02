@@ -2,10 +2,13 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthHeaderSlot } from "@/modules/auth/components/auth-header-slot";
 
+const mockSignOutExecute = vi.fn().mockResolvedValue(undefined);
+
 vi.mock("@/common/hooks/use-container", () => ({
-  useContainer: () => ({
-    resolve: vi.fn(),
-  }),
+  useContainer: vi.fn(() => ({
+    resolve: (name: string) =>
+      name === "signOutUseCase" ? { execute: mockSignOutExecute } : {},
+  })),
 }));
 
 let mockUser: {
@@ -55,5 +58,51 @@ describe("AuthHeaderSlot", () => {
     render(<AuthHeaderSlot />);
 
     expect(screen.getByRole("button", { name: "Alice" })).toBeInTheDocument();
+  });
+
+  it("renders email when user has no displayName", () => {
+    mockUser = {
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: null,
+      photoURL: null,
+    };
+
+    render(<AuthHeaderSlot />);
+
+    expect(screen.getByRole("button", { name: "a@b.com" })).toBeInTheDocument();
+  });
+
+  it("renders sign-in label when user has no displayName and no email", () => {
+    mockUser = {
+      id: "uid-1",
+      email: null,
+      displayName: null,
+      photoURL: null,
+    };
+
+    render(<AuthHeaderSlot />);
+
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
+  });
+
+  it("calls signOut when sign out is clicked", async () => {
+    const user = (await import("@testing-library/user-event")).default.setup();
+    mockUser = {
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: null,
+    };
+    mockSignOutExecute.mockClear();
+
+    render(<AuthHeaderSlot />);
+    await user.click(screen.getByRole("button", { name: "Alice" }));
+    const signOutItem = await screen.findByRole("menuitem", {
+      name: "Sign out",
+    });
+    await user.click(signOutItem);
+
+    expect(mockSignOutExecute).toHaveBeenCalledWith({});
   });
 });

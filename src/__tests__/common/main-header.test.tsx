@@ -241,4 +241,13 @@ describe("MainHeader", () => {
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
     expect(screen.getByTestId("mobile-menu")).toBeInTheDocument();
   });
+
+  it("does not render auth slot in mobile menu when authSlot is undefined", () => {
+    render(<MainHeader {...baseProps} authSlot={undefined} />);
+    fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
+    const mobileMenu = screen.getByTestId("mobile-menu");
+    const nav = within(mobileMenu).getByRole("navigation");
+    const links = within(nav).getAllByRole("link");
+    expect(links[0]).toHaveTextContent("Home");
+  });
 });

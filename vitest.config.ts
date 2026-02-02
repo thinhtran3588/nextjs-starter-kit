@@ -14,6 +14,13 @@ export default defineConfig({
         ),
       },
       {
+        find: "@/application/routing/navigation",
+        replacement: path.resolve(
+          __dirname,
+          "./src/__tests__/test-utils/navigation.tsx",
+        ),
+      },
+      {
         find: "@",
         replacement: path.resolve(__dirname, "./src"),
       },
@@ -27,10 +34,10 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "html"],
       thresholds: {
-        lines: 90,
-        functions: 92,
-        branches: 93,
-        statements: 90,
+        lines: 100,
+        functions: 100,
+        branches: 100,
+        statements: 100,
       },
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
@@ -38,6 +45,8 @@ export default defineConfig({
         "src/application/localization/**",
         "src/modules/auth/interfaces/**",
         "src/modules/auth/domain/types.ts",
+        "src/common/interfaces/menu-item.ts",
+        "src/application/config/firebase-config.ts",
       ],
     },
   },
