@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { Link } from "@/application/routing/navigation";
 import { AuthLayout } from "@/modules/auth/components/auth-layout";
 import { SignInPage } from "@/modules/auth/pages/sign-in/page";
 import { SignUpPage } from "@/modules/auth/pages/sign-up/page";
@@ -7,22 +6,26 @@ import { ForgotPasswordPage } from "@/modules/auth/pages/forgot-password/page";
 import messages from "@/application/localization/en.json";
 
 describe("Auth pages", () => {
-  it("renders the shared auth layout shell", () => {
+  it("renders the shared auth layout shell", async () => {
     render(
-      <AuthLayout>
-        <div className="space-y-6">
-          <h1 className="text-3xl font-semibold text-white sm:text-4xl">
-            {messages.modules.auth.pages["sign-in"].title}
-          </h1>
-          <Link href="/">{messages.common.navigation.backToHome}</Link>
-        </div>
-      </AuthLayout>,
+      await AuthLayout({
+        children: (
+          <div className="space-y-6">
+            <h1 className="text-3xl font-semibold text-white sm:text-4xl">
+              {messages.modules.auth.pages["sign-in"].title}
+            </h1>
+          </div>
+        ),
+      }),
     );
 
     expect(
       screen.getByRole("heading", {
         name: messages.modules.auth.pages["sign-in"].title,
       }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: messages.common.navigation.backToHome }),
     ).toBeInTheDocument();
   });
 

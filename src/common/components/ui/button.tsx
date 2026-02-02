@@ -42,13 +42,49 @@ const buttonVariants = cva(
   },
 );
 
+function LoaderIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path
+        d="M21 12a9 9 0 1 1-6.219-8.56"
+        className="animate-spin origin-center"
+      />
+    </svg>
+  );
+}
+
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    loading?: boolean;
   };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      loading = false,
+      children,
+      disabled,
+      ...props
+    },
+    ref,
+  ) => {
     const slotClassName = cn(buttonVariants({ variant, size, className }));
     if (asChild) {
       const childArray = Children.toArray(children);
@@ -87,8 +123,22 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     }
     return (
-      <button ref={ref} className={slotClassName} data-slot="button" {...props}>
-        {children}
+      <button
+        ref={ref}
+        className={slotClassName}
+        data-slot="button"
+        disabled={disabled ?? loading}
+        aria-busy={loading}
+        {...props}
+      >
+        {loading ? (
+          <>
+            <LoaderIcon className="size-4 shrink-0" />
+            {children}
+          </>
+        ) : (
+          children
+        )}
       </button>
     );
   },

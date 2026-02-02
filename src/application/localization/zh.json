@@ -6,6 +6,8 @@
       "backToHome": "返回主页",
       "signIn": "登录",
       "signUp": "注册",
+      "signOut": "退出登录",
+      "profile": "个人资料",
       "createAccount": "创建账号",
       "privacy": "隐私",
       "terms": "条款",
@@ -41,13 +43,78 @@
     "auth": {
       "pages": {
         "sign-in": {
-          "title": "登录"
+          "title": "登录",
+          "or": "或",
+          "googleButton": "使用 Google 继续",
+          "emailLabel": "邮箱",
+          "passwordLabel": "密码",
+          "submitButton": "使用邮箱登录",
+          "forgotPasswordLink": "忘记密码？",
+          "noAccountPrompt": "还没有账号？",
+          "signUpLink": "注册",
+          "agreeToPolicyAndTerms": "登录即表示您同意我们的{privacy}和{terms}。",
+          "validation": {
+            "invalidEmail": "邮箱格式不正确",
+            "passwordRequired": "请输入密码",
+            "passwordMaxLength": "密码最多 20 个字符"
+          },
+          "errors": {
+            "invalidCredentials": "邮箱或密码错误。",
+            "tooManyRequests": "尝试次数过多，请稍后再试。",
+            "generic": "出错了，请重试。"
+          }
         },
         "sign-up": {
-          "title": "注册"
+          "title": "注册",
+          "googleButton": "使用 Google 继续",
+          "emailLabel": "邮箱",
+          "passwordLabel": "密码",
+          "confirmPasswordLabel": "确认密码",
+          "fullNameLabel": "姓名（选填）",
+          "submitButton": "创建账号",
+          "hasAccountPrompt": "已有账号？",
+          "signInLink": "登录",
+          "agreeToPolicyAndTerms": "注册即表示您同意我们的{privacy}和{terms}。",
+          "validation": {
+            "invalidEmail": "邮箱格式不正确",
+            "passwordRequired": "请输入密码",
+            "minLength": "至少 8 个字符",
+            "passwordMaxLength": "密码最多 20 个字符",
+            "fullNameMaxLength": "姓名最多 200 个字符",
+            "uppercase": "至少一个大写字母",
+            "lowercase": "至少一个小写字母",
+            "number": "至少一个数字",
+            "specialChar": "至少一个特殊字符",
+            "passwordsDoNotMatch": "两次密码不一致"
+          },
+          "errors": {
+            "emailAlreadyInUse": "该邮箱已被使用。",
+            "generic": "出错了，请重试。"
+          }
         },
         "forgot-password": {
-          "title": "忘记密码"
+          "title": "忘记密码",
+          "emailLabel": "邮箱",
+          "submitButton": "发送重置链接",
+          "successMessage": "如果存在该邮箱的账号，我们已发送重置链接。",
+          "backToSignIn": "返回登录",
+          "validation": {
+            "invalidEmail": "邮箱格式不正确"
+          },
+          "errors": {
+            "generic": "出错了，请重试。"
+          }
+        },
+        "profile": {
+          "title": "个人资料",
+          "displayNameLabel": "显示名称",
+          "emailLabel": "邮箱",
+          "saveButton": "保存",
+          "backToApp": "返回应用",
+          "successMessage": "资料已更新。",
+          "errors": {
+            "generic": "出错了，请重试。"
+          }
         }
       }
     },

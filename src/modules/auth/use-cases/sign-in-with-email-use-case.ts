@@ -1,0 +1,20 @@
+import type { BaseAuthenticationService } from "@/modules/auth/interfaces/base-authentication-service";
+import type { AuthResult } from "@/modules/auth/domain/types";
+import { BaseUseCase } from "@/common/utils/base-use-case";
+import { mapAuthErrorCode } from "@/modules/auth/utils/map-auth-error";
+
+export class SignInWithEmailUseCase extends BaseUseCase {
+  constructor(private readonly authService: BaseAuthenticationService) {
+    super();
+  }
+
+  async execute(input: {
+    email: string;
+    password: string;
+  }): Promise<AuthResult> {
+    return this.handle(
+      () => this.authService.signInWithEmail(input.email, input.password),
+      (err) => mapAuthErrorCode((err as { code?: string })?.code),
+    );
+  }
+}

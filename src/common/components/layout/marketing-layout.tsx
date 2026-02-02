@@ -27,6 +27,8 @@ export async function MarketingLayout({ children }: MarketingLayoutProps) {
         badge={tHome("badge")}
         homeLabel={tCommon("navigation.home")}
         signInLabel={tCommon("navigation.signIn")}
+        profileLabel={tCommon("navigation.profile")}
+        signOutLabel={tCommon("navigation.signOut")}
         privacyLabel={tCommon("navigation.privacy")}
         termsLabel={tCommon("navigation.terms")}
         documentsLabel={tCommon("navigation.documents")}

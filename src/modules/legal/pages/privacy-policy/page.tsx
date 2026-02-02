@@ -1,9 +1,7 @@
-import { Link } from "@/application/routing/navigation";
-import { Button } from "@/common/components/ui/button";
+import { BackToHomeButton } from "@/common/components/back-to-home-button";
 import { getTranslations } from "next-intl/server";
 
 export async function PrivacyPolicyPage() {
-  const tCommon = await getTranslations("common");
   const tPrivacyPolicy = await getTranslations(
     "modules.legal.pages.privacy-policy",
   );
@@ -103,9 +101,7 @@ export async function PrivacyPolicyPage() {
       </div>
 
       <div className="mt-12">
-        <Button asChild variant="default">
-          <Link href="/">{tCommon("navigation.backToHome")}</Link>
-        </Button>
+        <BackToHomeButton />
       </div>
     </section>
   );

@@ -56,6 +56,31 @@ The project follows Clean Architecture with a modular structure.
 - Prefer clarity and maintainability over cleverness.
 - Keep responsibilities small and focused.
 
+### Import Type
+
+**CRITICAL**: Always use `import type` when importing only types (interfaces, type aliases). Use regular `import` only when you need runtime values (classes, functions, constants).
+
+- Use `import type { Foo } from '...'` when `Foo` is used only as a type.
+- Use `import type Foo from '...'` for default type imports.
+- Use regular `import` when the symbol is used at runtime (e.g. a component, function, or class you call or instantiate).
+
+**Examples:**
+
+```typescript
+// ✅ GOOD - Type-only import
+import type { User } from './types';
+import type { Props } from './component-types';
+
+// ✅ GOOD - Runtime import
+import { Button } from './button';
+import { useAuth } from './use-auth';
+
+// ❌ BAD - Regular import for type-only usage
+import { User } from './types';
+```
+
+**Principle**: `import type` is erased at compile time and avoids pulling in runtime code. Use it whenever the import is used only in type positions.
+
 ### Code Comments
 
 **CRITICAL**: Do not write comments if the code is obvious. Code should be self-documenting through clear naming and structure.

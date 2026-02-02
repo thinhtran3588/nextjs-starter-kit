@@ -1,8 +1,6 @@
-import { Link } from "@/application/routing/navigation";
+import { BackToHomeButton } from "@/common/components/back-to-home-button";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Button } from "@/common/components/ui/button";
-import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/application/routing/routing";
 import { isSupportedLocale } from "@/application/routing/routing";
 import { readDocContent } from "@/modules/docs/lib/read-doc";
@@ -21,7 +19,6 @@ export async function DocPage({ slug }: DocPageProps) {
   if (content === null) {
     notFound();
   }
-  const tCommon = await getTranslations("common");
 
   return (
     <section className="glass-panel-strong liquid-border rounded-[32px] px-8 py-12 sm:px-14">
@@ -29,9 +26,7 @@ export async function DocPage({ slug }: DocPageProps) {
         <MarkdownContent content={content} />
       </div>
       <div className="mt-12">
-        <Button asChild variant="default">
-          <Link href="/">{tCommon("navigation.backToHome")}</Link>
-        </Button>
+        <BackToHomeButton />
       </div>
     </section>
   );

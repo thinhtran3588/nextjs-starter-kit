@@ -142,6 +142,15 @@ describe("Button", () => {
     const button = container.querySelector("button");
     expect(button?.className).toMatch(/rounded-full/);
   });
+
+  it("when loading is true, shows loading icon and is disabled", () => {
+    render(<Button loading>Submit</Button>);
+    const button = screen.getByRole("button", { name: /submit/i });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    const svg = button.querySelector("svg");
+    expect(svg).toBeInTheDocument();
+  });
 });
 
 describe("buttonVariants", () => {
