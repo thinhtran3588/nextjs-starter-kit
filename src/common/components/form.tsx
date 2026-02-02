@@ -11,7 +11,7 @@ import {
 } from "react-hook-form";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/common/utils/cn";
-import { Label } from "@/common/components/ui/label";
+import { Label } from "@/common/components/label";
 
 const Form = FormProvider;
 

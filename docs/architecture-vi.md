@@ -203,11 +203,12 @@ src/                               # Toàn bộ code ứng dụng ở đây
 │   ├── localization/              # Bản dịch next-intl
 │   │   ├── en.json
 │   │   └── {locale}.json
-│   ├── routing/                   # Cấu hình routing next-intl
-│   │   ├── routing.ts             # Cấu hình locale routing
-│   │   └── request.ts             # Cấu hình request cho getTranslations
 │   └── configurations/            # Cấu hình cấp app
 ├── common/                        # Code dùng chung mọi module
+│   ├── routing/                   # Cấu hình routing next-intl
+│   │   ├── routing.ts             # Cấu hình locale routing
+│   │   ├── navigation.ts          # Link, useRouter, usePathname
+│   │   └── request.ts             # Cấu hình request cho getTranslations
 │   ├── components/                # Component dùng chung
 │   │   ├── ui/                    # Component shadcn/ui
 │   │   ├── layout/                # Component layout (Header, Footer, Sidebar)
@@ -273,7 +274,7 @@ export default function Page() {
 
 ```tsx
 // app/[locale]/layout.tsx
-import { RootLayout } from "@/common/components/layout/root-layout";
+import { RootLayout } from "@/common/components/root-layout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <RootLayout>{children}</RootLayout>;
@@ -399,7 +400,7 @@ Cách này giữ `/app` tối thiểu và toàn bộ code trong `/src` để d�
 - `src/common/utils/` – tiện ích (`cn()`, formatters, v.v.).
 - `src/modules/{module}/` – module tính năng với pages, components, domain, application.
 - `src/application/localization/` – file JSON bản dịch next-intl theo locale.
-- `src/application/routing/` – cấu hình routing và request next-intl.
+- `src/common/routing/` – cấu hình routing, navigation và request next-intl.
 
 ### Forms và Validation
 

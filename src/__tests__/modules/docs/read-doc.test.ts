@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { readDocContent } from "@/modules/docs/lib/read-doc";
+import { readDocContent } from "@/common/utils/read-doc";
 
 describe("readDocContent", () => {
   const mockReadFile = vi.fn();
@@ -8,10 +8,11 @@ describe("readDocContent", () => {
     mockReadFile.mockReset();
   });
 
-  it("returns null for invalid slug", async () => {
+  it("returns null when file does not exist", async () => {
+    mockReadFile.mockRejectedValue(new Error("ENOENT"));
     expect(await readDocContent("invalid", "en", mockReadFile)).toBe(null);
     expect(await readDocContent("", "vi", mockReadFile)).toBe(null);
-    expect(mockReadFile).not.toHaveBeenCalled();
+    expect(mockReadFile).toHaveBeenCalled();
   });
 
   it("returns content for valid slug and locale en", async () => {
@@ -48,7 +49,7 @@ describe("readDocContent", () => {
     );
   });
 
-  it("returns null when file does not exist", async () => {
+  it("returns null on read error", async () => {
     mockReadFile.mockRejectedValue(new Error("ENOENT"));
     const result = await readDocContent("architecture", "vi", mockReadFile);
     expect(result).toBe(null);

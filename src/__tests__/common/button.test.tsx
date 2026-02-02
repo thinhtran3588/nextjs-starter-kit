@@ -1,7 +1,7 @@
 import { createRef } from "react";
 import { render, screen } from "@testing-library/react";
-import { Link } from "@/application/routing/navigation";
-import { Button, buttonVariants } from "@/common/components/ui/button";
+import { Link } from "@/common/routing/navigation";
+import { Button, buttonVariants } from "@/common/components/button";
 
 describe("Button", () => {
   it("renders as a button with default variant and size", () => {

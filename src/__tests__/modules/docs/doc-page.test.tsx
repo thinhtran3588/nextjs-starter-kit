@@ -13,7 +13,7 @@ vi.mock("next-intl/server", () => ({
 }));
 
 const mockReadDocContent = vi.fn();
-vi.mock("@/modules/docs/lib/read-doc", () => ({
+vi.mock("@/common/utils/read-doc", () => ({
   readDocContent: (...args: unknown[]) => mockReadDocContent(...args),
 }));
 

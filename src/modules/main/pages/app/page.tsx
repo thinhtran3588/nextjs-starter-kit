@@ -1,4 +1,4 @@
-import { SimplePage } from "@/common/components/layout/simple-page";
+import { SimplePage } from "@/common/components/simple-page";
 import { getTranslations } from "next-intl/server";
 
 export async function AppPage() {

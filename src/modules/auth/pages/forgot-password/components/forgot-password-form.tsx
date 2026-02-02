@@ -4,10 +4,10 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Link } from "@/application/routing/navigation";
+import { Link } from "@/common/routing/navigation";
 import { useContainer } from "@/common/hooks/use-container";
 import type { SendPasswordResetUseCase } from "@/modules/auth/use-cases/send-password-reset-use-case";
-import { Button } from "@/common/components/ui/button";
+import { Button } from "@/common/components/button";
 import {
   Form,
   FormControl,
@@ -15,8 +15,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/common/components/ui/form";
-import { Input } from "@/common/components/ui/input";
+} from "@/common/components/form";
+import { Input } from "@/common/components/input";
 import {
   getForgotPasswordSchema,
   type ForgotPasswordInput,

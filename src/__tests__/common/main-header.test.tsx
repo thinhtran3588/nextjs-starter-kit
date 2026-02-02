@@ -1,11 +1,12 @@
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import { vi } from "vitest";
-import { MarketingHeader } from "@/common/components/layout/marketing-header";
+import { MainHeader } from "@/common/components/main-header";
+import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 
 let mockPathname = "/";
-vi.mock("@/application/routing/navigation", async (importOriginal) => {
+vi.mock("@/common/routing/navigation", async (importOriginal) => {
   const mod =
-    await importOriginal<typeof import("@/application/routing/navigation")>();
+    await importOriginal<typeof import("@/common/routing/navigation")>();
   return {
     ...mod,
     usePathname: () => mockPathname,
@@ -18,20 +19,36 @@ vi.mock("@/modules/auth/hooks/use-auth-user-store", () => ({
   ) => selector({ user: null, loading: false }),
 }));
 
+const menuItems: ResolvedMenuItem[] = [
+  { id: "home", label: "Home", href: "/" },
+  {
+    id: "documents",
+    label: "Documents",
+    href: "",
+    children: [
+      { id: "architecture", label: "Architecture", href: "/docs/architecture" },
+      {
+        id: "development-guide",
+        label: "Development guide",
+        href: "/docs/development-guide",
+      },
+      {
+        id: "testing-guide",
+        label: "Testing guide",
+        href: "/docs/testing-guide",
+      },
+    ],
+  },
+  { id: "privacy", label: "Privacy", href: "/privacy-policy" },
+  { id: "terms", label: "Terms", href: "/terms-of-service" },
+];
+
 const baseProps = {
   badge: "Liquid Badge",
-  homeLabel: "Home",
+  menuItems,
   signInLabel: "Sign in",
   profileLabel: "Profile",
   signOutLabel: "Sign out",
-  privacyLabel: "Privacy",
-  termsLabel: "Terms",
-  documentsLabel: "Documents",
-  docItems: [
-    { label: "Architecture", href: "/docs/architecture" },
-    { label: "Development guide", href: "/docs/development-guide" },
-    { label: "Testing guide", href: "/docs/testing-guide" },
-  ],
   languageLabel: "Language",
   menuLabel: "Menu",
   currentLocale: "en",
@@ -49,23 +66,23 @@ const setScrollY = (value: number) => {
   });
 };
 
-describe("MarketingHeader", () => {
+describe("MainHeader", () => {
   it("renders the primary navigation", () => {
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
 
     expect(screen.getByText(baseProps.badge)).toBeInTheDocument();
-    expect(screen.getByText(baseProps.homeLabel)).toBeInTheDocument();
+    expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText(baseProps.signInLabel)).toBeInTheDocument();
-    expect(screen.getByText(baseProps.privacyLabel)).toBeInTheDocument();
-    expect(screen.getByText(baseProps.termsLabel)).toBeInTheDocument();
+    expect(screen.getByText("Privacy")).toBeInTheDocument();
+    expect(screen.getByText("Terms")).toBeInTheDocument();
   });
 
   it("highlights the current page in the menu", () => {
     mockPathname = "/";
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
 
     const homeLinks = screen.getAllByRole("link", {
-      name: baseProps.homeLabel,
+      name: "Home",
     });
     expect(homeLinks.length).toBeGreaterThan(0);
     homeLinks.forEach((link) => {
@@ -75,11 +92,11 @@ describe("MarketingHeader", () => {
 
   it("highlights Privacy when on privacy-policy page", () => {
     mockPathname = "/privacy-policy";
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
 
-    const homeLink = screen.getByRole("link", { name: baseProps.homeLabel });
+    const homeLink = screen.getByRole("link", { name: "Home" });
     const privacyLink = screen.getByRole("link", {
-      name: baseProps.privacyLabel,
+      name: "Privacy",
     });
 
     expect(homeLink).not.toHaveClass("font-bold");
@@ -88,10 +105,10 @@ describe("MarketingHeader", () => {
 
   it("highlights Terms when on terms-of-service page", () => {
     mockPathname = "/terms-of-service";
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
 
-    const homeLink = screen.getByRole("link", { name: baseProps.homeLabel });
-    const termsLink = screen.getByRole("link", { name: baseProps.termsLabel });
+    const homeLink = screen.getByRole("link", { name: "Home" });
+    const termsLink = screen.getByRole("link", { name: "Terms" });
 
     expect(homeLink).not.toHaveClass("font-bold");
     expect(termsLink).toHaveClass("font-bold");
@@ -99,12 +116,12 @@ describe("MarketingHeader", () => {
 
   it("highlights current page in mobile menu when open", () => {
     mockPathname = "/privacy-policy";
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
 
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
 
     const privacyLinks = screen.getAllByRole("link", {
-      name: baseProps.privacyLabel,
+      name: "Privacy",
     });
     expect(privacyLinks.length).toBeGreaterThanOrEqual(1);
     privacyLinks.forEach((link) => {
@@ -113,7 +130,7 @@ describe("MarketingHeader", () => {
   });
 
   it("shows Sign in at top of mobile menu", () => {
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
 
     const nav = screen.getByTestId("mobile-menu");
@@ -124,19 +141,17 @@ describe("MarketingHeader", () => {
   });
 
   it("closes mobile menu when a nav link is clicked", () => {
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
     const mobileMenu = screen.getByTestId("mobile-menu");
     expect(mobileMenu).toBeInTheDocument();
 
-    fireEvent.click(
-      within(mobileMenu).getByRole("link", { name: baseProps.homeLabel }),
-    );
+    fireEvent.click(within(mobileMenu).getByRole("link", { name: "Home" }));
     expect(screen.queryByTestId("mobile-menu")).not.toBeInTheDocument();
   });
 
   it("closes mobile menu when a document link is clicked", () => {
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
     const mobileMenu = screen.getByTestId("mobile-menu");
     expect(mobileMenu).toBeInTheDocument();
@@ -149,7 +164,7 @@ describe("MarketingHeader", () => {
 
   it("highlights current document in mobile menu when on docs page", () => {
     mockPathname = "/docs/architecture";
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
 
     const architectureLinks = within(
@@ -161,11 +176,11 @@ describe("MarketingHeader", () => {
 
   it("highlights Home in mobile menu when on home page", () => {
     mockPathname = "/";
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
 
     const homeLinks = screen.getAllByRole("link", {
-      name: baseProps.homeLabel,
+      name: "Home",
     });
     homeLinks.forEach((link) => {
       expect(link).toHaveClass("font-bold");
@@ -174,11 +189,11 @@ describe("MarketingHeader", () => {
 
   it("highlights Terms in mobile menu when on terms page", () => {
     mockPathname = "/terms-of-service";
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
 
     const termsLinks = screen.getAllByRole("link", {
-      name: baseProps.termsLabel,
+      name: "Terms",
     });
     expect(termsLinks.length).toBeGreaterThanOrEqual(1);
     termsLinks.forEach((link) => {
@@ -188,7 +203,7 @@ describe("MarketingHeader", () => {
 
   it("hides on scroll down and shows on scroll up", () => {
     setScrollY(0);
-    const { container } = render(<MarketingHeader {...baseProps} />);
+    const { container } = render(<MainHeader {...baseProps} />);
     const header = container.querySelector("header");
     expect(header).not.toBeNull();
 
@@ -203,7 +218,7 @@ describe("MarketingHeader", () => {
 
   it("keeps the header visible near the top", () => {
     setScrollY(0);
-    const { container } = render(<MarketingHeader {...baseProps} />);
+    const { container } = render(<MainHeader {...baseProps} />);
     const header = container.querySelector("header");
     expect(header).not.toBeNull();
 
@@ -217,14 +232,14 @@ describe("MarketingHeader", () => {
   });
 
   it("renders an empty locale label when missing", () => {
-    render(<MarketingHeader {...baseProps} currentLocale="fr" />);
+    render(<MainHeader {...baseProps} currentLocale="fr" />);
 
     const languageButton = screen.getByRole("button", { name: /^Language:/ });
     expect(languageButton).toHaveAttribute("aria-label", "Language: ");
   });
 
   it("toggles the mobile menu", () => {
-    render(<MarketingHeader {...baseProps} />);
+    render(<MainHeader {...baseProps} />);
 
     expect(screen.queryByTestId("mobile-menu")).not.toBeInTheDocument();
 

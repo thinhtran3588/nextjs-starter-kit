@@ -1,5 +1,5 @@
-import { MarketingLayout } from "@/common/components/layout/marketing-layout";
+import { MainLayout } from "@/common/components/main-layout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <MarketingLayout>{children}</MarketingLayout>;
+  return <MainLayout>{children}</MainLayout>;
 }

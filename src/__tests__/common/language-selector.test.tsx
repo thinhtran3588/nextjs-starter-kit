@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { LanguageSelector } from "@/common/components/layout/language-selector";
+import { LanguageSelector } from "@/common/components/language-selector";
 
 const defaultProps = {
   languageLabel: "Language",

@@ -1,6 +1,6 @@
 import requestConfig, {
   requestConfig as resolveRequestConfig,
-} from "../../../application/routing/request";
+} from "../../../common/routing/request";
 import enMessages from "../../../application/localization/en.json";
 import viMessages from "../../../application/localization/vi.json";
 

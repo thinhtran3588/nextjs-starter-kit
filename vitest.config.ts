@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: "@/application/routing/navigation",
+        find: "@/common/routing/navigation",
         replacement: path.resolve(
           __dirname,
           "./src/__tests__/test-utils/navigation.tsx",

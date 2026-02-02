@@ -1,7 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { routing } from "@/application/routing/routing";
+import { routing } from "@/common/routing/routing";
 import { BackToHomeButton } from "@/common/components/back-to-home-button";
-import { LanguageSelector } from "@/common/components/layout/language-selector";
+import { LanguageSelector } from "@/common/components/language-selector";
 
 type AuthLayoutProps = {
   children: React.ReactNode;

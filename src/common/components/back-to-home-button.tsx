@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link } from "@/application/routing/navigation";
-import { Button } from "@/common/components/ui/button";
+import { Link } from "@/common/routing/navigation";
+import { Button } from "@/common/components/button";
 
 function BackArrowIcon() {
   return (
