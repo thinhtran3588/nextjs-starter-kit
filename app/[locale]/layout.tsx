@@ -1,21 +1,9 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { routing } from "@/common/routing/routing";
 import { RootLayout } from "@/common/components/root-layout";
 import { AppInitializer } from "@/application/components/app-initializer";
 import { SyncAuthState } from "@/modules/auth/components/sync-auth-state";
-import "../globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export async function generateMetadata() {
   const t = await getTranslations("common");
@@ -41,16 +29,10 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <AppInitializer />
-          <SyncAuthState />
-          <RootLayout>{children}</RootLayout>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <AppInitializer />
+      <SyncAuthState />
+      <RootLayout>{children}</RootLayout>
+    </NextIntlClientProvider>
   );
 }

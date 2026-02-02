@@ -37,6 +37,27 @@
         "title": "Next.js Starter Kit",
         "description": "生产就绪的 Next.js 入门套件，采用 Clean Architecture 与模块化结构，支持可扩展的前端开发。"
       }
+    },
+    "errors": {
+      "notFound": {
+        "eyebrow": "未找到",
+        "title": "页面未找到",
+        "description": "您访问的页面不存在或已被移动。",
+        "cta": "返回主页"
+      },
+      "serverError": {
+        "eyebrow": "错误",
+        "title": "出错了",
+        "description": "发生意外错误，请重试。",
+        "tryAgain": "重试",
+        "cta": "返回主页"
+      },
+      "generic": {
+        "eyebrow": "错误",
+        "title": "出错了",
+        "description": "发生错误，请稍后再试。",
+        "cta": "返回主页"
+      }
     }
   },
   "modules": {
