@@ -1,5 +1,6 @@
-import type { AwilixContainer } from "awilix";
+import { asValue, type AwilixContainer } from "awilix";
 import { createContainer, setContainer } from "@/common/utils/container";
+import { getAuthInstance } from "@/application/config/firebase-config";
 import { registerModule as registerAuthModule } from "@/modules/auth/module-configuration";
 import { registerModule as registerDocsModule } from "@/modules/docs/module-configuration";
 import { registerModule as registerLandingPageModule } from "@/modules/landing-page/module-configuration";
@@ -7,6 +8,9 @@ import { registerModule as registerLegalModule } from "@/modules/legal/module-co
 import { registerModule as registerMainModule } from "@/modules/main/module-configuration";
 
 export function registerContainer(container: AwilixContainer<object>): void {
+  container.register({
+    getAuthInstance: asValue(getAuthInstance),
+  });
   registerAuthModule(container);
   registerDocsModule(container);
   registerLandingPageModule(container);

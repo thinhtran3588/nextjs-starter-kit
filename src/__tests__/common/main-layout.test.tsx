@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
+import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 
 const translations: Record<string, Record<string, string>> = {
   common: {
@@ -25,6 +26,12 @@ const translations: Record<string, Record<string, string>> = {
   },
 };
 
+const menuItems: ResolvedMenuItem[] = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "privacy", label: "Privacy", href: "/privacy-policy" },
+  { id: "terms", label: "Terms", href: "/terms-of-service" },
+];
+
 vi.mock("next-intl/server", () => ({
   getLocale: vi.fn().mockResolvedValue("en"),
   getTranslations: vi.fn((namespace: string) =>
@@ -36,7 +43,12 @@ describe("MainLayout", () => {
   it("renders the layout shell and children", async () => {
     const { MainLayout } = await import("@/common/components/main-layout");
 
-    render(await MainLayout({ children: <div>Content</div> }));
+    render(
+      await MainLayout({
+        children: <div>Content</div>,
+        menuItems,
+      }),
+    );
 
     expect(screen.getByText("Content")).toBeInTheDocument();
     expect(

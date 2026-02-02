@@ -1,6 +1,6 @@
 import createNextIntlPlugin from "next-intl/plugin";
 
-const withNextIntl = createNextIntlPlugin("./src/common/routing/request.ts");
+const withNextIntl = createNextIntlPlugin("./src/application/i18n/request.ts");
 
 const nextConfig = {};
 

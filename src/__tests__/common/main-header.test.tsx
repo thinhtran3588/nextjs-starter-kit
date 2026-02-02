@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import { vi } from "vitest";
+import { Link } from "@/common/routing/navigation";
 import { MainHeader } from "@/common/components/main-header";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 
@@ -13,11 +14,7 @@ vi.mock("@/common/routing/navigation", async (importOriginal) => {
   };
 });
 
-vi.mock("@/modules/auth/hooks/use-auth-user-store", () => ({
-  useAuthUserStore: (
-    selector: (s: { user: null; loading: boolean }) => unknown,
-  ) => selector({ user: null, loading: false }),
-}));
+const signInLabel = "Sign in";
 
 const menuItems: ResolvedMenuItem[] = [
   { id: "home", label: "Home", href: "/" },
@@ -46,9 +43,6 @@ const menuItems: ResolvedMenuItem[] = [
 const baseProps = {
   badge: "Liquid Badge",
   menuItems,
-  signInLabel: "Sign in",
-  profileLabel: "Profile",
-  signOutLabel: "Sign out",
   languageLabel: "Language",
   menuLabel: "Menu",
   currentLocale: "en",
@@ -56,6 +50,7 @@ const baseProps = {
     { locale: "en", label: "English", flag: "US" },
     { locale: "vi", label: "Vietnamese", flag: "VN" },
   ],
+  authSlot: <Link href="/auth/sign-in">{signInLabel}</Link>,
 };
 
 const setScrollY = (value: number) => {
@@ -72,7 +67,7 @@ describe("MainHeader", () => {
 
     expect(screen.getByText(baseProps.badge)).toBeInTheDocument();
     expect(screen.getByText("Home")).toBeInTheDocument();
-    expect(screen.getByText(baseProps.signInLabel)).toBeInTheDocument();
+    expect(screen.getByText(signInLabel)).toBeInTheDocument();
     expect(screen.getByText("Privacy")).toBeInTheDocument();
     expect(screen.getByText("Terms")).toBeInTheDocument();
   });
@@ -137,7 +132,7 @@ describe("MainHeader", () => {
     const linksAndButtons = nav.querySelectorAll("a, button");
     const firstLink = linksAndButtons[0];
     expect(firstLink).toHaveAttribute("href", "/auth/sign-in");
-    expect(firstLink).toHaveTextContent(baseProps.signInLabel);
+    expect(firstLink).toHaveTextContent(signInLabel);
   });
 
   it("closes mobile menu when a nav link is clicked", () => {

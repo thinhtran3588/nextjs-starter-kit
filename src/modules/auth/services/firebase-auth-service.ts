@@ -10,12 +10,13 @@ import {
   signOut as firebaseSignOut,
   updateProfile,
 } from "firebase/auth";
-import { getAuthInstance } from "@/application/config/firebase-config";
 import type { Auth } from "firebase/auth";
 import type { BaseAuthenticationService } from "@/modules/auth/interfaces/base-authentication-service";
 import type { AuthUser } from "@/modules/auth/domain/types";
 
-function getAuthOrThrow(): Auth {
+export type GetAuthInstance = () => Auth | null;
+
+function getAuthOrThrow(getAuthInstance: GetAuthInstance): Auth {
   const auth = getAuthInstance();
   if (!auth) throw new Error("Auth not available");
   return auth;
@@ -36,12 +37,21 @@ function mapFirebaseUserToAuthUser(user: {
 }
 
 export class FirebaseAuthenticationService implements BaseAuthenticationService {
+  constructor(private readonly getAuthInstance: GetAuthInstance) {}
+
   async signInWithGoogle(): Promise<void> {
-    await signInWithPopup(getAuthOrThrow(), new GoogleAuthProvider());
+    await signInWithPopup(
+      getAuthOrThrow(this.getAuthInstance),
+      new GoogleAuthProvider(),
+    );
   }
 
   async signInWithEmail(email: string, password: string): Promise<void> {
-    await signInWithEmailAndPassword(getAuthOrThrow(), email, password);
+    await signInWithEmailAndPassword(
+      getAuthOrThrow(this.getAuthInstance),
+      email,
+      password,
+    );
   }
 
   async signUpWithEmail(
@@ -50,7 +60,7 @@ export class FirebaseAuthenticationService implements BaseAuthenticationService 
     displayName?: string,
   ): Promise<void> {
     const { user } = await createUserWithEmailAndPassword(
-      getAuthOrThrow(),
+      getAuthOrThrow(this.getAuthInstance),
       email,
       password,
     );
@@ -60,17 +70,17 @@ export class FirebaseAuthenticationService implements BaseAuthenticationService 
   }
 
   async sendPasswordReset(email: string): Promise<void> {
-    await sendPasswordResetEmail(getAuthOrThrow(), email);
+    await sendPasswordResetEmail(getAuthOrThrow(this.getAuthInstance), email);
   }
 
   async signOut(): Promise<void> {
-    const auth = getAuthInstance();
+    const auth = this.getAuthInstance();
     if (!auth) return;
     await firebaseSignOut(auth);
   }
 
   subscribeToAuthState(callback: (user: AuthUser | null) => void): () => void {
-    const auth = getAuthInstance();
+    const auth = this.getAuthInstance();
     if (!auth) {
       callback(null);
       return () => {};
