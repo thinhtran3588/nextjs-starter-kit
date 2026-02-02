@@ -7,6 +7,10 @@ const translations: Record<string, Record<string, string>> = {
     "navigation.signIn": "Sign in",
     "navigation.privacy": "Privacy",
     "navigation.terms": "Terms",
+    "navigation.documents": "Documents",
+    "navigation.docs.architecture": "Architecture",
+    "navigation.docs.developmentGuide": "Development guide",
+    "navigation.docs.testingGuide": "Testing guide",
     "navigation.menu": "Menu",
     "language.label": "Language",
     "language.options.en": "English",
@@ -28,12 +32,11 @@ vi.mock("next-intl/server", () => ({
   ),
 }));
 
-describe("MarketingLayout", () => {
+describe("MainLayout", () => {
   it("renders the layout shell and children", async () => {
-    const { MarketingLayout } =
-      await import("@/common/components/layout/marketing-layout");
+    const { MainLayout } = await import("@/common/components/main-layout");
 
-    render(await MarketingLayout({ children: <div>Content</div> }));
+    render(await MainLayout({ children: <div>Content</div> }));
 
     expect(screen.getByText("Content")).toBeInTheDocument();
     expect(

@@ -203,11 +203,12 @@ src/                               # 应用代码均在此
 │   ├── localization/              # next-intl 翻译
 │   │   ├── en.json
 │   │   └── {locale}.json
-│   ├── routing/                   # next-intl 路由配置
-│   │   ├── routing.ts             # 语言路由配置
-│   │   └── request.ts             # getTranslations 请求配置
 │   └── configurations/            # 应用级配置
 ├── common/                        # 跨模块共享代码
+│   ├── routing/                   # next-intl 路由配置
+│   │   ├── routing.ts             # 语言路由配置
+│   │   ├── navigation.ts          # Link、useRouter、usePathname
+│   │   └── request.ts             # getTranslations 请求配置
 │   ├── components/                # 公共组件
 │   │   ├── ui/                    # shadcn/ui 组件
 │   │   ├── layout/                # 布局组件（Header、Footer、Sidebar）
@@ -273,7 +274,7 @@ export default function Page() {
 
 ```tsx
 // app/[locale]/layout.tsx
-import { RootLayout } from "@/common/components/layout/root-layout";
+import { RootLayout } from "@/common/components/root-layout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <RootLayout>{children}</RootLayout>;
@@ -399,7 +400,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 - `src/common/utils/`——工具（`cn()`、formatters 等）。
 - `src/modules/{module}/`——功能 module 的 pages、components、domain、application。
 - `src/application/localization/`——next-intl 按 locale 的 JSON 翻译文件。
-- `src/application/routing/`——next-intl routing 与 request 配置。
+- `src/common/routing/`——next-intl routing、navigation 与 request 配置。
 
 ### 表单与校验
 

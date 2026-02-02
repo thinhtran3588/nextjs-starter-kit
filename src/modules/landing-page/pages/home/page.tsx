@@ -1,12 +1,12 @@
-import { Link } from "@/application/routing/navigation";
-import { Button } from "@/common/components/ui/button";
+import { Link } from "@/common/routing/navigation";
+import { Button } from "@/common/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/common/components/ui/card";
+} from "@/common/components/card";
 import { getTranslations } from "next-intl/server";
 import { ScrollReveal } from "./components/scroll-reveal";
 

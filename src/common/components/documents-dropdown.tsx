@@ -1,6 +1,6 @@
 "use client";
 
-import { Link, usePathname } from "@/application/routing/navigation";
+import { Link, usePathname } from "@/common/routing/navigation";
 import { cn } from "@/common/utils/cn";
 import { useEffect, useRef, useState } from "react";
 

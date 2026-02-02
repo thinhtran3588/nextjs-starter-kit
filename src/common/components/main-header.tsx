@@ -1,34 +1,30 @@
 "use client";
 
-import { Link, usePathname } from "@/application/routing/navigation";
+import { Link, usePathname } from "@/common/routing/navigation";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 import { useContainer } from "@/common/hooks/use-container";
 import type { SignOutUseCase } from "@/modules/auth/use-cases/sign-out-use-case";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/common/components/ui/button";
+import { Button } from "@/common/components/button";
 import { cn } from "@/common/utils/cn";
-import type { DocItem } from "@/common/components/layout/documents-dropdown";
-import { DocumentsDropdown } from "@/common/components/layout/documents-dropdown";
+import { DocumentsDropdown } from "@/common/components/documents-dropdown";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/common/components/ui/dropdown-menu";
-import type { LocaleOption } from "@/common/components/layout/language-selector";
-import { LanguageSelector } from "@/common/components/layout/language-selector";
+} from "@/common/components/dropdown-menu";
+import type { LocaleOption } from "@/common/components/language-selector";
+import { LanguageSelector } from "@/common/components/language-selector";
+import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 
-type MarketingHeaderProps = {
+type MainHeaderProps = {
   badge: string;
-  homeLabel: string;
+  menuItems: ResolvedMenuItem[];
   signInLabel: string;
   profileLabel: string;
   signOutLabel: string;
-  privacyLabel: string;
-  termsLabel: string;
-  documentsLabel: string;
-  docItems: DocItem[];
   languageLabel: string;
   menuLabel: string;
   currentLocale: string;
@@ -38,21 +34,22 @@ type MarketingHeaderProps = {
 const SCROLL_HIDE_THRESHOLD = 32;
 const SCROLL_DELTA = 4;
 
-export function MarketingHeader({
+const navLinkClass = cn(
+  "relative py-1 transition hover:text-white nav-link-indicator",
+  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
+);
+
+export function MainHeader({
   badge,
-  homeLabel,
+  menuItems,
   signInLabel,
   profileLabel,
   signOutLabel,
-  privacyLabel,
-  termsLabel,
-  documentsLabel,
-  docItems,
   languageLabel,
   menuLabel,
   currentLocale,
   localeOptions,
-}: MarketingHeaderProps) {
+}: MainHeaderProps) {
   const pathname = usePathname();
   const container = useContainer();
   const user = useAuthUserStore((s) => s.user);
@@ -123,46 +120,31 @@ export function MarketingHeader({
           </Link>
           <div className="flex items-center gap-3 text-sm text-[var(--text-muted)]">
             <nav className="hidden items-center gap-4 sm:flex">
-              <Link
-                className={cn(
-                  "relative py-1 transition hover:text-white nav-link-indicator",
-                  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
-                  isActive("/")
-                    ? "text-white font-bold after:scale-x-100"
-                    : "after:scale-x-0",
-                )}
-                href="/"
-              >
-                {homeLabel}
-              </Link>
-              <DocumentsDropdown
-                documentsLabel={documentsLabel}
-                items={docItems}
-              />
-              <Link
-                className={cn(
-                  "relative py-1 transition hover:text-white nav-link-indicator",
-                  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
-                  isActive("/privacy-policy")
-                    ? "text-white font-bold after:scale-x-100"
-                    : "after:scale-x-0",
-                )}
-                href="/privacy-policy"
-              >
-                {privacyLabel}
-              </Link>
-              <Link
-                className={cn(
-                  "relative py-1 transition hover:text-white nav-link-indicator",
-                  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
-                  isActive("/terms-of-service")
-                    ? "text-white font-bold after:scale-x-100"
-                    : "after:scale-x-0",
-                )}
-                href="/terms-of-service"
-              >
-                {termsLabel}
-              </Link>
+              {menuItems.map((item) =>
+                item.children?.length ? (
+                  <DocumentsDropdown
+                    key={item.id}
+                    documentsLabel={item.label}
+                    items={item.children.map((c) => ({
+                      label: c.label,
+                      href: c.href,
+                    }))}
+                  />
+                ) : (
+                  <Link
+                    key={item.id}
+                    className={cn(
+                      navLinkClass,
+                      isActive(item.href)
+                        ? "text-white font-bold after:scale-x-100"
+                        : "after:scale-x-0",
+                    )}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                ),
+              )}
             </nav>
             <LanguageSelector
               languageLabel={languageLabel}
@@ -261,47 +243,36 @@ export function MarketingHeader({
                   <Link href="/auth/sign-in">{signInLabel}</Link>
                 </Button>
               )}
-              <Link
-                className={cn(
-                  "py-1 transition hover:text-white/80",
-                  isActive("/") && "text-white font-bold",
-                )}
-                href="/"
-              >
-                {homeLabel}
-              </Link>
-              <span className="py-1 text-white/60">{documentsLabel}</span>
-              {docItems.map((item) => (
-                <Link
-                  key={item.href}
-                  className={cn(
-                    "py-1 pl-3 transition hover:text-white/80",
-                    isActive(item.href) && "text-white font-bold",
-                  )}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <Link
-                className={cn(
-                  "py-1 transition hover:text-white/80",
-                  isActive("/privacy-policy") && "text-white font-bold",
-                )}
-                href="/privacy-policy"
-              >
-                {privacyLabel}
-              </Link>
-              <Link
-                className={cn(
-                  "py-1 transition hover:text-white/80",
-                  isActive("/terms-of-service") && "text-white font-bold",
-                )}
-                href="/terms-of-service"
-              >
-                {termsLabel}
-              </Link>
+              {menuItems.map((item) =>
+                item.children?.length ? (
+                  <span key={item.id}>
+                    <span className="py-1 text-white/60">{item.label}</span>
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.id}
+                        className={cn(
+                          "py-1 pl-3 transition hover:text-white/80",
+                          isActive(child.href) && "text-white font-bold",
+                        )}
+                        href={child.href}
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </span>
+                ) : (
+                  <Link
+                    key={item.id}
+                    className={cn(
+                      "py-1 transition hover:text-white/80",
+                      isActive(item.href) && "text-white font-bold",
+                    )}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                ),
+              )}
             </nav>
           </div>
         ) : null}

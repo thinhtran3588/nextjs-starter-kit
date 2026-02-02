@@ -203,11 +203,12 @@ src/                               # All application code lives here
 │   ├── localization/              # next-intl translations
 │   │   ├── en.json
 │   │   └── {locale}.json
-│   ├── routing/                   # next-intl routing config
-│   │   ├── routing.ts             # Locale routing config
-│   │   └── request.ts             # Request config for getTranslations
 │   └── configurations/            # App-level configuration
 ├── common/                        # Shared code across all modules
+│   ├── routing/                   # next-intl routing config
+│   │   ├── routing.ts             # Locale routing config
+│   │   ├── navigation.ts          # Link, useRouter, usePathname
+│   │   └── request.ts             # Request config for getTranslations
 │   ├── components/                # Common components
 │   │   ├── ui/                    # shadcn/ui components
 │   │   ├── layout/                # Layout components (Header, Footer, Sidebar)
@@ -283,7 +284,7 @@ export default function Page() {
 
 ```tsx
 // app/[locale]/layout.tsx
-import { RootLayout } from "@/common/components/layout/root-layout";
+import { RootLayout } from "@/common/components/root-layout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <RootLayout>{children}</RootLayout>;
@@ -409,7 +410,7 @@ This keeps `/app` minimal and all code in `/src` for better organization and tes
 - `src/common/utils/` – utilities (`cn()`, formatters, etc.).
 - `src/modules/{module}/` – feature modules with pages, components, domain, application.
 - `src/application/localization/` – next-intl translation JSON files per locale.
-- `src/application/routing/` – next-intl routing and request config.
+- `src/common/routing/` – next-intl routing, navigation, and request config.
 
 ### Forms and Validation
 

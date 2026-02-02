@@ -1,6 +1,6 @@
-import { Link } from "@/application/routing/navigation";
-import { Button } from "@/common/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/common/components/ui/card";
+import { Link } from "@/common/routing/navigation";
+import { Button } from "@/common/components/button";
+import { Card, CardContent, CardHeader } from "@/common/components/card";
 
 type SimplePageProps = {
   title: string;

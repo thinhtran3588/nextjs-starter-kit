@@ -1,7 +1,7 @@
 "use client";
 
-import { Link, usePathname } from "@/application/routing/navigation";
-import { Button } from "@/common/components/ui/button";
+import { Link, usePathname } from "@/common/routing/navigation";
+import { Button } from "@/common/components/button";
 import { useEffect, useRef, useState } from "react";
 
 export type LocaleOption = {

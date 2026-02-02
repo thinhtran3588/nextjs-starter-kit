@@ -1,9 +1,9 @@
 import { BackToHomeButton } from "@/common/components/back-to-home-button";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import type { Locale } from "@/application/routing/routing";
-import { isSupportedLocale } from "@/application/routing/routing";
-import { readDocContent } from "@/modules/docs/lib/read-doc";
+import type { Locale } from "@/common/routing/routing";
+import { isSupportedLocale } from "@/common/routing/routing";
+import { readDocContent } from "@/common/utils/read-doc";
 import { MarkdownContent } from "@/modules/docs/components/markdown-content";
 
 type DocPageProps = {

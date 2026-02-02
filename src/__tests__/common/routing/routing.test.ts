@@ -1,7 +1,4 @@
-import {
-  isSupportedLocale,
-  routing,
-} from "../../../application/routing/routing";
+import { isSupportedLocale, routing } from "../../../common/routing/routing";
 
 describe("routing", () => {
   it("exposes the default locale", () => {

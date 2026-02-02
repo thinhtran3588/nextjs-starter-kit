@@ -1,5 +1,4 @@
-import type { Locale } from "@/application/routing/routing";
-import { isDocSlug } from "@/common/config/docs";
+import type { Locale } from "@/common/routing/routing";
 import { readFile } from "node:fs/promises";
 import path from "path";
 
@@ -17,9 +16,6 @@ export async function readDocContent(
   locale: Locale,
   readFileFn: ReadFileFn = readFile,
 ): Promise<string | null> {
-  if (!isDocSlug(slug)) {
-    return null;
-  }
   const filename = getDocFilename(slug, locale);
   const filePath = path.join(process.cwd(), "docs", filename);
   try {

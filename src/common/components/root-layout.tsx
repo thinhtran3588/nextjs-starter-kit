@@ -1,4 +1,4 @@
-import { AppInitializer } from "@/common/components/layout/app-initializer";
+import { AppInitializer } from "@/common/components/app-initializer";
 
 type RootLayoutProps = {
   children: React.ReactNode;

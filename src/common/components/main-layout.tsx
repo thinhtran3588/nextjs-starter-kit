@@ -1,21 +1,34 @@
-import { DOC_I18N_KEYS, DOC_SLUGS } from "@/common/config/docs";
-import { routing } from "@/application/routing/routing";
+import type { MenuItem, ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import { getMainMenuConfig } from "@/application/config/main-menu";
+import { routing } from "@/common/routing/routing";
 import { getLocale, getTranslations } from "next-intl/server";
-import { MarketingHeader } from "@/common/components/layout/marketing-header";
+import { MainHeader } from "@/common/components/main-header";
 
-type MarketingLayoutProps = {
+type MainLayoutProps = {
   children: React.ReactNode;
 };
 
-export async function MarketingLayout({ children }: MarketingLayoutProps) {
+function resolveMenuItems(
+  items: MenuItem[],
+  t: (key: string) => string,
+): ResolvedMenuItem[] {
+  return items.map((item) => ({
+    id: item.id,
+    label: t(item.translationKey),
+    href: item.href,
+    children: item.children?.length
+      ? resolveMenuItems(item.children, t)
+      : undefined,
+  }));
+}
+
+export async function MainLayout({ children }: MainLayoutProps) {
   const tCommon = await getTranslations("common");
   const tHome = await getTranslations("modules.landing.pages.home");
   const locale = await getLocale();
 
-  const docItems = DOC_SLUGS.map((slug) => ({
-    label: tCommon(`navigation.docs.${DOC_I18N_KEYS[slug]}`),
-    href: `/docs/${slug}`,
-  }));
+  const menuConfig = getMainMenuConfig();
+  const menuItems = resolveMenuItems(menuConfig, (key) => tCommon(key));
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -23,16 +36,12 @@ export async function MarketingLayout({ children }: MarketingLayoutProps) {
       <div className="glow-orb float right-[-15%] top-[10%] h-[380px] w-[380px] bg-[rgba(126,249,216,0.35)]" />
       <div className="glow-orb float bottom-[-20%] left-[20%] h-[460px] w-[460px] bg-[rgba(139,184,255,0.2)]" />
 
-      <MarketingHeader
+      <MainHeader
         badge={tHome("badge")}
-        homeLabel={tCommon("navigation.home")}
+        menuItems={menuItems}
         signInLabel={tCommon("navigation.signIn")}
         profileLabel={tCommon("navigation.profile")}
         signOutLabel={tCommon("navigation.signOut")}
-        privacyLabel={tCommon("navigation.privacy")}
-        termsLabel={tCommon("navigation.terms")}
-        documentsLabel={tCommon("navigation.documents")}
-        docItems={docItems}
         languageLabel={tCommon("language.label")}
         menuLabel={tCommon("navigation.menu")}
         currentLocale={locale}

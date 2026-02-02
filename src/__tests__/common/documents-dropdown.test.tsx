@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { vi } from "vitest";
-import { DocumentsDropdown } from "@/common/components/layout/documents-dropdown";
+import { DocumentsDropdown } from "@/common/components/documents-dropdown";
 
 let mockPathname = "/";
-vi.mock("@/application/routing/navigation", async (importOriginal) => {
+vi.mock("@/common/routing/navigation", async (importOriginal) => {
   const mod =
-    await importOriginal<typeof import("@/application/routing/navigation")>();
+    await importOriginal<typeof import("@/common/routing/navigation")>();
   return {
     ...mod,
     usePathname: () => mockPathname,

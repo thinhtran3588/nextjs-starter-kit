@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { routing } from "@/application/routing/routing";
-import { RootLayout } from "@/common/components/layout/root-layout";
+import { routing } from "@/common/routing/routing";
+import { RootLayout } from "@/common/components/root-layout";
 import "../globals.css";
 
 const geistSans = Geist({
