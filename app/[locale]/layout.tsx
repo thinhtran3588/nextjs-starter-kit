@@ -1,8 +1,10 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { routing } from "@/common/routing/routing";
-import { RootLayout } from "@/common/components/root-layout";
+
 import { AppInitializer } from "@/application/components/app-initializer";
+import { RootLayout } from "@/common/components/root-layout";
+import { Toaster } from "@/common/components/toaster";
+import { routing } from "@/common/routing/routing";
 import { SyncAuthState } from "@/modules/auth/components/sync-auth-state";
 
 export async function generateMetadata() {
@@ -33,6 +35,7 @@ export default async function LocaleLayout({
       <AppInitializer />
       <SyncAuthState />
       <RootLayout>{children}</RootLayout>
+      <Toaster />
     </NextIntlClientProvider>
   );
 }

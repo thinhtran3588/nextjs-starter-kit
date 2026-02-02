@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+
 import { ForgotPasswordForm } from "./components/forgot-password-form";
 
 export async function ForgotPasswordPage() {

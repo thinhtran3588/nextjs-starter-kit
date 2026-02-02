@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
+
+import messages from "@/application/localization/en.json";
 import { PrivacyPolicyPage } from "@/modules/legal/pages/privacy-policy/page";
 import { TermsOfServicePage } from "@/modules/legal/pages/terms-of-service/page";
-import messages from "@/application/localization/en.json";
 
 describe("Legal pages", () => {
   it("renders the privacy policy placeholder", async () => {

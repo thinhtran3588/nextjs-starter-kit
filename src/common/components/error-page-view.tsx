@@ -20,19 +20,19 @@ export function ErrorPageView({
       <div className="w-full max-w-2xl">
         <div className="hero-grid glass-panel-strong liquid-border rounded-2xl px-6 py-12 text-center sm:rounded-3xl sm:px-10 sm:py-16">
           {eyebrow && (
-            <p className="text-xs font-medium uppercase tracking-[0.3em] text-[var(--text-muted)]">
+            <p className="text-xs font-medium tracking-[0.3em] text-[var(--text-muted)] uppercase">
               {eyebrow}
             </p>
           )}
           {errorCode && (
             <p
-              className="mt-2 font-mono text-6xl font-semibold tabular-nums text-[var(--accent)] drop-shadow-[0_0_24px_var(--accent-glow)] sm:text-7xl"
+              className="mt-2 font-mono text-6xl font-semibold text-[var(--accent)] tabular-nums drop-shadow-[0_0_24px_var(--accent-glow)] sm:text-7xl"
               aria-hidden
             >
               {errorCode}
             </p>
           )}
-          <h1 className="mt-4 text-2xl font-semibold leading-tight text-white sm:text-3xl lg:text-4xl">
+          <h1 className="mt-4 text-2xl leading-tight font-semibold text-white sm:text-3xl lg:text-4xl">
             {title}
           </h1>
           <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">

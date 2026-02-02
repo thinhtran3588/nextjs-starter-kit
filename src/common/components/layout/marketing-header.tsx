@@ -1,8 +1,10 @@
 "use client";
 
-import { Link } from "@/common/routing/navigation";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+
+import { ChevronDownIcon, MenuIcon } from "@/common/components/icons";
+import { Link } from "@/common/routing/navigation";
 
 type LocaleOption = {
   locale: string;
@@ -75,7 +77,7 @@ export function MarketingHeader({
     <header
       className={`fixed inset-x-0 top-0 z-50 bg-[rgba(6,10,20,0.6)] backdrop-blur-sm transition-all duration-300 ${
         isHidden
-          ? "-translate-y-full opacity-0 pointer-events-none"
+          ? "pointer-events-none -translate-y-full opacity-0"
           : "translate-y-0 opacity-100"
       }`}
     >
@@ -122,18 +124,7 @@ export function MarketingHeader({
                 <span className="hidden sm:inline">
                   {currentLocaleOption?.label}
                 </span>
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 20 20"
-                  className="h-3 w-3"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 7l5 5 5-5" />
-                </svg>
+                <ChevronDownIcon className="h-3 w-3" />
               </summary>
               <div className="glass-panel-strong pointer-events-auto absolute right-0 z-40 mt-2 flex w-44 flex-col gap-1 rounded-2xl bg-[rgba(8,12,24,0.9)] px-2 py-2 text-xs text-white shadow-[0_20px_55px_rgba(0,0,0,0.45)] backdrop-blur">
                 {localeOptions.map((option) => {
@@ -169,25 +160,13 @@ export function MarketingHeader({
               aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen((value) => !value)}
             >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <path d="M4 7h16" />
-                <path d="M4 12h16" />
-                <path d="M4 17h16" />
-              </svg>
+              <MenuIcon className="h-4 w-4" />
             </button>
           </div>
         </div>
         {isMenuOpen ? (
           <div
-            className="glass-panel-strong absolute left-6 right-6 top-full z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
+            className="glass-panel-strong absolute top-full right-6 left-6 z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
             data-testid="mobile-menu"
           >
             <nav className="flex flex-col gap-3">

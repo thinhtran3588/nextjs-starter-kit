@@ -1,11 +1,14 @@
 import { describe, expect, it, vi } from "vitest";
+
+import type { BaseAuthenticationService } from "@/modules/auth/interfaces/base-authentication-service";
 import { GetAuthStateSubscriptionUseCase } from "@/modules/auth/use-cases/get-auth-state-subscription-use-case";
 import { SendPasswordResetUseCase } from "@/modules/auth/use-cases/send-password-reset-use-case";
 import { SignInWithEmailUseCase } from "@/modules/auth/use-cases/sign-in-with-email-use-case";
 import { SignInWithGoogleUseCase } from "@/modules/auth/use-cases/sign-in-with-google-use-case";
 import { SignOutUseCase } from "@/modules/auth/use-cases/sign-out-use-case";
 import { SignUpWithEmailUseCase } from "@/modules/auth/use-cases/sign-up-with-email-use-case";
-import type { BaseAuthenticationService } from "@/modules/auth/interfaces/base-authentication-service";
+import { UpdatePasswordUseCase } from "@/modules/auth/use-cases/update-password-use-case";
+import { UpdateProfileUseCase } from "@/modules/auth/use-cases/update-profile-use-case";
 
 function createMockAuthService(): BaseAuthenticationService {
   return {
@@ -15,6 +18,8 @@ function createMockAuthService(): BaseAuthenticationService {
     sendPasswordReset: vi.fn(),
     signOut: vi.fn(),
     subscribeToAuthState: vi.fn(() => () => {}),
+    updateDisplayName: vi.fn().mockResolvedValue({ success: true }),
+    updatePassword: vi.fn().mockResolvedValue({ success: true }),
   };
 }
 
@@ -168,6 +173,29 @@ describe("auth use case classes", () => {
       const unsubscribe = subscription.subscribe(callback);
       expect(mock.subscribeToAuthState).toHaveBeenCalledWith(callback);
       expect(typeof unsubscribe).toBe("function");
+    });
+  });
+
+  describe("UpdateProfileUseCase", () => {
+    it("execute calls authService.updateDisplayName and returns result", async () => {
+      const mock = createMockAuthService();
+      const useCase = new UpdateProfileUseCase(mock);
+      const result = await useCase.execute({ displayName: "Alice" });
+      expect(result).toEqual({ success: true });
+      expect(mock.updateDisplayName).toHaveBeenCalledWith("Alice");
+    });
+  });
+
+  describe("UpdatePasswordUseCase", () => {
+    it("execute calls authService.updatePassword and returns result", async () => {
+      const mock = createMockAuthService();
+      const useCase = new UpdatePasswordUseCase(mock);
+      const result = await useCase.execute({
+        oldPassword: "old",
+        newPassword: "new",
+      });
+      expect(result).toEqual({ success: true });
+      expect(mock.updatePassword).toHaveBeenCalledWith("old", "new");
     });
   });
 });

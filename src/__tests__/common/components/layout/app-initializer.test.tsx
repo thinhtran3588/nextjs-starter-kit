@@ -1,7 +1,8 @@
 import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AppInitializer } from "@/common/components/layout/app-initializer";
+
 import { initializeContainer } from "@/application/register-container";
+import { AppInitializer } from "@/common/components/layout/app-initializer";
 import { getContainerOrNull } from "@/common/utils/container";
 
 vi.mock("@/application/register-container", () => ({

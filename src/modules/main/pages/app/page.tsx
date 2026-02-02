@@ -1,5 +1,6 @@
-import { SimplePage } from "@/common/components/simple-page";
 import { getTranslations } from "next-intl/server";
+
+import { SimplePage } from "@/common/components/simple-page";
 
 export async function AppPage() {
   const tCommon = await getTranslations("common");

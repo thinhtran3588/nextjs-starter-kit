@@ -1,9 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link } from "@/common/routing/navigation";
+
 import { Button } from "@/common/components/button";
 import { ErrorPageView } from "@/common/components/error-page-view";
+import { Link } from "@/common/routing/navigation";
 
 type ErrorPageProps = {
   reset: () => void;

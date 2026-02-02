@@ -1,5 +1,6 @@
-import { BackToHomeButton } from "@/common/components/back-to-home-button";
 import { getTranslations } from "next-intl/server";
+
+import { BackToHomeButton } from "@/common/components/back-to-home-button";
 
 export async function PrivacyPolicyPage() {
   const tPrivacyPolicy = await getTranslations(

@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ErrorPage from "@/common/pages/error-page";
+
 import messages from "@/application/localization/en.json";
+import ErrorPage from "@/common/pages/error-page";
 
 describe("ErrorPage", () => {
   it("renders server error title and description from translations", () => {

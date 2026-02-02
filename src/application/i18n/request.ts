@@ -1,4 +1,5 @@
 import { getRequestConfig } from "next-intl/server";
+
 import enMessages from "@/application/localization/en.json";
 import viMessages from "@/application/localization/vi.json";
 import zhMessages from "@/application/localization/zh.json";

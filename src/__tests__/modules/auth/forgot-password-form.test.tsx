@@ -1,5 +1,6 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
 import { ForgotPasswordForm } from "@/modules/auth/pages/forgot-password/components/forgot-password-form";
 
 const mockExecute = vi.fn();

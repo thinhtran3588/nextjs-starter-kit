@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { AppInitializer } from "@/application/components/app-initializer";
 
 const [mockInitializeContainer, mockGetContainerOrNull] = vi.hoisted(() => [

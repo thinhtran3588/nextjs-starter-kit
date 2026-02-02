@@ -49,5 +49,28 @@ export function getForgotPasswordSchema(t: (key: string) => string) {
 }
 
 export const profileSchema = z.object({
-  displayName: z.string().optional(),
+  displayName: z.string().max(200).optional(),
 });
+
+export function getProfileSchema(t: (key: string) => string) {
+  return z.object({
+    displayName: z.string().max(200, t("fullNameMaxLength")).optional(),
+  });
+}
+
+export type UpdatePasswordInput = z.infer<
+  ReturnType<typeof getUpdatePasswordSchema>
+>;
+
+export function getUpdatePasswordSchema(t: (key: string) => string) {
+  return z
+    .object({
+      oldPassword: z.string().min(1, t("oldPasswordRequired")),
+      newPassword: strongPassword(t),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t("passwordsDoNotMatch"),
+      path: ["confirmPassword"],
+    });
+}

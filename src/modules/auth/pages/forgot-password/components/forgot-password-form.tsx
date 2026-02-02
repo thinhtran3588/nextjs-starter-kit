@@ -1,12 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Link } from "@/common/routing/navigation";
-import { useContainer } from "@/common/hooks/use-container";
-import type { SendPasswordResetUseCase } from "@/modules/auth/use-cases/send-password-reset-use-case";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+
 import { Button } from "@/common/components/button";
 import {
   Form,
@@ -17,10 +15,13 @@ import {
   FormMessage,
 } from "@/common/components/form";
 import { Input } from "@/common/components/input";
+import { useContainer } from "@/common/hooks/use-container";
+import { Link } from "@/common/routing/navigation";
 import {
   getForgotPasswordSchema,
   type ForgotPasswordInput,
 } from "@/modules/auth/domain/schemas";
+import type { SendPasswordResetUseCase } from "@/modules/auth/use-cases/send-password-reset-use-case";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("modules.auth.pages.forgot-password");

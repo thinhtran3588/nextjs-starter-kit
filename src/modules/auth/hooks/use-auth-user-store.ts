@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+
 import type { AuthUser } from "@/modules/auth/domain/types";
 
 type AuthUserState = {
