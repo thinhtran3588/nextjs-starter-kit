@@ -2,7 +2,7 @@ import { getRequestConfig } from "next-intl/server";
 import enMessages from "@/application/localization/en.json";
 import viMessages from "@/application/localization/vi.json";
 import zhMessages from "@/application/localization/zh.json";
-import { isSupportedLocale, routing } from "./routing";
+import { isSupportedLocale, routing } from "@/common/routing/routing";
 
 const messagesByLocale = {
   en: enMessages,

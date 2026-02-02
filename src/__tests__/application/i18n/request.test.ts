@@ -1,8 +1,8 @@
 import requestConfig, {
   requestConfig as resolveRequestConfig,
-} from "../../../common/routing/request";
-import enMessages from "../../../application/localization/en.json";
-import viMessages from "../../../application/localization/vi.json";
+} from "@/application/i18n/request";
+import enMessages from "@/application/localization/en.json";
+import viMessages from "@/application/localization/vi.json";
 
 describe("request config", () => {
   it("loads messages for the requested locale", async () => {

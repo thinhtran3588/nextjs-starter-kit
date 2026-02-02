@@ -1,20 +1,11 @@
 "use client";
 
 import { Link, usePathname } from "@/common/routing/navigation";
-import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
-import { useContainer } from "@/common/hooks/use-container";
-import type { SignOutUseCase } from "@/modules/auth/use-cases/sign-out-use-case";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/common/components/button";
 import { cn } from "@/common/utils/cn";
 import { DocumentsDropdown } from "@/common/components/documents-dropdown";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/common/components/dropdown-menu";
 import type { LocaleOption } from "@/common/components/language-selector";
 import { LanguageSelector } from "@/common/components/language-selector";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
@@ -22,13 +13,11 @@ import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 type MainHeaderProps = {
   badge: string;
   menuItems: ResolvedMenuItem[];
-  signInLabel: string;
-  profileLabel: string;
-  signOutLabel: string;
   languageLabel: string;
   menuLabel: string;
   currentLocale: string;
   localeOptions: LocaleOption[];
+  authSlot?: React.ReactNode;
 };
 
 const SCROLL_HIDE_THRESHOLD = 32;
@@ -42,26 +31,16 @@ const navLinkClass = cn(
 export function MainHeader({
   badge,
   menuItems,
-  signInLabel,
-  profileLabel,
-  signOutLabel,
   languageLabel,
   menuLabel,
   currentLocale,
   localeOptions,
+  authSlot,
 }: MainHeaderProps) {
   const pathname = usePathname();
-  const container = useContainer();
-  const user = useAuthUserStore((s) => s.user);
-  const loading = useAuthUserStore((s) => s.loading);
   const [isHidden, setIsHidden] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
-
-  async function handleSignOut() {
-    const useCase = container.resolve("signOutUseCase") as SignOutUseCase;
-    await useCase.execute({});
-  }
 
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" || pathname === "" : pathname === path;
@@ -151,35 +130,9 @@ export function MainHeader({
               currentLocale={currentLocale}
               localeOptions={localeOptions}
             />
-            <div className="hidden sm:block">
-              {loading ? (
-                <div
-                  className="h-8 w-16 animate-pulse rounded-full bg-white/10"
-                  aria-busy="true"
-                  data-testid="auth-loading"
-                />
-              ) : user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="default" size="sm">
-                      {user.displayName || user.email || signInLabel}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href="/app/profile">{profileLabel}</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      {signOutLabel}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Button asChild variant="default" size="sm">
-                  <Link href="/auth/sign-in">{signInLabel}</Link>
-                </Button>
-              )}
-            </div>
+            {authSlot != null ? (
+              <div className="hidden sm:block">{authSlot}</div>
+            ) : null}
             <Button
               type="button"
               variant="default"
@@ -214,35 +167,9 @@ export function MainHeader({
               className="flex flex-col gap-3"
               onClick={() => setIsMenuOpen(false)}
             >
-              {loading ? (
-                <div
-                  className="h-8 w-full animate-pulse rounded-full bg-white/10"
-                  aria-busy="true"
-                  data-testid="auth-loading-mobile"
-                />
-              ) : user ? (
-                <>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="default" size="sm" className="w-full">
-                        {user.displayName || user.email || signInLabel}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem asChild>
-                        <Link href="/app/profile">{profileLabel}</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={handleSignOut}>
-                        {signOutLabel}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </>
-              ) : (
-                <Button asChild variant="default" size="sm">
-                  <Link href="/auth/sign-in">{signInLabel}</Link>
-                </Button>
-              )}
+              {authSlot != null ? (
+                <div className="sm:hidden">{authSlot}</div>
+              ) : null}
               {menuItems.map((item) =>
                 item.children?.length ? (
                   <span key={item.id}>

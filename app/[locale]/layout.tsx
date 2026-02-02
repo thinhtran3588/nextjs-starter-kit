@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { routing } from "@/common/routing/routing";
 import { RootLayout } from "@/common/components/root-layout";
+import { AppInitializer } from "@/application/components/app-initializer";
+import { SyncAuthState } from "@/modules/auth/components/sync-auth-state";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -44,6 +46,8 @@ export default async function LocaleLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <AppInitializer />
+          <SyncAuthState />
           <RootLayout>{children}</RootLayout>
         </NextIntlClientProvider>
       </body>
