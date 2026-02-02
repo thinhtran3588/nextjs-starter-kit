@@ -9,7 +9,7 @@ alwaysApply: true
 **CRITICAL**: When making code changes, always refer to the following documentation files:
 
 - **[@README.md](../../README.md)**: Project overview, features, current status, and getting started
-- **[@docs/architecture.md](../../docs/architecture.md)**: Clean Architecture and DDD principles, layer responsibilities, module structure, design patterns, and technology stack
+- **[@docs/architecture.md](../../docs/architecture.md)**: Clean Architecture, layer responsibilities, module structure (use-cases, services, DI), design patterns, and technology stack
 - **[@docs/development-guide.md](../../docs/development-guide.md)**: Step-by-step guide for creating new features, including domain entities, use cases, repositories, routes, and testing
 - **[@docs/testing-guide.md](../../docs/testing-guide.md)**: Testing practices, coverage requirements, and testing workflow
 
@@ -32,17 +32,23 @@ The project follows Clean Architecture with a modular structure.
 - **Module System**: Feature modules under `src/modules/{module-name}/`
 - **Build Tool**: Next.js build pipeline
 - **Source Directory**: `src/`
-- **Module Structure**: `src/modules/{module-name}/` with `domain/`, `application/`, `infrastructure/`, and `adapters/` layers
+- **App-Level Setup**: `src/application/` — components (e.g. AppInitializer), config (firebase-config, main-menu), i18n, localization, register-container (Awilix)
+- **Shared Code**: `src/common/` — components (flat), hooks, interfaces, pages, routing, utils (container, base-use-case, cn, menu, read-doc)
+- **Module Structure**: `src/modules/{module-name}/` with `domain/` (types, schemas), `use-cases/` (application layer, resolved via container), `services/` (infrastructure, e.g. Firebase auth), `interfaces/`, `hooks/`, `components/`, `pages/`, `utils/`, and `module-configuration.ts` (Awilix registration)
+- **Routing**: `app/` is routing only; page components live in `src/modules/{module}/pages/`
+- **DI**: Awilix — container in `src/common/utils/container.ts`, registration in `src/application/register-container.ts`, per-module `module-configuration.ts`; components resolve use cases via `useContainer()` from `src/common/hooks/use-container.ts`
 - **Architecture**: Clean Architecture
-- **Testing**: Vitest with 100% coverage requirement
+- **Testing**: Vitest with 100% coverage requirement (tests in `src/__tests__/`)
 
 ## Common Libraries
 
-- **UI & Styling**: Tailwind CSS, shadcn/ui
-- **State**: Zustand
-- **Forms & Validation**: React Hook Form, Zod
+- **UI & Styling**: Tailwind CSS, shadcn-style components (Radix UI, CVA, clsx, tailwind-merge)
+- **State**: Zustand (e.g. module state via hooks like use-auth-user-store)
+- **Forms & Validation**: React Hook Form, Zod (`zodResolver`)
 - **i18n**: next-intl
-- **Testing**: Vitest, React Testing Library
+- **DI**: Awilix (container, register-container, module-configuration per module)
+- **Toasts**: Sonner (Toaster in root layout)
+- **Testing**: Vitest, React Testing Library (tests in `src/__tests__/`)
 
 ## Essential Code Conventions
 
