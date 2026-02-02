@@ -37,6 +37,27 @@
         "title": "Next.js Starter Kit",
         "description": "Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và cấu trúc module cho phát triển frontend mở rộng."
       }
+    },
+    "errors": {
+      "notFound": {
+        "eyebrow": "Không tìm thấy",
+        "title": "Không tìm thấy trang",
+        "description": "Trang bạn tìm kiếm không tồn tại hoặc đã được di chuyển.",
+        "cta": "Quay lại trang chủ"
+      },
+      "serverError": {
+        "eyebrow": "Lỗi",
+        "title": "Đã xảy ra lỗi",
+        "description": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+        "tryAgain": "Thử lại",
+        "cta": "Quay lại trang chủ"
+      },
+      "generic": {
+        "eyebrow": "Lỗi",
+        "title": "Đã xảy ra lỗi",
+        "description": "Đã xảy ra lỗi. Vui lòng thử lại sau.",
+        "cta": "Quay lại trang chủ"
+      }
     }
   },
   "modules": {
