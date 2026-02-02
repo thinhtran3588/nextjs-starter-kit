@@ -29,13 +29,7 @@ describe("AuthHeaderSlot", () => {
   });
 
   it("renders sign-in link when user is null and not loading", () => {
-    render(
-      <AuthHeaderSlot
-        signInLabel="Sign in"
-        profileLabel="Profile"
-        signOutLabel="Sign out"
-      />,
-    );
+    render(<AuthHeaderSlot />);
 
     const link = screen.getByRole("link", { name: "Sign in" });
     expect(link).toBeInTheDocument();
@@ -45,13 +39,7 @@ describe("AuthHeaderSlot", () => {
   it("renders loading skeleton when loading", () => {
     mockLoading = true;
 
-    render(
-      <AuthHeaderSlot
-        signInLabel="Sign in"
-        profileLabel="Profile"
-        signOutLabel="Sign out"
-      />,
-    );
+    render(<AuthHeaderSlot />);
 
     expect(screen.getByTestId("auth-loading")).toBeInTheDocument();
   });
@@ -64,13 +52,7 @@ describe("AuthHeaderSlot", () => {
       photoURL: null,
     };
 
-    render(
-      <AuthHeaderSlot
-        signInLabel="Sign in"
-        profileLabel="Profile"
-        signOutLabel="Sign out"
-      />,
-    );
+    render(<AuthHeaderSlot />);
 
     expect(screen.getByRole("button", { name: "Alice" })).toBeInTheDocument();
   });

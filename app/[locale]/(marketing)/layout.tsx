@@ -14,16 +14,7 @@ export default async function Layout({
   const menuItems = resolveMenuItems(menuConfig, (key) => tCommon(key));
 
   return (
-    <MainLayout
-      menuItems={menuItems}
-      authSlot={
-        <AuthHeaderSlot
-          signInLabel={tCommon("navigation.signIn")}
-          profileLabel={tCommon("navigation.profile")}
-          signOutLabel={tCommon("navigation.signOut")}
-        />
-      }
-    >
+    <MainLayout menuItems={menuItems} authSlot={<AuthHeaderSlot />}>
       {children}
     </MainLayout>
   );

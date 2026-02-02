@@ -11,18 +11,13 @@ import {
 } from "@/common/components/dropdown-menu";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 import type { SignOutUseCase } from "@/modules/auth/use-cases/sign-out-use-case";
+import { useTranslations } from "next-intl";
 
-type AuthHeaderSlotProps = {
-  signInLabel: string;
-  profileLabel: string;
-  signOutLabel: string;
-};
-
-export function AuthHeaderSlot({
-  signInLabel,
-  profileLabel,
-  signOutLabel,
-}: AuthHeaderSlotProps) {
+export function AuthHeaderSlot() {
+  const t = useTranslations("common");
+  const signInLabel = t("navigation.signIn");
+  const profileLabel = t("navigation.profile");
+  const signOutLabel = t("navigation.signOut");
   const container = useContainer();
   const user = useAuthUserStore((s) => s.user);
   const loading = useAuthUserStore((s) => s.loading);
