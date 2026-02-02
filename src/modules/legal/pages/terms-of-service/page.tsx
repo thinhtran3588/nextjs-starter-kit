@@ -1,9 +1,7 @@
-import { Link } from "@/application/routing/navigation";
-import { Button } from "@/common/components/ui/button";
+import { BackToHomeButton } from "@/common/components/back-to-home-button";
 import { getTranslations } from "next-intl/server";
 
 export async function TermsOfServicePage() {
-  const tCommon = await getTranslations("common");
   const tTermsOfService = await getTranslations(
     "modules.legal.pages.terms-of-service",
   );
@@ -104,9 +102,7 @@ export async function TermsOfServicePage() {
       </div>
 
       <div className="mt-12">
-        <Button asChild variant="default">
-          <Link href="/">{tCommon("navigation.backToHome")}</Link>
-        </Button>
+        <BackToHomeButton />
       </div>
     </section>
   );

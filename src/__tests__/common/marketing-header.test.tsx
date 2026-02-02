@@ -12,10 +12,18 @@ vi.mock("@/application/routing/navigation", async (importOriginal) => {
   };
 });
 
+vi.mock("@/modules/auth/hooks/use-auth-user-store", () => ({
+  useAuthUserStore: (
+    selector: (s: { user: null; loading: boolean }) => unknown,
+  ) => selector({ user: null, loading: false }),
+}));
+
 const baseProps = {
   badge: "Liquid Badge",
   homeLabel: "Home",
   signInLabel: "Sign in",
+  profileLabel: "Profile",
+  signOutLabel: "Sign out",
   privacyLabel: "Privacy",
   termsLabel: "Terms",
   documentsLabel: "Documents",

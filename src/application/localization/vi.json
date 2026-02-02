@@ -6,6 +6,8 @@
       "backToHome": "Quay lại trang chủ",
       "signIn": "Đăng nhập",
       "signUp": "Đăng ký",
+      "signOut": "Đăng xuất",
+      "profile": "Hồ sơ",
       "createAccount": "Tạo tài khoản",
       "privacy": "Quyền riêng tư",
       "terms": "Điều khoản",
@@ -41,13 +43,79 @@
     "auth": {
       "pages": {
         "sign-in": {
-          "title": "Đăng nhập"
+          "title": "Đăng nhập",
+          "or": "Hoặc",
+          "googleButton": "Tiếp tục với Google",
+          "emailLabel": "Email",
+          "passwordLabel": "Mật khẩu",
+          "submitButton": "Đăng nhập bằng email",
+          "forgotPasswordLink": "Quên mật khẩu?",
+          "noAccountPrompt": "Chưa có tài khoản?",
+          "signUpLink": "Đăng ký",
+          "agreeToPolicyAndTerms": "Bằng việc đăng nhập, bạn đồng ý với {privacy} và {terms} của chúng tôi.",
+          "validation": {
+            "invalidEmail": "Email không hợp lệ",
+            "passwordRequired": "Vui lòng nhập mật khẩu",
+            "passwordMaxLength": "Mật khẩu tối đa 20 ký tự"
+          },
+          "errors": {
+            "invalidCredentials": "Email hoặc mật khẩu không đúng.",
+            "tooManyRequests": "Quá nhiều lần thử. Vui lòng thử lại sau.",
+            "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+          }
         },
         "sign-up": {
-          "title": "Đăng ký"
+          "title": "Đăng ký",
+          "or": "Hoặc",
+          "googleButton": "Tiếp tục với Google",
+          "emailLabel": "Email",
+          "passwordLabel": "Mật khẩu",
+          "confirmPasswordLabel": "Xác nhận mật khẩu",
+          "fullNameLabel": "Họ tên (tùy chọn)",
+          "submitButton": "Tạo tài khoản",
+          "hasAccountPrompt": "Đã có tài khoản?",
+          "signInLink": "Đăng nhập",
+          "agreeToPolicyAndTerms": "Bằng việc đăng ký, bạn đồng ý với {privacy} và {terms} của chúng tôi.",
+          "validation": {
+            "invalidEmail": "Email không hợp lệ",
+            "passwordRequired": "Vui lòng nhập mật khẩu",
+            "minLength": "Ít nhất 8 ký tự",
+            "passwordMaxLength": "Mật khẩu tối đa 20 ký tự",
+            "fullNameMaxLength": "Họ tên tối đa 200 ký tự",
+            "uppercase": "Ít nhất một chữ in hoa",
+            "lowercase": "Ít nhất một chữ thường",
+            "number": "Ít nhất một chữ số",
+            "specialChar": "Ít nhất một ký tự đặc biệt",
+            "passwordsDoNotMatch": "Mật khẩu không khớp"
+          },
+          "errors": {
+            "emailAlreadyInUse": "Email này đã được sử dụng.",
+            "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+          }
         },
         "forgot-password": {
-          "title": "Quên mật khẩu"
+          "title": "Quên mật khẩu",
+          "emailLabel": "Email",
+          "submitButton": "Gửi link đặt lại",
+          "successMessage": "Nếu có tài khoản với email này, chúng tôi đã gửi link đặt lại mật khẩu.",
+          "backToSignIn": "Quay lại đăng nhập",
+          "validation": {
+            "invalidEmail": "Email không hợp lệ"
+          },
+          "errors": {
+            "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+          }
+        },
+        "profile": {
+          "title": "Hồ sơ",
+          "displayNameLabel": "Tên hiển thị",
+          "emailLabel": "Email",
+          "saveButton": "Lưu",
+          "backToApp": "Quay lại ứng dụng",
+          "successMessage": "Đã cập nhật hồ sơ.",
+          "errors": {
+            "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+          }
         }
       }
     },
