@@ -31,7 +31,7 @@ export function AuthHeaderSlot() {
   if (loading) {
     return (
       <div
-        className="h-8 w-16 animate-pulse rounded-full bg-white/10 sm:h-8 sm:w-16"
+        className="h-8 w-16 animate-pulse rounded-full bg-[var(--glass-highlight)] sm:h-8 sm:w-16"
         aria-busy="true"
         data-testid="auth-loading"
       />

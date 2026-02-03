@@ -32,6 +32,14 @@
         "zh": "🇨🇳"
       }
     },
+    "theme": {
+      "label": "Theme",
+      "options": {
+        "system": "System",
+        "light": "Light",
+        "dark": "Dark"
+      }
+    },
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",

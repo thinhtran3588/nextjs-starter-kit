@@ -38,7 +38,10 @@ const CardTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("text-base font-semibold text-white sm:text-lg", className)}
+    className={cn(
+      "text-base font-semibold text-[var(--text-primary)] sm:text-lg",
+      className,
+    )}
     data-slot="card-title"
     {...props}
   />

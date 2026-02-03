@@ -81,12 +81,12 @@ export function MermaidDiagram({ children, className }: MermaidDiagramProps) {
     return (
       <div
         className={cn(
-          "mt-3 flex min-h-[120px] items-center justify-center rounded-xl bg-white/5",
+          "mt-3 flex min-h-[120px] items-center justify-center rounded-xl bg-[var(--glass-highlight)]",
           className,
         )}
         aria-busy="true"
       >
-        <span className="text-sm text-white/60">Loading diagram…</span>
+        <span className="text-sm text-[var(--text-muted)]">Loading diagram…</span>
       </div>
     );
   }
@@ -94,7 +94,7 @@ export function MermaidDiagram({ children, className }: MermaidDiagramProps) {
   return (
     <div
       className={cn(
-        "mt-3 flex justify-center overflow-x-auto rounded-xl bg-white/5 p-4 [&_svg]:max-w-full",
+        "mt-3 flex justify-center overflow-x-auto rounded-xl bg-[var(--glass-highlight)] p-4 [&_svg]:max-w-full",
         className,
       )}
       dangerouslySetInnerHTML={{ __html: svg }}

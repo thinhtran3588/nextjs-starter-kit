@@ -59,10 +59,10 @@ export function DocumentsDropdown({
       <button
         type="button"
         className={cn(
-          "nav-link-indicator relative flex items-center gap-1 py-1 transition hover:text-white",
-          "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:origin-left after:bg-white after:transition-transform after:duration-300 after:content-['']",
+          "nav-link-indicator relative flex items-center gap-1 py-1 text-[var(--text-muted)] transition hover:text-[var(--text-primary)]",
+          "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:origin-left after:bg-[var(--text-primary)] after:transition-transform after:duration-300 after:content-['']",
           isActive
-            ? "font-bold text-white after:scale-x-100"
+            ? "font-bold text-[var(--text-primary)] after:scale-x-100"
             : "after:scale-x-0",
         )}
         aria-label={documentsLabel}
@@ -77,7 +77,7 @@ export function DocumentsDropdown({
       </button>
       {isOpen ? (
         <div
-          className="glass-panel-strong pointer-events-auto absolute left-0 z-40 mt-2 flex min-w-48 flex-col gap-0.5 rounded-2xl bg-[rgba(8,12,24,0.9)] px-2 py-2 text-sm text-white shadow-[0_20px_55px_rgba(0,0,0,0.45)] backdrop-blur"
+          className="glass-dropdown pointer-events-auto absolute left-0 z-40 mt-2 flex min-w-48 flex-col gap-0.5 rounded-2xl px-2 py-2 text-sm [color:var(--text-primary)]"
           role="menu"
           aria-label={documentsLabel}
         >
@@ -87,10 +87,10 @@ export function DocumentsDropdown({
               href={item.href}
               role="menuitem"
               className={cn(
-                "rounded-lg px-3 py-2 font-medium transition hover:bg-white/10 hover:text-white",
+                "rounded-lg px-3 py-2 font-medium transition hover:bg-[var(--glass-highlight)] hover:text-[var(--text-primary)]",
                 pathname === item.href
-                  ? "bg-white/10 text-white"
-                  : "text-white/80",
+                  ? "bg-[var(--glass-highlight)] text-[var(--text-primary)]"
+                  : "text-[var(--text-muted)]",
               )}
               onClick={() => setIsOpen(false)}
             >

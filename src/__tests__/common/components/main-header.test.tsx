@@ -51,6 +51,12 @@ const baseProps = {
     { locale: "en", label: "English", flag: "US" },
     { locale: "vi", label: "Vietnamese", flag: "VN" },
   ],
+  themeLabel: "Theme",
+  themeOptions: [
+    { theme: "system" as const, label: "System" },
+    { theme: "light" as const, label: "Light" },
+    { theme: "dark" as const, label: "Dark" },
+  ],
   authSlot: <Link href="/auth/sign-in">{signInLabel}</Link>,
 };
 
@@ -71,6 +77,7 @@ describe("MainHeader", () => {
     expect(screen.getByText(signInLabel)).toBeInTheDocument();
     expect(screen.getByText("Privacy")).toBeInTheDocument();
     expect(screen.getByText("Terms")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Theme:/ })).toBeInTheDocument();
   });
 
   it("highlights the current page in the menu", () => {

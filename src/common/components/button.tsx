@@ -18,12 +18,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "glass-panel rounded-full text-white shadow-[0_8px_24px_rgba(139,184,255,0.2)] hover:translate-y-[-1px] hover:shadow-[0_12px_28px_rgba(139,184,255,0.3)]",
+          "glass-panel rounded-full text-[var(--text-primary)] shadow-[0_8px_24px_var(--accent-glow)] hover:translate-y-[-1px] hover:shadow-[0_12px_28px_var(--accent-glow)]",
         secondary:
-          "glass-panel rounded-full text-[var(--text-muted)] hover:text-white",
+          "glass-panel rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)]",
         outline:
-          "border border-[var(--glass-border)] bg-transparent text-white hover:bg-white/5",
-        ghost: "text-[var(--text-muted)] hover:bg-white/5 hover:text-white",
+          "border border-[var(--glass-border)] bg-transparent text-[var(--text-primary)] hover:bg-[var(--glass-highlight)]",
+        ghost:
+          "text-[var(--text-muted)] hover:bg-[var(--glass-highlight)] hover:text-[var(--text-primary)]",
         link: "text-[var(--accent)] underline-offset-4 hover:underline",
         destructive:
           "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500",

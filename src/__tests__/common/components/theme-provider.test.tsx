@@ -1,0 +1,63 @@
+import { render } from "@testing-library/react";
+import { vi } from "vitest";
+
+import { ThemeProvider } from "@/common/components/theme-provider";
+import { useThemeStore } from "@/common/hooks/use-theme-store";
+
+describe("ThemeProvider", () => {
+  it("renders children", () => {
+    const { getByText } = render(
+      <ThemeProvider>
+        <span>Child</span>
+      </ThemeProvider>,
+    );
+    expect(getByText("Child")).toBeInTheDocument();
+  });
+
+  it("applies dark class when theme is dark", () => {
+    useThemeStore.setState({ theme: "dark" });
+    render(
+      <ThemeProvider>
+        <span>Child</span>
+      </ThemeProvider>,
+    );
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+    expect(document.documentElement.classList.contains("light")).toBe(false);
+  });
+
+  it("applies light class when theme is light", () => {
+    useThemeStore.setState({ theme: "light" });
+    render(
+      <ThemeProvider>
+        <span>Child</span>
+      </ThemeProvider>,
+    );
+    expect(document.documentElement.classList.contains("light")).toBe(true);
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+  });
+
+  it("applies theme when system preference changes and theme is system", () => {
+    let changeListener: () => void;
+    const addEventListener = vi.fn((_event: string, listener: () => void) => {
+      changeListener = listener;
+    });
+    const removeEventListener = vi.fn();
+    Object.defineProperty(window, "matchMedia", {
+      value: vi.fn(() => ({
+        matches: false,
+        addEventListener,
+        removeEventListener,
+      })),
+      writable: true,
+    });
+    useThemeStore.setState({ theme: "system" });
+    render(
+      <ThemeProvider>
+        <span>Child</span>
+      </ThemeProvider>,
+    );
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+    changeListener!();
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+  });
+});

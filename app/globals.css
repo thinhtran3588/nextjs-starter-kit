@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-:root {
+:root,
+.dark {
   color-scheme: dark;
   --glass-bg: rgba(13, 18, 34, 0.55);
   --glass-bg-strong: rgba(18, 25, 44, 0.72);
@@ -15,6 +16,37 @@
   --accent-strong: #b8d3ff;
   --accent-glow: rgba(139, 184, 255, 0.4);
   --mint: #7ef9d8;
+  --header-glass-bg: rgba(6, 10, 20, 0.65);
+  --header-glass-border: rgba(140, 175, 255, 0.12);
+  --code-bg: rgba(0, 0, 0, 0.3);
+  --orb-1: rgba(139, 184, 255, 0.45);
+  --orb-2: rgba(126, 249, 216, 0.35);
+  --orb-3: rgba(139, 184, 255, 0.2);
+  --glass-bg-dropdown: rgba(22, 30, 52, 0.96);
+}
+
+.light {
+  color-scheme: light;
+  --glass-bg: rgba(241, 245, 249, 0.75);
+  --glass-bg-strong: rgba(248, 250, 252, 0.92);
+  --glass-bg-dropdown: rgba(248, 250, 252, 0.98);
+  --glass-border: rgba(59, 130, 246, 0.18);
+  --glass-highlight: rgba(0, 0, 0, 0.04);
+  --glass-shadow: 0 25px 80px rgba(0, 0, 0, 0.08);
+  --surface: #e8ecf4;
+  --surface-soft: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-glow: rgba(37, 99, 235, 0.2);
+  --mint: #0d9488;
+  --header-glass-bg: rgba(241, 245, 249, 0.82);
+  --header-glass-border: rgba(59, 130, 246, 0.15);
+  --code-bg: rgba(203, 213, 225, 0.4);
+  --orb-1: rgba(59, 130, 246, 0.18);
+  --orb-2: rgba(14, 165, 233, 0.14);
+  --orb-3: rgba(20, 184, 166, 0.12);
 }
 
 body {
@@ -34,6 +66,42 @@ body {
   color: var(--text-primary);
 }
 
+html.light body {
+  background:
+    radial-gradient(
+      1400px 900px at 5% 5%,
+      rgba(59, 130, 246, 0.12),
+      transparent 50%
+    ),
+    radial-gradient(
+      1200px 700px at 95% 15%,
+      rgba(20, 184, 166, 0.08),
+      transparent 50%
+    ),
+    radial-gradient(
+      1000px 600px at 50% 90%,
+      rgba(99, 102, 241, 0.05),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #eef2f7 0%, #e8ecf4 35%, #e2e8f0 70%, #cbd5e1 100%);
+}
+
+.glass-header {
+  background: var(--header-glass-bg);
+  border-bottom: 1px solid var(--header-glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 var(--glass-highlight);
+}
+
+.glass-dropdown {
+  background: var(--glass-bg-dropdown);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 .glass-panel {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -45,17 +113,18 @@ body {
 .glass-panel-strong {
   background: var(--glass-bg-strong);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 22px 70px rgba(8, 14, 30, 0.65);
+  box-shadow: var(--glass-shadow);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
 .mobile-menu-panel {
-  background: rgba(18, 25, 44, 0.92);
+  background: var(--glass-bg-strong);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 22px 70px rgba(8, 14, 30, 0.65);
+  box-shadow: var(--glass-shadow);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  color: var(--text-primary);
 }
 
 .glass-outline {
@@ -65,17 +134,22 @@ body {
 .glow-orb {
   position: absolute;
   border-radius: 999px;
-  filter: blur(40px);
-  opacity: 0.7;
+  filter: blur(64px);
+  opacity: 0.8;
+  animation: float 14s ease-in-out infinite;
+}
+
+.glow-orb-2 {
+  animation-delay: -4s;
+}
+
+.glow-orb-3 {
+  animation-delay: -8s;
 }
 
 .hero-grid {
   background-image:
-    linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      rgba(255, 255, 255, 0) 65%
-    ),
+    linear-gradient(120deg, var(--glass-highlight) 0%, transparent 65%),
     linear-gradient(to right, rgba(148, 163, 184, 0.15) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
   background-size:
@@ -95,12 +169,23 @@ body {
   inset: -40%;
   background: conic-gradient(
     from 160deg,
-    rgba(139, 184, 255, 0.15),
-    rgba(126, 249, 216, 0.25),
-    rgba(139, 184, 255, 0.15)
+    var(--liquid-a),
+    var(--liquid-b),
+    var(--liquid-a)
   );
   animation: spin 18s linear infinite;
   z-index: 0;
+}
+
+:root,
+.dark {
+  --liquid-a: rgba(139, 184, 255, 0.2);
+  --liquid-b: rgba(126, 249, 216, 0.28);
+}
+
+.light {
+  --liquid-a: rgba(59, 130, 246, 0.25);
+  --liquid-b: rgba(20, 184, 166, 0.2);
 }
 
 .liquid-border > * {
@@ -119,6 +204,73 @@ body {
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+.hero-entrance {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-entrance 0.7s ease-out forwards;
+}
+
+.hero-entrance-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.hero-entrance-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.hero-entrance-delay-3 {
+  animation-delay: 0.3s;
+}
+
+.hero-entrance-delay-4 {
+  animation-delay: 0.4s;
+}
+
+.hero-entrance-delay-5 {
+  animation-delay: 0.5s;
+}
+
+.hero-entrance-delay-6 {
+  animation-delay: 0.6s;
+}
+
+@keyframes hero-entrance {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.hero-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    var(--glass-highlight) 45%,
+    transparent 55%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes spin {
@@ -148,8 +300,16 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .float,
-  .liquid-border::after {
+  .glow-orb,
+  .liquid-border::after,
+  .hero-shine::before {
     animation: none;
+  }
+
+  .hero-entrance {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 
   .reveal {

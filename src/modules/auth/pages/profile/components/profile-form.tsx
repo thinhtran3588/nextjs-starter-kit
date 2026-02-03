@@ -110,7 +110,7 @@ export function ProfileForm() {
   if (loading) {
     return (
       <div
-        className="h-32 animate-pulse rounded-lg bg-white/5"
+        className="h-32 animate-pulse rounded-lg bg-[var(--glass-highlight)]"
         aria-busy="true"
         data-testid="profile-loading"
       />

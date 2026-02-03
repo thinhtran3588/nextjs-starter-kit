@@ -3,33 +3,42 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/common/components/button";
-import { ChevronDownIcon } from "@/common/components/icons";
-import { Link, usePathname } from "@/common/routing/navigation";
+import {
+  ChevronDownIcon,
+  MonitorIcon,
+  MoonIcon,
+  SunIcon,
+} from "@/common/components/icons";
+import { useThemeStore, type Theme } from "@/common/hooks/use-theme-store";
+import { cn } from "@/common/utils/cn";
 
-export type LocaleOption = {
-  locale: string;
+export type ThemeOption = {
+  theme: Theme;
   label: string;
-  flag: string;
 };
 
-type LanguageSelectorProps = {
-  languageLabel: string;
-  currentLocale: string;
-  localeOptions: LocaleOption[];
+type ThemeSelectorProps = {
+  themeLabel: string;
+  themeOptions: ThemeOption[];
 };
 
-export function LanguageSelector({
-  languageLabel,
-  currentLocale,
-  localeOptions,
-}: LanguageSelectorProps) {
-  const pathname = usePathname();
+const themeIcons: Record<Theme, React.ComponentType<{ className?: string }>> = {
+  system: MonitorIcon,
+  light: SunIcon,
+  dark: MoonIcon,
+};
+
+export function ThemeSelector({
+  themeLabel,
+  themeOptions,
+}: ThemeSelectorProps) {
+  const theme = useThemeStore((state) => state.theme);
+  const setTheme = useThemeStore((state) => state.setTheme);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const currentLocaleOption = localeOptions.find(
-    (option) => option.locale === currentLocale,
-  );
+  const currentOption = themeOptions.find((option) => option.theme === theme);
+  const CurrentIcon = themeIcons[theme];
 
   useEffect(() => {
     const handlePointerDown = (event: PointerEvent) => {
@@ -66,41 +75,43 @@ export function LanguageSelector({
         variant="secondary"
         size="sm"
         className="gap-2 px-2 sm:px-3"
-        aria-label={`${languageLabel}: ${currentLocaleOption?.label ?? ""}`}
+        aria-label={`${themeLabel}: ${currentOption?.label ?? ""}`}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="text-sm">{currentLocaleOption?.flag}</span>
-        <span className="hidden sm:inline">{currentLocaleOption?.label}</span>
+        <CurrentIcon className="h-3.5 w-3.5" />
+        <span className="hidden sm:inline">{currentOption?.label}</span>
         <ChevronDownIcon className="h-3 w-3" />
       </Button>
       {isOpen ? (
         <div
           className="glass-dropdown pointer-events-auto absolute right-0 z-40 mt-2 flex w-44 flex-col gap-1 rounded-2xl px-2 py-2 text-xs [color:var(--text-primary)]"
           role="listbox"
-          aria-label={languageLabel}
+          aria-label={themeLabel}
         >
-          {localeOptions.map((option) => {
-            const isActive = option.locale === currentLocale;
+          {themeOptions.map((option) => {
+            const isActive = option.theme === theme;
+            const Icon = themeIcons[option.theme];
 
             return (
-              <Link
-                key={option.locale}
-                href={pathname}
-                locale={option.locale}
+              <button
+                key={option.theme}
+                type="button"
                 role="option"
                 aria-selected={isActive}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 font-semibold transition hover:bg-[var(--glass-highlight)] ${
-                  isActive
-                    ? "bg-[var(--glass-highlight)] text-[var(--text-primary)]"
-                    : "text-[var(--text-muted)]"
-                }`}
-                onClick={() => setIsOpen(false)}
+                className={cn(
+                  "flex items-center gap-2 rounded-full px-3 py-2 font-semibold transition hover:bg-[var(--glass-highlight)]",
+                  isActive ? "bg-[var(--glass-highlight)]" : "opacity-80",
+                )}
+                onClick={() => {
+                  setTheme(option.theme);
+                  setIsOpen(false);
+                }}
               >
-                <span className="text-sm">{option.flag}</span>
+                <Icon className="h-3.5 w-3.5" />
                 <span>{option.label}</span>
-              </Link>
+              </button>
             );
           })}
         </div>
