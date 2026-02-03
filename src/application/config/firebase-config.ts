@@ -1,6 +1,7 @@
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
 
 function getFirebaseConfig(): {
   apiKey: string;
@@ -30,6 +31,7 @@ function getFirebaseConfig(): {
 
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
+let firestore: Firestore | null = null;
 
 function getFirebaseApp(): FirebaseApp | null {
   const config = getFirebaseConfig();
@@ -49,4 +51,14 @@ export function getAuthInstance(): Auth | null {
     auth = getAuth(firebaseApp);
   }
   return auth;
+}
+
+export function getFirestoreInstance(): Firestore | null {
+  if (typeof window === "undefined") return null;
+  const firebaseApp = getFirebaseApp();
+  if (!firebaseApp) return null;
+  if (!firestore) {
+    firestore = getFirestore(firebaseApp);
+  }
+  return firestore;
 }

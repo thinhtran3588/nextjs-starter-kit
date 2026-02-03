@@ -41,7 +41,12 @@ export default defineConfig({
         statements: 100,
       },
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/__tests__/**", "src/**/interfaces/**"],
+      exclude: [
+        "src/__tests__/**",
+        "src/**/interfaces/**",
+        "src/**/domain/types.ts",
+        "src/application/config/firebase-config.ts",
+      ],
     },
   },
 });

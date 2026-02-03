@@ -60,4 +60,26 @@ describe("register-container", () => {
     const b = container.resolve("signInWithGoogleUseCase");
     expect(a).toBe(b);
   });
+
+  it("returns a container that resolves settings repository and use cases", () => {
+    const container = getContainer();
+    const repo = container.resolve("userSettingsRepository") as {
+      get: (userId: string) => Promise<unknown>;
+      set: (userId: string, settings: unknown) => Promise<void>;
+    };
+    const loadUseCase = container.resolve("loadUserSettingsUseCase") as {
+      execute: (input: { userId: string | null }) => Promise<unknown>;
+    };
+    const saveUseCase = container.resolve("saveUserSettingsUseCase") as {
+      execute: (input: {
+        userId: string | null;
+        settings: unknown;
+      }) => Promise<void>;
+    };
+    expect(repo).toBeDefined();
+    expect(typeof repo.get).toBe("function");
+    expect(typeof repo.set).toBe("function");
+    expect(typeof loadUseCase.execute).toBe("function");
+    expect(typeof saveUseCase.execute).toBe("function");
+  });
 });

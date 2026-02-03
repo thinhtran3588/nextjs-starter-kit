@@ -8,6 +8,7 @@ import { getContainerOrNull } from "@/common/utils/container";
 
 vi.mock("@/application/config/firebase-config", () => ({
   getAuthInstance: vi.fn(() => null),
+  getFirestoreInstance: vi.fn(() => null),
 }));
 
 vi.mock("firebase/auth", () => ({
@@ -23,6 +24,13 @@ vi.mock("firebase/auth", () => ({
   signOut: vi.fn(),
   updatePassword: vi.fn(),
   updateProfile: vi.fn(),
+}));
+
+vi.mock("firebase/firestore", () => ({
+  getFirestore: vi.fn(),
+  doc: vi.fn(),
+  getDoc: vi.fn(),
+  setDoc: vi.fn(),
 }));
 
 if (getContainerOrNull() === null) {
