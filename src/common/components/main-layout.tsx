@@ -26,7 +26,7 @@ export async function MainLayout({
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="blueprint-grid relative min-h-screen overflow-hidden">
       <div
         className="glow-orb top-[-10%] left-[-10%] h-[420px] w-[420px] bg-[var(--orb-1)]"
         aria-hidden

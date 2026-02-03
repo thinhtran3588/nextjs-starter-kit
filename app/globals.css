@@ -3,36 +3,39 @@
 :root,
 .dark {
   color-scheme: dark;
-  --glass-bg: rgba(13, 18, 34, 0.55);
-  --glass-bg-strong: rgba(18, 25, 44, 0.94);
-  --glass-border: rgba(140, 175, 255, 0.22);
-  --glass-highlight: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 20px 80px rgba(7, 12, 24, 0.55);
-  --surface: #0b1020;
-  --surface-soft: #111a2f;
-  --text-primary: #f5f7ff;
-  --text-muted: #b5bfd9;
-  --accent: #8bb8ff;
-  --accent-strong: #b8d3ff;
-  --accent-glow: rgba(139, 184, 255, 0.4);
-  --mint: #7ef9d8;
-  --header-glass-bg: rgba(6, 10, 20, 0.92);
-  --header-glass-border: rgba(140, 175, 255, 0.18);
-  --code-bg: rgba(0, 0, 0, 0.3);
-  --orb-1: rgba(139, 184, 255, 0.45);
-  --orb-2: rgba(126, 249, 216, 0.35);
-  --orb-3: rgba(139, 184, 255, 0.2);
-  --glass-bg-dropdown: rgba(22, 30, 52, 0.96);
+  --glass-bg: rgba(10, 14, 28, 0.52);
+  --glass-bg-strong: rgba(14, 20, 38, 0.92);
+  --glass-border: rgba(140, 175, 255, 0.18);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 20px 80px rgba(4, 8, 18, 0.5);
+  --surface: #050810;
+  --surface-soft: #0a0f1a;
+  --text-primary: #f0f4ff;
+  --text-muted: #94a3b8;
+  --accent: #6b9aff;
+  --accent-strong: #8bb8ff;
+  --accent-electric: #7c8cff;
+  --accent-glow: rgba(107, 154, 255, 0.35);
+  --accent-purple: rgba(139, 92, 246, 0.5);
+  --mint: #67e8c4;
+  --header-glass-bg: rgba(5, 8, 16, 0.88);
+  --header-glass-border: rgba(140, 175, 255, 0.14);
+  --code-bg: rgba(0, 0, 0, 0.35);
+  --orb-1: rgba(107, 154, 255, 0.4);
+  --orb-2: rgba(126, 249, 216, 0.28);
+  --orb-3: rgba(139, 92, 246, 0.22);
+  --glass-bg-dropdown: rgba(18, 24, 42, 0.96);
+  --blueprint-line: rgba(148, 163, 184, 0.06);
 }
 
 .light {
   color-scheme: light;
-  --glass-bg: rgba(241, 245, 249, 0.75);
+  --glass-bg: rgba(241, 245, 249, 0.78);
   --glass-bg-strong: rgba(248, 250, 252, 0.98);
   --glass-bg-dropdown: rgba(248, 250, 252, 0.98);
-  --glass-border: rgba(59, 130, 246, 0.18);
+  --glass-border: rgba(59, 130, 246, 0.16);
   --glass-highlight: rgba(0, 0, 0, 0.04);
-  --glass-shadow: 0 25px 80px rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 25px 80px rgba(0, 0, 0, 0.06);
   --surface: #e8ecf4;
   --surface-soft: #e2e8f0;
   --text-primary: #0f172a;
@@ -47,22 +50,28 @@
   --orb-1: rgba(59, 130, 246, 0.18);
   --orb-2: rgba(14, 165, 233, 0.14);
   --orb-3: rgba(20, 184, 166, 0.12);
+  --blueprint-line: rgba(15, 23, 42, 0.06);
 }
 
 body {
   min-height: 100%;
   background:
     radial-gradient(
-      1200px 800px at 10% 10%,
-      rgba(93, 124, 255, 0.24),
-      transparent 60%
-    ),
-    radial-gradient(
-      1200px 800px at 90% 20%,
-      rgba(126, 249, 216, 0.18),
+      1400px 900px at 8% 5%,
+      rgba(107, 154, 255, 0.22),
       transparent 55%
     ),
-    linear-gradient(180deg, #070b15 0%, #0b1020 45%, #0d1326 100%);
+    radial-gradient(
+      1200px 700px at 92% 15%,
+      rgba(126, 249, 216, 0.14),
+      transparent 50%
+    ),
+    radial-gradient(
+      1000px 600px at 50% 95%,
+      rgba(139, 92, 246, 0.12),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #040710 0%, #070c18 40%, #0a0f1a 100%);
   color: var(--text-primary);
 }
 
@@ -118,6 +127,16 @@ html.light body {
   -webkit-backdrop-filter: blur(20px);
 }
 
+.content-panel {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 1px 0 var(--glass-highlight),
+    var(--glass-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 .mobile-menu-panel {
   background: var(--glass-bg-strong);
   border: 1px solid var(--glass-border);
@@ -150,12 +169,34 @@ html.light body {
 .hero-grid {
   background-image:
     linear-gradient(120deg, var(--glass-highlight) 0%, transparent 65%),
-    linear-gradient(to right, rgba(148, 163, 184, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+    linear-gradient(to right, var(--blueprint-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--blueprint-line) 1px, transparent 1px);
   background-size:
     auto,
-    120px 120px,
-    120px 120px;
+    80px 80px,
+    80px 80px;
+}
+
+.blueprint-grid {
+  background-image:
+    linear-gradient(to right, var(--blueprint-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--blueprint-line) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.bento-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 1rem;
+}
+
+@media (min-width: 640px) {
+  .bento-card {
+    border-radius: 1.25rem;
+  }
 }
 
 .liquid-border {

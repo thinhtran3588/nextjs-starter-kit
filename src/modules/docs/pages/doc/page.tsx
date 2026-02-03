@@ -21,7 +21,7 @@ export async function DocPage({ slug }: DocPageProps) {
   }
 
   return (
-    <section className="glass-panel-strong liquid-border rounded-[32px] px-8 py-12 sm:px-14">
+    <section className="content-panel rounded-[32px] px-8 py-12 sm:px-14">
       <div className="mt-3">
         <MarkdownContent content={content} />
       </div>
