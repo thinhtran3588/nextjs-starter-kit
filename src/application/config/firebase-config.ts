@@ -32,7 +32,6 @@ let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 
 function getFirebaseApp(): FirebaseApp | null {
-  if (typeof window === "undefined") return null;
   const config = getFirebaseConfig();
   if (!config) return null;
   if (!app) {
