@@ -14,6 +14,7 @@ import {
   ThemeSelector,
   type ThemeOption,
 } from "@/common/components/theme-selector";
+import { MobileMenuProvider } from "@/common/contexts/mobile-menu-context";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 import { Link, usePathname } from "@/common/routing/navigation";
 import { cn } from "@/common/utils/cn";
@@ -179,7 +180,11 @@ export function MainHeader({
                 onClick={() => setIsMenuOpen(false)}
               >
                 {authSlot != null ? (
-                  <div className="sm:hidden">{authSlot}</div>
+                  <div className="sm:hidden">
+                    <MobileMenuProvider value={true}>
+                      {authSlot}
+                    </MobileMenuProvider>
+                  </div>
                 ) : null}
                 {menuItems.map((item) =>
                   item.children?.length ? (

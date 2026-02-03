@@ -9,8 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/common/components/dropdown-menu";
+import { useMobileMenu } from "@/common/contexts/mobile-menu-context";
 import { useContainer } from "@/common/hooks/use-container";
 import { Link } from "@/common/routing/navigation";
+import { cn } from "@/common/utils/cn";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 import type { SignOutUseCase } from "@/modules/auth/use-cases/sign-out-use-case";
 
@@ -22,6 +24,7 @@ export function AuthHeaderSlot() {
   const container = useContainer();
   const user = useAuthUserStore((s) => s.user);
   const loading = useAuthUserStore((s) => s.loading);
+  const isMobileMenu = useMobileMenu();
 
   async function handleSignOut() {
     const useCase = container.resolve("signOutUseCase") as SignOutUseCase;
@@ -39,6 +42,45 @@ export function AuthHeaderSlot() {
   }
 
   if (user) {
+    if (isMobileMenu) {
+      return (
+        <div className="flex flex-col gap-2">
+          <div
+            className={cn(
+              "rounded-full px-4 py-2 text-center text-sm font-medium",
+              "bg-[var(--glass-highlight)] text-[var(--text-primary)]",
+            )}
+            data-testid="auth-user-name"
+          >
+            {user.displayName || user.email || signInLabel}
+          </div>
+          <div
+            className={cn(
+              "flex flex-col gap-0.5 rounded-xl border border-[var(--glass-border)] p-1",
+            )}
+          >
+            <Link
+              href="/auth/profile"
+              className={cn(
+                "rounded-lg px-3 py-2 text-sm font-medium transition",
+                "text-[var(--text-muted)] hover:bg-[var(--glass-highlight)] hover:text-[var(--text-primary)]",
+              )}
+            >
+              {profileLabel}
+            </Link>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="justify-start rounded-lg px-3 py-2 text-sm font-medium text-[var(--text-muted)] hover:bg-[var(--glass-highlight)] hover:text-[var(--text-primary)]"
+              onClick={handleSignOut}
+            >
+              {signOutLabel}
+            </Button>
+          </div>
+        </div>
+      );
+    }
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
