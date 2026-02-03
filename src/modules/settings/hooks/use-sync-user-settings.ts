@@ -19,9 +19,11 @@ function applyLoadedTheme(settings: UserSettings): void {
 export function useSyncUserSettings(): void {
   const container = useContainer();
   const user = useAuthUserStore((s) => s.user);
+  const authLoading = useAuthUserStore((s) => s.loading);
   const setSettings = useUserSettingsStore((s) => s.setSettings);
 
   useEffect(() => {
+    if (authLoading) return;
     const useCase = container.resolve(
       "loadUserSettingsUseCase",
     ) as LoadUserSettingsUseCase;
@@ -31,5 +33,5 @@ export function useSyncUserSettings(): void {
       setSettings(merged);
       applyLoadedTheme(merged);
     });
-  }, [container, user?.id, setSettings]);
+  }, [container, user?.id, authLoading, setSettings]);
 }

@@ -92,6 +92,21 @@ describe("useSyncUserSettings", () => {
     });
   });
 
+  it("does not load settings from Firestore while auth is still loading", () => {
+    useAuthUserStore.setState({ user: null, loading: true });
+    const execute = vi.fn().mockResolvedValue({});
+    mockResolve = (key: string) => {
+      if (key === "loadUserSettingsUseCase") {
+        return { execute };
+      }
+      return undefined;
+    };
+
+    render(<SyncConsumer />);
+
+    expect(execute).not.toHaveBeenCalled();
+  });
+
   it("applies loaded theme to theme store when settings include theme", async () => {
     const settings = { locale: "en", theme: "dark" as const };
     mockResolve = (key: string) => {

@@ -120,4 +120,22 @@ describe("firebase-config", () => {
     expect(first).toBe(mockFirestore);
     expect(firestore.getFirestore).toHaveBeenCalledTimes(1);
   });
+
+  it("getFirestoreInstance returns null when NEXT_PUBLIC_FIREBASE_CONFIG is missing", async () => {
+    vi.stubGlobal("window", originalWindow);
+    delete process.env.NEXT_PUBLIC_FIREBASE_CONFIG;
+    vi.resetModules();
+    const { getFirestoreInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getFirestoreInstance()).toBeNull();
+  });
+
+  it("getFirestoreInstance returns null when NEXT_PUBLIC_FIREBASE_CONFIG is invalid JSON", async () => {
+    vi.stubGlobal("window", originalWindow);
+    process.env.NEXT_PUBLIC_FIREBASE_CONFIG = "invalid-json";
+    vi.resetModules();
+    const { getFirestoreInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getFirestoreInstance()).toBeNull();
+  });
 });

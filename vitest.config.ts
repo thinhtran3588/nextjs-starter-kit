@@ -45,7 +45,6 @@ export default defineConfig({
         "src/__tests__/**",
         "src/**/interfaces/**",
         "src/**/domain/types.ts",
-        "src/application/config/firebase-config.ts",
       ],
     },
   },
