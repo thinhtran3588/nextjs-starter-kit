@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { MobileMenuProvider } from "@/common/contexts/mobile-menu-context";
 import { AuthHeaderSlot } from "@/modules/auth/components/auth-header-slot";
 
 const mockSignOutExecute = vi.fn().mockResolvedValue(undefined);
@@ -128,5 +129,93 @@ describe("AuthHeaderSlot", () => {
     await user.click(signOutItem);
 
     expect(mockSignOutExecute).toHaveBeenCalledWith({});
+  });
+
+  describe("mobile menu (inline)", () => {
+    it("shows user name, Profile link, and Sign out button directly when in mobile menu", () => {
+      mockUser = {
+        id: "uid-1",
+        email: "a@b.com",
+        displayName: "Alice",
+        photoURL: null,
+        authType: "email",
+      };
+
+      render(
+        <MobileMenuProvider value={true}>
+          <AuthHeaderSlot />
+        </MobileMenuProvider>,
+      );
+
+      expect(screen.getByTestId("auth-user-name")).toHaveTextContent("Alice");
+      expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute(
+        "href",
+        "/auth/profile",
+      );
+      expect(
+        screen.getByRole("button", { name: "Sign out" }),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole("menuitem")).not.toBeInTheDocument();
+    });
+
+    it("shows email when user has no displayName in mobile menu", () => {
+      mockUser = {
+        id: "uid-1",
+        email: "a@b.com",
+        displayName: null,
+        photoURL: null,
+        authType: "email",
+      };
+
+      render(
+        <MobileMenuProvider value={true}>
+          <AuthHeaderSlot />
+        </MobileMenuProvider>,
+      );
+
+      expect(screen.getByTestId("auth-user-name")).toHaveTextContent("a@b.com");
+    });
+
+    it("shows sign-in label when user has no displayName and no email in mobile menu", () => {
+      mockUser = {
+        id: "uid-1",
+        email: null,
+        displayName: null,
+        photoURL: null,
+        authType: "other",
+      };
+
+      render(
+        <MobileMenuProvider value={true}>
+          <AuthHeaderSlot />
+        </MobileMenuProvider>,
+      );
+
+      expect(screen.getByTestId("auth-user-name")).toHaveTextContent("Sign in");
+    });
+
+    it("calls signOut when Sign out is clicked in mobile menu", async () => {
+      const user = (
+        await import("@testing-library/user-event")
+      ).default.setup();
+      mockUser = {
+        id: "uid-1",
+        email: "a@b.com",
+        displayName: "Alice",
+        photoURL: null,
+        authType: "email",
+      };
+      mockSignOutExecute.mockClear();
+
+      render(
+        <MobileMenuProvider value={true}>
+          <AuthHeaderSlot />
+        </MobileMenuProvider>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Sign out" }));
+
+      expect(mockSignOutExecute).toHaveBeenCalledWith({});
+    });
   });
 });

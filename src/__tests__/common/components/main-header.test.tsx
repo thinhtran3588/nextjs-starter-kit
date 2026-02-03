@@ -5,6 +5,28 @@ import { MainHeader } from "@/common/components/main-header";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 import { Link } from "@/common/routing/navigation";
 
+let mockAuthUser: {
+  id: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  authType: "email" | "google" | "apple" | "other";
+} | null = null;
+let mockAuthLoading = false;
+
+vi.mock("@/common/hooks/use-container", () => ({
+  useContainer: vi.fn(() => ({
+    resolve: (name: string) =>
+      name === "signOutUseCase" ? { execute: vi.fn() } : {},
+  })),
+}));
+
+vi.mock("@/modules/auth/hooks/use-auth-user-store", () => ({
+  useAuthUserStore: (
+    selector: (s: { user: typeof mockAuthUser; loading: boolean }) => unknown,
+  ) => selector({ user: mockAuthUser, loading: mockAuthLoading }),
+}));
+
 let mockPathname = "/";
 vi.mock("@/common/routing/navigation", async (importOriginal) => {
   const mod =
@@ -266,5 +288,32 @@ describe("MainHeader", () => {
     const nav = within(mobileMenu).getByRole("navigation");
     const links = within(nav).getAllByRole("link");
     expect(links[0]).toHaveTextContent("Home");
+  });
+
+  it("shows user name, Profile, and Sign out directly in mobile menu when signed in", async () => {
+    const { AuthHeaderSlot } =
+      await import("@/modules/auth/components/auth-header-slot");
+    mockAuthUser = {
+      id: "uid-1",
+      email: "a@b.com",
+      displayName: "Alice",
+      photoURL: null,
+      authType: "email",
+    };
+    mockAuthLoading = false;
+
+    render(<MainHeader {...baseProps} authSlot={<AuthHeaderSlot />} />);
+    fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
+
+    const mobileMenu = screen.getByTestId("mobile-menu");
+    expect(within(mobileMenu).getByTestId("auth-user-name")).toHaveTextContent(
+      "Alice",
+    );
+    expect(
+      within(mobileMenu).getByRole("link", { name: "Profile" }),
+    ).toHaveAttribute("href", "/auth/profile");
+    expect(
+      within(mobileMenu).getByRole("button", { name: "Sign out" }),
+    ).toBeInTheDocument();
   });
 });
