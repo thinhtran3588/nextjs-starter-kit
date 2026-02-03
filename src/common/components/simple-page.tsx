@@ -18,7 +18,7 @@ export function SimplePage({ title, href = "/", ctaLabel }: SimplePageProps) {
           </h1>
         </CardHeader>
         <CardContent className="pt-6">
-          <Button asChild variant="default">
+          <Button asChild variant="primary">
             <Link href={href}>{ctaLabel}</Link>
           </Button>
         </CardContent>

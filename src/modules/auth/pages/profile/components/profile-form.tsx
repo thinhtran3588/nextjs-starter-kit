@@ -294,7 +294,7 @@ export function ProfileForm() {
                           </DialogClose>
                           <Button
                             type="submit"
-                            variant="default"
+                            variant="primary"
                             loading={passwordForm.formState.isSubmitting}
                           >
                             {t("updatePasswordButton")}
@@ -307,7 +307,7 @@ export function ProfileForm() {
               ) : null}
               <Button
                 type="submit"
-                variant="default"
+                variant="primary"
                 loading={profileForm.formState.isSubmitting}
               >
                 {t("saveButton")}

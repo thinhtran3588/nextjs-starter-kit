@@ -32,7 +32,7 @@ export async function LandingPage() {
                 {tHome("hero.subtitle")}
               </p>
               <div className="hero-entrance hero-entrance-delay-4 flex flex-wrap justify-center gap-3">
-                <Button asChild variant="default" className="min-w-[140px]">
+                <Button asChild variant="primary" className="min-w-[140px]">
                   <Link href="/app">{tCommon("navigation.goToApp")}</Link>
                 </Button>
                 <Button asChild variant="secondary" className="min-w-[140px]">
