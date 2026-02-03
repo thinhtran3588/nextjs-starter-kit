@@ -153,7 +153,7 @@ export type LoginInput = z.infer<typeof loginSchema>;
 ### Setup Overview
 
 - **Routing**: Define supported locales and default in `i18n/routing.ts` with `defineRouting({ locales: ['en', 'de'], defaultLocale: 'en' })`.
-- **Middleware**: Root `middleware.ts` uses `createMiddleware(routing)` from `next-intl/middleware` so locale is detected and routes are prefixed (e.g. `/en/about`).
+- **Proxy**: Root `proxy.ts` uses `createMiddleware(routing)` from `next-intl/middleware` so locale is detected and routes are prefixed (e.g. `/en/about`).
 - **Messages**: JSON per locale in `messages/en.json`, `messages/de.json` (nested keys, e.g. `{ "common": { "submit": "Submit" } }`).
 - **Request config**: `i18n/request.ts` uses `getRequestConfig` from `next-intl/server` to load messages for the current locale; wire it in `next.config` with the next-intl plugin or pass to `NextIntlClientProvider` in layout.
 - **App structure**: All app routes live under `app/[locale]/` (e.g. `app/[locale]/layout.tsx`, `app/[locale]/page.tsx`). Root layout wraps children with `NextIntlClientProvider` when using client translations.
