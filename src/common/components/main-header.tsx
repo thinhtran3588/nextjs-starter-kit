@@ -151,49 +151,59 @@ export function MainHeader({
           </div>
         </div>
         {isMenuOpen ? (
-          <div
-            className="mobile-menu-panel absolute top-full right-6 left-6 z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
-            data-testid="mobile-menu"
-          >
-            <nav
-              className="flex flex-col gap-3"
+          <>
+            <div
+              className="fixed inset-0 z-30 sm:hidden"
+              aria-hidden
               onClick={() => setIsMenuOpen(false)}
+              data-testid="mobile-menu-backdrop"
+            />
+            <div
+              className="mobile-menu-panel absolute top-full right-6 left-6 z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
+              data-testid="mobile-menu"
             >
-              {authSlot != null ? (
-                <div className="sm:hidden">{authSlot}</div>
-              ) : null}
-              {menuItems.map((item) =>
-                item.children?.length ? (
-                  <span key={item.id}>
-                    <span className="py-1 text-white/60">{item.label}</span>
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.id}
-                        className={cn(
-                          "py-1 pl-3 transition hover:text-white/80",
-                          isActive(child.href) && "font-bold text-white",
-                        )}
-                        href={child.href}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </span>
-                ) : (
-                  <Link
-                    key={item.id}
-                    className={cn(
-                      "py-1 transition hover:text-white/80",
-                      isActive(item.href) && "font-bold text-white",
-                    )}
-                    href={item.href}
-                  >
-                    {item.label}
-                  </Link>
-                ),
-              )}
-            </nav>
-          </div>
+              <nav
+                className="flex flex-col gap-3"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {authSlot != null ? (
+                  <div className="sm:hidden">{authSlot}</div>
+                ) : null}
+                {menuItems.map((item) =>
+                  item.children?.length ? (
+                    <div key={item.id} className="flex flex-col gap-1">
+                      <span className="py-1 text-white/60">{item.label}</span>
+                      <div className="flex flex-col pl-3">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.id}
+                            className={cn(
+                              "block py-1 transition hover:text-white/80",
+                              isActive(child.href) && "font-bold text-white",
+                            )}
+                            href={child.href}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <Link
+                      key={item.id}
+                      className={cn(
+                        "py-1 transition hover:text-white/80",
+                        isActive(item.href) && "font-bold text-white",
+                      )}
+                      href={item.href}
+                    >
+                      {item.label}
+                    </Link>
+                  ),
+                )}
+              </nav>
+            </div>
+          </>
         ) : null}
       </div>
     </header>

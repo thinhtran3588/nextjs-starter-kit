@@ -136,6 +136,15 @@ describe("MainHeader", () => {
     expect(firstLink).toHaveTextContent(signInLabel);
   });
 
+  it("closes mobile menu when backdrop is clicked", () => {
+    render(<MainHeader {...baseProps} />);
+    fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
+    expect(screen.getByTestId("mobile-menu")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("mobile-menu-backdrop"));
+    expect(screen.queryByTestId("mobile-menu")).not.toBeInTheDocument();
+  });
+
   it("closes mobile menu when a nav link is clicked", () => {
     render(<MainHeader {...baseProps} />);
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
