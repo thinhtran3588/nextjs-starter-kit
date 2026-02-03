@@ -20,7 +20,7 @@ export default function ErrorPage({ reset }: ErrorPageProps) {
       title={t("title")}
       description={t("description")}
       primaryAction={
-        <Button onClick={reset} variant="default">
+        <Button onClick={reset} variant="primary">
           {t("tryAgain")}
         </Button>
       }

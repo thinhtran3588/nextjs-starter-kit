@@ -172,7 +172,7 @@ export function SignInForm() {
             ) : null}
             <Button
               type="submit"
-              variant="default"
+              variant="primary"
               className="w-full"
               loading={form.formState.isSubmitting}
             >

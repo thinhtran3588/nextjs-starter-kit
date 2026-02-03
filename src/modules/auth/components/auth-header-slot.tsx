@@ -101,7 +101,7 @@ export function AuthHeaderSlot() {
   }
 
   return (
-    <Button asChild variant="default" size="sm">
+    <Button asChild variant="primary" size="sm">
       <Link href="/auth/sign-in">{signInLabel}</Link>
     </Button>
   );

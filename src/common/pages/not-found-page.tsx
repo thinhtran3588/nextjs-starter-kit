@@ -16,7 +16,7 @@ export default function NotFoundPage() {
       title={t("title")}
       description={t("description")}
       primaryAction={
-        <Button asChild variant="default">
+        <Button asChild variant="primary">
           <Link href="/">{t("cta")}</Link>
         </Button>
       }
