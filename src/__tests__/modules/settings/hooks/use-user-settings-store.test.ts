@@ -1,8 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
 
 describe("useUserSettingsStore", () => {
+  beforeEach(() => {
+    useUserSettingsStore.setState({ settings: {} });
+    localStorage.clear();
+  });
+
   it("has initial empty settings", () => {
     expect(useUserSettingsStore.getState().settings).toEqual({});
   });

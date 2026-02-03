@@ -25,9 +25,11 @@ export function useSyncUserSettings(): void {
     const useCase = container.resolve(
       "loadUserSettingsUseCase",
     ) as LoadUserSettingsUseCase;
-    useCase.execute({ userId: user?.id ?? null }).then((loaded) => {
-      setSettings(loaded);
-      applyLoadedTheme(loaded);
+    const local = useUserSettingsStore.getState().settings;
+    useCase.execute({ userId: user?.id ?? null }).then((remote) => {
+      const merged = remote ? { ...local, ...remote } : local;
+      setSettings(merged);
+      applyLoadedTheme(merged);
     });
   }, [container, user?.id, setSettings]);
 }

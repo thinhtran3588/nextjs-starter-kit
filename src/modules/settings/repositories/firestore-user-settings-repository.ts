@@ -3,13 +3,13 @@
 import { doc, getDoc, setDoc, type Firestore } from "firebase/firestore";
 
 import type { UserSettings } from "@/modules/settings/domain/types";
-import type { UserSettingsRepository } from "@/modules/settings/interfaces/user-settings-repository";
+import type { BaseUserSettingsRepository } from "@/modules/settings/interfaces/base-user-settings-repository";
 
 const COLLECTION_ID = "user-settings";
 
 export type GetFirestoreInstance = () => Firestore | null;
 
-export class FirestoreUserSettingsRepository implements UserSettingsRepository {
+export class FirestoreUserSettingsRepository implements BaseUserSettingsRepository {
   constructor(private readonly getFirestoreInstance: GetFirestoreInstance) {}
 
   async get(userId: string): Promise<UserSettings | null> {

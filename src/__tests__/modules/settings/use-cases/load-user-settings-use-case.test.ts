@@ -1,49 +1,34 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { LocalUserSettingsStorage } from "@/modules/settings/interfaces/local-user-settings-storage";
-import type { UserSettingsRepository } from "@/modules/settings/interfaces/user-settings-repository";
+import type { BaseUserSettingsRepository } from "@/modules/settings/interfaces/base-user-settings-repository";
 import { LoadUserSettingsUseCase } from "@/modules/settings/use-cases/load-user-settings-use-case";
 
 describe("LoadUserSettingsUseCase", () => {
   let loadUseCase: LoadUserSettingsUseCase;
-  let mockLocalStorage: LocalUserSettingsStorage;
-  let mockRepository: UserSettingsRepository;
+  let mockRepository: BaseUserSettingsRepository;
 
   beforeEach(() => {
-    mockLocalStorage = {
-      get: vi.fn().mockReturnValue({}),
-      set: vi.fn(),
-    };
     mockRepository = {
       get: vi.fn().mockResolvedValue(null),
       set: vi.fn(),
     };
-    loadUseCase = new LoadUserSettingsUseCase(mockLocalStorage, mockRepository);
+    loadUseCase = new LoadUserSettingsUseCase(mockRepository);
   });
 
-  it("returns local settings when userId is null", async () => {
-    vi.mocked(mockLocalStorage.get).mockReturnValue({
-      locale: "en",
-      theme: "dark",
-    });
+  it("returns null when userId is null", async () => {
     const result = await loadUseCase.execute({ userId: null });
-    expect(result).toEqual({ locale: "en", theme: "dark" });
+    expect(result).toBeNull();
     expect(mockRepository.get).not.toHaveBeenCalled();
   });
 
-  it("returns local settings when userId is set but remote returns null", async () => {
-    vi.mocked(mockLocalStorage.get).mockReturnValue({ locale: "vi" });
+  it("returns null when userId is set but remote returns null", async () => {
     vi.mocked(mockRepository.get).mockResolvedValue(null);
     const result = await loadUseCase.execute({ userId: "user-1" });
-    expect(result).toEqual({ locale: "vi" });
+    expect(result).toBeNull();
     expect(mockRepository.get).toHaveBeenCalledWith("user-1");
   });
 
-  it("merges remote over local when userId is set and remote exists", async () => {
-    vi.mocked(mockLocalStorage.get).mockReturnValue({
-      locale: "en",
-      theme: "light",
-    });
+  it("returns remote when userId is set and remote exists", async () => {
     vi.mocked(mockRepository.get).mockResolvedValue({
       locale: "vi",
       theme: "dark",

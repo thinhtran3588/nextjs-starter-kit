@@ -110,4 +110,32 @@ describe("useSyncUserSettings", () => {
       expect(mockSetTheme).toHaveBeenCalledWith("dark");
     });
   });
+
+  it("updates store with local only when remote is null", async () => {
+    useAuthUserStore.setState({
+      user: {
+        id: "uid-1",
+        email: "a@b.com",
+        displayName: "Alice",
+        photoURL: null,
+        authType: "email",
+      },
+      loading: false,
+    });
+    useUserSettingsStore.setState({ settings: { locale: "en" } });
+    mockResolve = (key: string) => {
+      if (key === "loadUserSettingsUseCase") {
+        return { execute: () => Promise.resolve(null) };
+      }
+      return undefined;
+    };
+
+    render(<SyncConsumer />);
+
+    await vi.waitFor(() => {
+      expect(useUserSettingsStore.getState().settings).toEqual({
+        locale: "en",
+      });
+    });
+  });
 });
