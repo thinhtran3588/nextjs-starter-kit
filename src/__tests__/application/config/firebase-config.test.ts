@@ -71,4 +71,13 @@ describe("firebase-config", () => {
       await import("@/application/config/firebase-config");
     expect(getAuthInstance()).toBeNull();
   });
+
+  it("getAuthInstance returns null when NEXT_PUBLIC_FIREBASE_CONFIG is invalid JSON", async () => {
+    vi.stubGlobal("window", originalWindow);
+    process.env.NEXT_PUBLIC_FIREBASE_CONFIG = "invalid-json";
+    vi.resetModules();
+    const { getAuthInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getAuthInstance()).toBeNull();
+  });
 });

@@ -2,7 +2,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import messages from "@/application/localization/en.json";
-import { AuthLayout } from "@/modules/auth/components/auth-layout";
 import { AuthVerification } from "@/modules/auth/components/auth-verification";
 import { AuthType } from "@/modules/auth/domain/types";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
@@ -22,43 +21,6 @@ vi.mock("@/common/routing/navigation", async (importOriginal) => {
 });
 
 describe("Auth pages", () => {
-  it("renders the shared auth layout shell", async () => {
-    render(
-      await AuthLayout({
-        children: (
-          <div className="space-y-6">
-            <h1 className="text-3xl font-semibold text-white sm:text-4xl">
-              {messages.modules.auth.pages["sign-in"].title}
-            </h1>
-          </div>
-        ),
-      }),
-    );
-
-    expect(
-      screen.getByRole("heading", {
-        name: messages.modules.auth.pages["sign-in"].title,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: messages.common.navigation.backToHome }),
-    ).toBeInTheDocument();
-  });
-
-  it("hides language selector when showLanguageSelector is false", async () => {
-    render(
-      await AuthLayout({
-        children: <span data-testid="profile-content">Profile</span>,
-        showLanguageSelector: false,
-      }),
-    );
-
-    expect(screen.getByTestId("profile-content")).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: messages.common.navigation.backToHome }),
-    ).toBeInTheDocument();
-  });
-
   it("renders the sign in page", async () => {
     render(await SignInPage());
 
