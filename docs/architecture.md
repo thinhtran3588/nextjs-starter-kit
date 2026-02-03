@@ -372,8 +372,8 @@ Route groups (e.g. `(marketing)`) use a shared layout that provides `MainLayout`
 
 **Implementation:**
 
-- Container is created in `src/common/utils/container.ts` and registered in `src/application/register-container.ts`.
-- Each module exposes `registerModule(container)` in `module-configuration.ts`, registering use cases and services (e.g. `asClass(SignInWithEmailUseCase).singleton()`).
+- Container is created in `src/common/utils/container.ts` with `injectionMode: InjectionMode.PROXY` and registered in `src/application/register-container.ts`.
+- Each module exposes `registerModule(container)` in `module-configuration.ts`, registering use cases and services (e.g. `asFunction(cradle => new SignInWithEmailUseCase(cradle.authService)).singleton()`).
 - Components resolve use cases via `useContainer()` from `src/common/hooks/use-container.ts` and call `execute()`.
 - App-level dependencies (e.g. Firebase auth instance) are registered in `register-container.ts`.
 
