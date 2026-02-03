@@ -32,7 +32,7 @@ export function ErrorPageView({
               {errorCode}
             </p>
           )}
-          <h1 className="mt-4 text-2xl leading-tight font-semibold text-white sm:text-3xl lg:text-4xl">
+          <h1 className="mt-4 text-2xl leading-tight font-semibold text-[var(--text-primary)] sm:text-3xl lg:text-4xl">
             {title}
           </h1>
           <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">

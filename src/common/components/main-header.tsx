@@ -10,6 +10,10 @@ import {
   LanguageSelector,
   type LocaleOption,
 } from "@/common/components/language-selector";
+import {
+  ThemeSelector,
+  type ThemeOption,
+} from "@/common/components/theme-selector";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 import { Link, usePathname } from "@/common/routing/navigation";
 import { cn } from "@/common/utils/cn";
@@ -21,6 +25,8 @@ type MainHeaderProps = {
   menuLabel: string;
   currentLocale: string;
   localeOptions: LocaleOption[];
+  themeLabel: string;
+  themeOptions: ThemeOption[];
   authSlot?: React.ReactNode;
 };
 
@@ -28,8 +34,8 @@ const SCROLL_HIDE_THRESHOLD = 32;
 const SCROLL_DELTA = 4;
 
 const navLinkClass = cn(
-  "relative py-1 transition hover:text-white nav-link-indicator",
-  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-white after:content-[''] after:transition-transform after:duration-300 after:origin-left",
+  "relative py-1 transition text-[var(--text-muted)] hover:text-[var(--text-primary)] nav-link-indicator",
+  "after:absolute after:bottom-0 after:left-0 after:block after:h-0.5 after:w-full after:bg-[var(--text-primary)] after:content-[''] after:transition-transform after:duration-300 after:origin-left",
 );
 
 export function MainHeader({
@@ -39,6 +45,8 @@ export function MainHeader({
   menuLabel,
   currentLocale,
   localeOptions,
+  themeLabel,
+  themeOptions,
   authSlot,
 }: MainHeaderProps) {
   const pathname = usePathname();
@@ -79,7 +87,7 @@ export function MainHeader({
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 bg-[rgba(6,10,20,0.6)] backdrop-blur-sm transition-all duration-300 ${
+      className={`glass-header fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         isHidden
           ? "pointer-events-none -translate-y-full opacity-0"
           : "translate-y-0 opacity-100"
@@ -88,7 +96,7 @@ export function MainHeader({
       <div className="relative">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
           <Link
-            className="flex items-center gap-3 text-base font-semibold text-white/90 transition hover:text-white"
+            className="flex items-center gap-3 text-base font-semibold text-[var(--text-primary)] transition hover:opacity-90"
             href="/"
           >
             <Image
@@ -101,7 +109,7 @@ export function MainHeader({
             />
             {badge}
           </Link>
-          <div className="flex items-center gap-3 text-sm text-[var(--text-muted)]">
+          <div className="flex items-center gap-3 text-sm">
             <nav className="hidden items-center gap-4 sm:flex">
               {menuItems.map((item) =>
                 item.children?.length ? (
@@ -119,7 +127,7 @@ export function MainHeader({
                     className={cn(
                       navLinkClass,
                       isActive(item.href)
-                        ? "font-bold text-white after:scale-x-100"
+                        ? "font-bold text-[var(--text-primary)] after:scale-x-100"
                         : "after:scale-x-0",
                     )}
                     href={item.href}
@@ -129,6 +137,10 @@ export function MainHeader({
                 ),
               )}
             </nav>
+            <ThemeSelector
+              themeLabel={themeLabel}
+              themeOptions={themeOptions}
+            />
             <LanguageSelector
               languageLabel={languageLabel}
               currentLocale={currentLocale}
@@ -159,7 +171,7 @@ export function MainHeader({
               data-testid="mobile-menu-backdrop"
             />
             <div
-              className="mobile-menu-panel absolute top-full right-6 left-6 z-40 rounded-3xl px-4 py-4 text-sm text-white sm:hidden"
+              className="mobile-menu-panel absolute top-full right-6 left-6 z-40 rounded-3xl px-4 py-4 text-sm sm:hidden"
               data-testid="mobile-menu"
             >
               <nav
@@ -172,14 +184,17 @@ export function MainHeader({
                 {menuItems.map((item) =>
                   item.children?.length ? (
                     <div key={item.id} className="flex flex-col gap-1">
-                      <span className="py-1 text-white/60">{item.label}</span>
+                      <span className="py-1 text-[var(--text-muted)]">
+                        {item.label}
+                      </span>
                       <div className="flex flex-col pl-3">
                         {item.children.map((child) => (
                           <Link
                             key={child.id}
                             className={cn(
-                              "block py-1 transition hover:text-white/80",
-                              isActive(child.href) && "font-bold text-white",
+                              "block py-1 text-[var(--text-muted)] transition hover:text-[var(--text-primary)]",
+                              isActive(child.href) &&
+                                "font-bold text-[var(--text-primary)]",
                             )}
                             href={child.href}
                           >
@@ -192,8 +207,9 @@ export function MainHeader({
                     <Link
                       key={item.id}
                       className={cn(
-                        "py-1 transition hover:text-white/80",
-                        isActive(item.href) && "font-bold text-white",
+                        "py-1 text-[var(--text-muted)] transition hover:text-[var(--text-primary)]",
+                        isActive(item.href) &&
+                          "font-bold text-[var(--text-primary)]",
                       )}
                       href={item.href}
                     >

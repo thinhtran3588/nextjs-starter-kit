@@ -19,11 +19,26 @@ export async function MainLayout({
   const tHome = await getTranslations("modules.landing.pages.home");
   const locale = await getLocale();
 
+  const themeOptions = [
+    { theme: "system" as const, label: tCommon("theme.options.system") },
+    { theme: "light" as const, label: tCommon("theme.options.light") },
+    { theme: "dark" as const, label: tCommon("theme.options.dark") },
+  ];
+
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="glow-orb float top-[-10%] left-[-10%] h-[420px] w-[420px] bg-[rgba(139,184,255,0.45)]" />
-      <div className="glow-orb float top-[10%] right-[-15%] h-[380px] w-[380px] bg-[rgba(126,249,216,0.35)]" />
-      <div className="glow-orb float bottom-[-20%] left-[20%] h-[460px] w-[460px] bg-[rgba(139,184,255,0.2)]" />
+      <div
+        className="glow-orb top-[-10%] left-[-10%] h-[420px] w-[420px] bg-[var(--orb-1)]"
+        aria-hidden
+      />
+      <div
+        className="glow-orb glow-orb-2 top-[10%] right-[-15%] h-[380px] w-[380px] bg-[var(--orb-2)]"
+        aria-hidden
+      />
+      <div
+        className="glow-orb glow-orb-3 bottom-[-20%] left-[20%] h-[460px] w-[460px] bg-[var(--orb-3)]"
+        aria-hidden
+      />
 
       <MainHeader
         badge={tHome("badge")}
@@ -36,6 +51,8 @@ export async function MainLayout({
           label: tCommon(`language.options.${targetLocale}`),
           flag: tCommon(`language.flags.${targetLocale}`),
         }))}
+        themeLabel={tCommon("theme.label")}
+        themeOptions={themeOptions}
         authSlot={authSlot}
       />
 

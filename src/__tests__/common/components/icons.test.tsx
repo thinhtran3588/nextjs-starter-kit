@@ -10,6 +10,9 @@ import {
   LoaderIcon,
   MailIcon,
   MenuIcon,
+  MonitorIcon,
+  MoonIcon,
+  SunIcon,
   UserIcon,
 } from "@/common/components/icons";
 
@@ -67,5 +70,14 @@ describe("Icons", () => {
   it("UserIcon renders", () => {
     const { container } = render(<UserIcon />);
     expect(container.querySelector("svg")).toBeInTheDocument();
+  });
+
+  it("SunIcon, MoonIcon and MonitorIcon render", () => {
+    const { container: c1 } = render(<SunIcon />);
+    const { container: c2 } = render(<MoonIcon />);
+    const { container: c3 } = render(<MonitorIcon />);
+    expect(c1.querySelector("svg")).toBeInTheDocument();
+    expect(c2.querySelector("svg")).toBeInTheDocument();
+    expect(c3.querySelector("svg")).toBeInTheDocument();
   });
 });

@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/common/components/card";
 import { Link } from "@/common/routing/navigation";
+import { cn } from "@/common/utils/cn";
 import { ScrollReveal } from "./components/scroll-reveal";
 
 export async function LandingPage() {
@@ -18,19 +19,19 @@ export async function LandingPage() {
   return (
     <>
       <div className="flex flex-col gap-20 sm:gap-24">
-        <section className="hero-grid glass-panel-strong liquid-border rounded-2xl px-6 py-12 sm:rounded-3xl sm:px-10 sm:py-16">
-          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+        <section className="hero-shine hero-grid glass-panel-strong liquid-border rounded-2xl px-6 py-12 sm:rounded-3xl sm:px-10 sm:py-16">
+          <div className="relative z-10 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div className="space-y-5">
-              <p className="text-xs font-medium tracking-[0.3em] text-[var(--text-muted)] uppercase">
+              <p className="hero-entrance hero-entrance-delay-1 text-xs font-medium tracking-[0.3em] text-[var(--text-muted)] uppercase">
                 {tHome("hero.eyebrow")}
               </p>
-              <h1 className="text-3xl leading-tight font-semibold text-white sm:text-4xl lg:text-5xl">
+              <h1 className="hero-entrance hero-entrance-delay-2 text-3xl leading-tight font-semibold text-[var(--text-primary)] sm:text-4xl lg:text-5xl">
                 {tHome("hero.title")}
               </h1>
-              <p className="max-w-xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">
+              <p className="hero-entrance hero-entrance-delay-3 max-w-xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">
                 {tHome("hero.subtitle")}
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="hero-entrance hero-entrance-delay-4 flex flex-wrap gap-3">
                 <Button asChild variant="default">
                   <Link href="/app">{tCommon("navigation.goToApp")}</Link>
                 </Button>
@@ -55,8 +56,16 @@ export async function LandingPage() {
                   label: tHome("highlights.i18n.label"),
                   description: tHome("highlights.i18n.description"),
                 },
-              ].map((item) => (
-                <Card key={item.label} className="px-4 py-4 sm:px-5 sm:py-5">
+              ].map((item, index) => (
+                <Card
+                  key={item.label}
+                  className={cn(
+                    "hero-entrance px-4 py-4 sm:px-5 sm:py-5",
+                    index === 0 && "hero-entrance-delay-4",
+                    index === 1 && "hero-entrance-delay-5",
+                    index === 2 && "hero-entrance-delay-6",
+                  )}
+                >
                   <CardHeader className="space-y-0 pb-0">
                     <CardTitle className="text-sm">{item.label}</CardTitle>
                   </CardHeader>
@@ -73,7 +82,7 @@ export async function LandingPage() {
 
         <ScrollReveal>
           <section className="space-y-6">
-            <h2 className="text-xl font-semibold text-white sm:text-2xl">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] sm:text-2xl">
               {tHome("features.architecture.title")}
             </h2>
             <p className="max-w-2xl text-sm text-[var(--text-muted)] sm:text-base">
@@ -108,7 +117,7 @@ export async function LandingPage() {
             variant="strong"
             className="rounded-2xl px-6 py-10 sm:rounded-3xl sm:px-10 sm:py-12"
           >
-            <h2 className="text-xl font-semibold text-white sm:text-2xl">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] sm:text-2xl">
               {tHome("techStack.title")}
             </h2>
             <ul className="mt-6 grid gap-2 sm:grid-cols-2">
@@ -129,7 +138,7 @@ export async function LandingPage() {
                   className="flex items-center gap-3 text-sm text-[var(--text-muted)]"
                 >
                   <span
-                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs text-white"
+                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--glass-highlight)] text-xs text-[var(--text-primary)]"
                     aria-hidden
                   >
                     ✓
@@ -144,7 +153,7 @@ export async function LandingPage() {
         <ScrollReveal>
           <section className="grid gap-8 lg:grid-cols-[0.5fr_0.5fr] lg:items-start">
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-white sm:text-2xl">
+              <h2 className="text-xl font-semibold text-[var(--text-primary)] sm:text-2xl">
                 {tHome("gettingStarted.title")}
               </h2>
               <p className="text-sm text-[var(--text-muted)] sm:text-base">
@@ -152,13 +161,13 @@ export async function LandingPage() {
               </p>
             </div>
             <div className="space-y-3">
-              <code className="block rounded-lg bg-black/30 px-4 py-3 font-mono text-sm text-white">
+              <code className="block rounded-lg bg-[var(--code-bg)] px-4 py-3 font-mono text-sm text-[var(--text-primary)]">
                 {tHome("gettingStarted.steps.install")}
               </code>
-              <code className="block rounded-lg bg-black/30 px-4 py-3 font-mono text-sm text-white">
+              <code className="block rounded-lg bg-[var(--code-bg)] px-4 py-3 font-mono text-sm text-[var(--text-primary)]">
                 {tHome("gettingStarted.steps.dev")}
               </code>
-              <code className="block rounded-lg bg-black/30 px-4 py-3 font-mono text-sm text-white">
+              <code className="block rounded-lg bg-[var(--code-bg)] px-4 py-3 font-mono text-sm text-[var(--text-primary)]">
                 {tHome("gettingStarted.steps.validate")}
               </code>
             </div>
@@ -167,7 +176,7 @@ export async function LandingPage() {
 
         <ScrollReveal>
           <section className="space-y-6">
-            <h2 className="text-xl font-semibold text-white sm:text-2xl">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] sm:text-2xl">
               {tHome("docs.title")}
             </h2>
             <p className="max-w-2xl text-sm text-[var(--text-muted)] sm:text-base">

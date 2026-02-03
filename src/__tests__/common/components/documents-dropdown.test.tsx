@@ -184,7 +184,10 @@ describe("DocumentsDropdown", () => {
     const architectureLink = screen.getByRole("menuitem", {
       name: "Architecture",
     });
-    expect(architectureLink).toHaveClass("bg-white/10", "text-white");
+    expect(architectureLink).toHaveClass(
+      "bg-[var(--glass-highlight)]",
+      "text-[var(--text-primary)]",
+    );
   });
 
   it("closes when focus moves outside and event target is a Node", () => {

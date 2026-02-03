@@ -21,6 +21,10 @@ const translations: Record<string, Record<string, string>> = {
     "language.flags.en": "US",
     "language.flags.vi": "VN",
     "language.flags.zh": "CN",
+    "theme.label": "Theme",
+    "theme.options.system": "System",
+    "theme.options.light": "Light",
+    "theme.options.dark": "Dark",
   },
   "modules.landing.pages.home": {
     badge: "Liquid Badge",
