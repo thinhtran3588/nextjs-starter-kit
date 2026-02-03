@@ -17,6 +17,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        primary:
+          "rounded-full border-0 bg-[linear-gradient(135deg,var(--accent)_0%,var(--accent-electric)_50%,var(--accent-purple)_100%)] text-white shadow-[0_8px_24px_var(--accent-glow)] hover:opacity-95 hover:shadow-[0_12px_28px_var(--accent-glow)] hover:translate-y-[-1px] focus-visible:ring-[var(--accent)]",
         default:
           "glass-panel rounded-full text-[var(--text-primary)] shadow-[0_8px_24px_var(--accent-glow)] hover:translate-y-[-1px] hover:shadow-[0_12px_28px_var(--accent-glow)]",
         secondary:

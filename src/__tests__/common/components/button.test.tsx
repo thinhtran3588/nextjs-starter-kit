@@ -144,6 +144,13 @@ describe("Button", () => {
     expect(button?.className).toMatch(/rounded-full/);
   });
 
+  it("applies primary variant with gradient", () => {
+    const { container } = render(<Button variant="primary">Primary</Button>);
+    const button = container.querySelector("button");
+    expect(button?.className).toMatch(/linear-gradient/);
+    expect(button?.className).toMatch(/text-white/);
+  });
+
   it("when loading is true, shows loading icon and is disabled", () => {
     render(<Button loading>Submit</Button>);
     const button = screen.getByRole("button", { name: /submit/i });
