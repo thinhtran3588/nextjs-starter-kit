@@ -1,4 +1,7 @@
-import { createContainer as createAwilixContainer } from "awilix";
+import {
+  createContainer as createAwilixContainer,
+  InjectionMode,
+} from "awilix";
 
 export type AppContainer = ReturnType<typeof createAwilixContainer>;
 
@@ -6,7 +9,7 @@ let containerInstance: AppContainer | null = null;
 
 export function createContainer(): AppContainer {
   return createAwilixContainer({
-    injectionMode: "CLASSIC",
+    injectionMode: InjectionMode.PROXY,
   });
 }
 
