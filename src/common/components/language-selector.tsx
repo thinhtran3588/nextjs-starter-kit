@@ -16,12 +16,14 @@ type LanguageSelectorProps = {
   languageLabel: string;
   currentLocale: string;
   localeOptions: LocaleOption[];
+  onLocaleChange?: (locale: string) => void;
 };
 
 export function LanguageSelector({
   languageLabel,
   currentLocale,
   localeOptions,
+  onLocaleChange,
 }: LanguageSelectorProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -96,7 +98,10 @@ export function LanguageSelector({
                     ? "bg-[var(--glass-highlight)] text-[var(--text-primary)]"
                     : "text-[var(--text-muted)]"
                 }`}
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  onLocaleChange?.(option.locale);
+                  setIsOpen(false);
+                }}
               >
                 <span className="text-sm">{option.flag}</span>
                 <span>{option.label}</span>

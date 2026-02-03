@@ -6,10 +6,16 @@ import { useSyncUserSettings } from "@/modules/settings/hooks/use-sync-user-sett
 import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
 
 let mockResolve: (key: string) => unknown;
+const mockSetTheme = vi.fn();
 vi.mock("@/common/hooks/use-container", () => ({
   useContainer: () => ({
     resolve: (key: string) => mockResolve(key),
   }),
+}));
+vi.mock("@/common/hooks/use-theme-store", () => ({
+  useThemeStore: {
+    getState: () => ({ setTheme: mockSetTheme }),
+  },
 }));
 
 function SyncConsumer() {
@@ -21,6 +27,7 @@ describe("useSyncUserSettings", () => {
   beforeEach(() => {
     useUserSettingsStore.setState({ settings: {} });
     useAuthUserStore.setState({ user: null, loading: false });
+    mockSetTheme.mockClear();
     vi.clearAllMocks();
     mockResolve = vi.fn();
   });
@@ -82,6 +89,25 @@ describe("useSyncUserSettings", () => {
 
     await vi.waitFor(() => {
       expect(execute).toHaveBeenCalledWith({ userId: null });
+    });
+  });
+
+  it("applies loaded theme to theme store when settings include theme", async () => {
+    const settings = { locale: "en", theme: "dark" as const };
+    mockResolve = (key: string) => {
+      if (key === "loadUserSettingsUseCase") {
+        return {
+          execute: () => Promise.resolve(settings),
+        };
+      }
+      return undefined;
+    };
+
+    render(<SyncConsumer />);
+
+    await vi.waitFor(() => {
+      expect(useUserSettingsStore.getState().settings).toEqual(settings);
+      expect(mockSetTheme).toHaveBeenCalledWith("dark");
     });
   });
 });

@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
 import { ThemeSelector } from "@/common/components/theme-selector";
 import { useThemeStore } from "@/common/hooks/use-theme-store";
@@ -98,5 +99,16 @@ describe("ThemeSelector", () => {
       fireEvent.focusIn(outsideButton);
     });
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+  });
+
+  it("calls onThemeChange when a theme option is clicked", () => {
+    const onThemeChange = vi.fn();
+    render(<ThemeSelector {...defaultProps} onThemeChange={onThemeChange} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
+    fireEvent.click(screen.getByRole("option", { name: /Dark/ }));
+
+    expect(onThemeChange).toHaveBeenCalledTimes(1);
+    expect(onThemeChange).toHaveBeenCalledWith("dark");
   });
 });

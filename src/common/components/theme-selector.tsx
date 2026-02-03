@@ -20,6 +20,7 @@ export type ThemeOption = {
 type ThemeSelectorProps = {
   themeLabel: string;
   themeOptions: ThemeOption[];
+  onThemeChange?: (theme: Theme) => void;
 };
 
 const themeIcons: Record<Theme, React.ComponentType<{ className?: string }>> = {
@@ -31,6 +32,7 @@ const themeIcons: Record<Theme, React.ComponentType<{ className?: string }>> = {
 export function ThemeSelector({
   themeLabel,
   themeOptions,
+  onThemeChange,
 }: ThemeSelectorProps) {
   const theme = useThemeStore((state) => state.theme);
   const setTheme = useThemeStore((state) => state.setTheme);
@@ -106,6 +108,7 @@ export function ThemeSelector({
                 )}
                 onClick={() => {
                   setTheme(option.theme);
+                  onThemeChange?.(option.theme);
                   setIsOpen(false);
                 }}
               >

@@ -18,6 +18,7 @@ import { MobileMenuProvider } from "@/common/contexts/mobile-menu-context";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 import { Link, usePathname } from "@/common/routing/navigation";
 import { cn } from "@/common/utils/cn";
+import { usePersistUserSettings } from "@/modules/settings/hooks/use-persist-user-settings";
 
 type MainHeaderProps = {
   badge: string;
@@ -51,6 +52,7 @@ export function MainHeader({
   authSlot,
 }: MainHeaderProps) {
   const pathname = usePathname();
+  const { persistLocale, persistTheme } = usePersistUserSettings();
   const [isHidden, setIsHidden] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
@@ -141,11 +143,13 @@ export function MainHeader({
             <ThemeSelector
               themeLabel={themeLabel}
               themeOptions={themeOptions}
+              onThemeChange={persistTheme}
             />
             <LanguageSelector
               languageLabel={languageLabel}
               currentLocale={currentLocale}
               localeOptions={localeOptions}
+              onLocaleChange={persistLocale}
             />
             {authSlot != null ? (
               <div className="hidden sm:block">{authSlot}</div>

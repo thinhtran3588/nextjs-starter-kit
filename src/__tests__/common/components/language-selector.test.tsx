@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
 import { LanguageSelector } from "@/common/components/language-selector";
 
@@ -103,5 +104,18 @@ describe("LanguageSelector", () => {
 
     const button = screen.getByRole("button", { name: /^Language:/ });
     expect(button).toHaveAttribute("aria-label", "Language: ");
+  });
+
+  it("calls onLocaleChange when a locale option is clicked", () => {
+    const onLocaleChange = vi.fn();
+    render(
+      <LanguageSelector {...defaultProps} onLocaleChange={onLocaleChange} />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
+    fireEvent.click(screen.getByRole("option", { name: /Vietnamese/ }));
+
+    expect(onLocaleChange).toHaveBeenCalledTimes(1);
+    expect(onLocaleChange).toHaveBeenCalledWith("vi");
   });
 });
