@@ -68,6 +68,7 @@ vi.mock("next-intl", () => ({
       lookupMessage(namespace ? `${namespace}.${key}` : key);
     return t;
   },
+  useLocale: vi.fn(() => "en"),
 }));
 
 class IntersectionObserverMock implements IntersectionObserver {

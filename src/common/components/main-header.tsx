@@ -6,30 +6,17 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/common/components/button";
 import { DocumentsDropdown } from "@/common/components/documents-dropdown";
 import { MenuIcon } from "@/common/components/icons";
-import {
-  LanguageSelector,
-  type LocaleOption,
-} from "@/common/components/language-selector";
-import {
-  ThemeSelector,
-  type ThemeOption,
-} from "@/common/components/theme-selector";
 import { MobileMenuProvider } from "@/common/contexts/mobile-menu-context";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 import { Link, usePathname } from "@/common/routing/navigation";
 import { cn } from "@/common/utils/cn";
-import { usePersistUserSettings } from "@/modules/settings/hooks/use-persist-user-settings";
 
 type MainHeaderProps = {
   badge: string;
   menuItems: ResolvedMenuItem[];
-  languageLabel: string;
   menuLabel: string;
-  currentLocale: string;
-  localeOptions: LocaleOption[];
-  themeLabel: string;
-  themeOptions: ThemeOption[];
   authSlot?: React.ReactNode;
+  settingsSlot?: React.ReactNode;
 };
 
 const SCROLL_HIDE_THRESHOLD = 32;
@@ -43,16 +30,11 @@ const navLinkClass = cn(
 export function MainHeader({
   badge,
   menuItems,
-  languageLabel,
   menuLabel,
-  currentLocale,
-  localeOptions,
-  themeLabel,
-  themeOptions,
   authSlot,
+  settingsSlot,
 }: MainHeaderProps) {
   const pathname = usePathname();
-  const { persistLocale, persistTheme } = usePersistUserSettings();
   const [isHidden, setIsHidden] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
@@ -140,17 +122,14 @@ export function MainHeader({
                 ),
               )}
             </nav>
-            <ThemeSelector
-              themeLabel={themeLabel}
-              themeOptions={themeOptions}
-              onThemeChange={persistTheme}
-            />
-            <LanguageSelector
-              languageLabel={languageLabel}
-              currentLocale={currentLocale}
-              localeOptions={localeOptions}
-              onLocaleChange={persistLocale}
-            />
+            {settingsSlot != null ? (
+              <div
+                className="flex items-center gap-3"
+                data-testid="settings-slot"
+              >
+                {settingsSlot}
+              </div>
+            ) : null}
             {authSlot != null ? (
               <div className="hidden sm:block">{authSlot}</div>
             ) : null}

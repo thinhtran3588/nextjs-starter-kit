@@ -19,27 +19,6 @@
       },
       "menu": "Menu"
     },
-    "language": {
-      "label": "Ngôn ngữ",
-      "options": {
-        "en": "Tiếng Anh",
-        "vi": "Tiếng Việt",
-        "zh": "Tiếng Trung"
-      },
-      "flags": {
-        "en": "🇺🇸",
-        "vi": "🇻🇳",
-        "zh": "🇨🇳"
-      }
-    },
-    "theme": {
-      "label": "Giao diện",
-      "options": {
-        "system": "Hệ thống",
-        "light": "Sáng",
-        "dark": "Tối"
-      }
-    },
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",
@@ -65,6 +44,32 @@
         "title": "Đã xảy ra lỗi",
         "description": "Đã xảy ra lỗi. Vui lòng thử lại sau.",
         "cta": "Quay lại trang chủ"
+      }
+    }
+  },
+  "settings": {
+    "error": {
+      "saveFailed": "Không thể lưu cài đặt."
+    },
+    "language": {
+      "label": "Ngôn ngữ",
+      "options": {
+        "en": "Tiếng Anh",
+        "vi": "Tiếng Việt",
+        "zh": "Tiếng Trung"
+      },
+      "flags": {
+        "en": "🇺🇸",
+        "vi": "🇻🇳",
+        "zh": "🇨🇳"
+      }
+    },
+    "theme": {
+      "label": "Giao diện",
+      "options": {
+        "system": "Hệ thống",
+        "light": "Sáng",
+        "dark": "Tối"
       }
     }
   },

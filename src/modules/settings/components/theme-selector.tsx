@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/common/components/button";
@@ -9,19 +10,11 @@ import {
   MoonIcon,
   SunIcon,
 } from "@/common/components/icons";
-import { useThemeStore, type Theme } from "@/common/hooks/use-theme-store";
 import { cn } from "@/common/utils/cn";
+import type { Theme } from "@/common/utils/theme";
+import { useUserSettings } from "@/modules/settings/hooks/use-user-settings-store";
 
-export type ThemeOption = {
-  theme: Theme;
-  label: string;
-};
-
-type ThemeSelectorProps = {
-  themeLabel: string;
-  themeOptions: ThemeOption[];
-  onThemeChange?: (theme: Theme) => void;
-};
+const DEFAULT_THEME: Theme = "system";
 
 const themeIcons: Record<Theme, React.ComponentType<{ className?: string }>> = {
   system: MonitorIcon,
@@ -29,18 +22,22 @@ const themeIcons: Record<Theme, React.ComponentType<{ className?: string }>> = {
   dark: MoonIcon,
 };
 
-export function ThemeSelector({
-  themeLabel,
-  themeOptions,
-  onThemeChange,
-}: ThemeSelectorProps) {
-  const theme = useThemeStore((state) => state.theme);
-  const setTheme = useThemeStore((state) => state.setTheme);
+export function ThemeSelector() {
+  const t = useTranslations("settings");
+  const { settings, persistTheme } = useUserSettings();
+  const theme = (settings.theme ?? DEFAULT_THEME) as Theme;
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const themeLabel = t("theme.label");
+  const themeOptions: { theme: Theme; label: string }[] = [
+    { theme: "system", label: t("theme.options.system") },
+    { theme: "light", label: t("theme.options.light") },
+    { theme: "dark", label: t("theme.options.dark") },
+  ];
+
   const currentOption = themeOptions.find((option) => option.theme === theme);
-  const CurrentIcon = themeIcons[theme];
+  const CurrentIcon = themeIcons[theme] ?? MonitorIcon;
 
   useEffect(() => {
     const handlePointerDown = (event: PointerEvent) => {
@@ -107,8 +104,7 @@ export function ThemeSelector({
                   isActive ? "bg-[var(--glass-highlight)]" : "opacity-80",
                 )}
                 onClick={() => {
-                  setTheme(option.theme);
-                  onThemeChange?.(option.theme);
+                  persistTheme(option.theme);
                   setIsOpen(false);
                 }}
               >

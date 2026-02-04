@@ -14,6 +14,8 @@ const translations: Record<string, Record<string, string>> = {
     "navigation.docs.developmentGuide": "Development guide",
     "navigation.docs.testingGuide": "Testing guide",
     "navigation.menu": "Menu",
+  },
+  settings: {
     "language.label": "Language",
     "language.options.en": "English",
     "language.options.vi": "Vietnamese",
@@ -52,6 +54,9 @@ describe("MainLayout", () => {
       await MainLayout({
         children: <div>Content</div>,
         menuItems,
+        settingsSlot: (
+          <span>{translations.settings["language.options.en"]}</span>
+        ),
       }),
     );
 
@@ -60,7 +65,7 @@ describe("MainLayout", () => {
       screen.getByText(translations["modules.landing.pages.home"].badge),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(translations.common["language.options.en"]),
+      screen.getByText(translations.settings["language.options.en"]),
     ).toBeInTheDocument();
   });
 });

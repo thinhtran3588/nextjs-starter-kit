@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
@@ -6,16 +6,10 @@ import { useSyncUserSettings } from "@/modules/settings/hooks/use-sync-user-sett
 import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
 
 let mockResolve: (key: string) => unknown;
-const mockSetTheme = vi.fn();
 vi.mock("@/common/hooks/use-container", () => ({
   useContainer: () => ({
     resolve: (key: string) => mockResolve(key),
   }),
-}));
-vi.mock("@/common/hooks/use-theme-store", () => ({
-  useThemeStore: {
-    getState: () => ({ setTheme: mockSetTheme }),
-  },
 }));
 
 function SyncConsumer() {
@@ -27,9 +21,29 @@ describe("useSyncUserSettings", () => {
   beforeEach(() => {
     useUserSettingsStore.setState({ settings: {} });
     useAuthUserStore.setState({ user: null, loading: false });
-    mockSetTheme.mockClear();
     vi.clearAllMocks();
     mockResolve = vi.fn();
+  });
+
+  it("does not update store when use case returns success false", async () => {
+    useUserSettingsStore.setState({ settings: { locale: "en" } });
+    mockResolve = (key: string) => {
+      if (key === "loadUserSettingsUseCase") {
+        return {
+          execute: () =>
+            Promise.resolve({ success: false, error: "unavailable" }),
+        };
+      }
+      return undefined;
+    };
+
+    render(<SyncConsumer />);
+
+    await vi.waitFor(() => {
+      expect(useUserSettingsStore.getState().settings).toEqual({
+        locale: "en",
+      });
+    });
   });
 
   it("loads settings and updates store when use case resolves", async () => {
@@ -37,7 +51,7 @@ describe("useSyncUserSettings", () => {
     mockResolve = (key: string) => {
       if (key === "loadUserSettingsUseCase") {
         return {
-          execute: () => Promise.resolve(settings),
+          execute: () => Promise.resolve({ success: true, data: settings }),
         };
       }
       return undefined;
@@ -61,7 +75,7 @@ describe("useSyncUserSettings", () => {
       },
       loading: false,
     });
-    const execute = vi.fn().mockResolvedValue({});
+    const execute = vi.fn().mockResolvedValue({ success: true, data: null });
     mockResolve = (key: string) => {
       if (key === "loadUserSettingsUseCase") {
         return { execute };
@@ -77,7 +91,7 @@ describe("useSyncUserSettings", () => {
   });
 
   it("calls load with null userId when user is not signed in", async () => {
-    const execute = vi.fn().mockResolvedValue({});
+    const execute = vi.fn().mockResolvedValue({ success: true, data: null });
     mockResolve = (key: string) => {
       if (key === "loadUserSettingsUseCase") {
         return { execute };
@@ -94,7 +108,7 @@ describe("useSyncUserSettings", () => {
 
   it("does not load settings from Firestore while auth is still loading", () => {
     useAuthUserStore.setState({ user: null, loading: true });
-    const execute = vi.fn().mockResolvedValue({});
+    const execute = vi.fn().mockResolvedValue({ success: true, data: null });
     mockResolve = (key: string) => {
       if (key === "loadUserSettingsUseCase") {
         return { execute };
@@ -107,12 +121,12 @@ describe("useSyncUserSettings", () => {
     expect(execute).not.toHaveBeenCalled();
   });
 
-  it("applies loaded theme to theme store when settings include theme", async () => {
+  it("updates store with theme when remote settings include theme", async () => {
     const settings = { locale: "en", theme: "dark" as const };
     mockResolve = (key: string) => {
       if (key === "loadUserSettingsUseCase") {
         return {
-          execute: () => Promise.resolve(settings),
+          execute: () => Promise.resolve({ success: true, data: settings }),
         };
       }
       return undefined;
@@ -122,7 +136,6 @@ describe("useSyncUserSettings", () => {
 
     await vi.waitFor(() => {
       expect(useUserSettingsStore.getState().settings).toEqual(settings);
-      expect(mockSetTheme).toHaveBeenCalledWith("dark");
     });
   });
 
@@ -140,7 +153,9 @@ describe("useSyncUserSettings", () => {
     useUserSettingsStore.setState({ settings: { locale: "en" } });
     mockResolve = (key: string) => {
       if (key === "loadUserSettingsUseCase") {
-        return { execute: () => Promise.resolve(null) };
+        return {
+          execute: () => Promise.resolve({ success: true, data: null }),
+        };
       }
       return undefined;
     };
@@ -152,5 +167,75 @@ describe("useSyncUserSettings", () => {
         locale: "en",
       });
     });
+  });
+
+  it("does not call load again when user signs out after initial load", async () => {
+    useAuthUserStore.setState({
+      user: {
+        id: "uid-1",
+        email: "a@b.com",
+        displayName: "Alice",
+        photoURL: null,
+        authType: "email",
+      },
+      loading: false,
+    });
+    const execute = vi.fn().mockResolvedValue({ success: true, data: null });
+    mockResolve = (key: string) => {
+      if (key === "loadUserSettingsUseCase") {
+        return { execute };
+      }
+      return undefined;
+    };
+
+    const { rerender } = render(<SyncConsumer />);
+
+    await vi.waitFor(() => {
+      expect(execute).toHaveBeenCalledWith({ userId: "uid-1" });
+    });
+
+    act(() => {
+      useAuthUserStore.setState({ user: null, loading: false });
+    });
+    rerender(<SyncConsumer />);
+
+    expect(execute).toHaveBeenCalledTimes(1);
+  });
+
+  it("calls load again when user signs in after initial load", async () => {
+    const execute = vi.fn().mockResolvedValue({ success: true, data: null });
+    mockResolve = (key: string) => {
+      if (key === "loadUserSettingsUseCase") {
+        return { execute };
+      }
+      return undefined;
+    };
+
+    const { rerender } = render(<SyncConsumer />);
+
+    await vi.waitFor(() => {
+      expect(execute).toHaveBeenCalledWith({ userId: null });
+    });
+
+    const callCountAfterInitial = execute.mock.calls.length;
+
+    act(() => {
+      useAuthUserStore.setState({
+        user: {
+          id: "uid-2",
+          email: "b@c.com",
+          displayName: "Bob",
+          photoURL: null,
+          authType: "email",
+        },
+        loading: false,
+      });
+    });
+    rerender(<SyncConsumer />);
+
+    await vi.waitFor(() => {
+      expect(execute).toHaveBeenCalledWith({ userId: "uid-2" });
+    });
+    expect(execute.mock.calls.length).toBeGreaterThan(callCountAfterInitial);
   });
 });

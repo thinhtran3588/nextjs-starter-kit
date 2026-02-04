@@ -1,25 +1,41 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ThemeSelector } from "@/common/components/theme-selector";
-import { useThemeStore } from "@/common/hooks/use-theme-store";
+import type { Theme } from "@/common/utils/theme";
+import { ThemeSelector } from "@/modules/settings/components/theme-selector";
+import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
 
-const defaultProps = {
-  themeLabel: "Theme",
-  themeOptions: [
-    { theme: "system" as const, label: "System" },
-    { theme: "light" as const, label: "Light" },
-    { theme: "dark" as const, label: "Dark" },
-  ],
-};
+const mockPersistLocale = vi.fn();
+const mockPersistTheme = vi.fn();
+
+vi.mock(
+  "@/modules/settings/hooks/use-user-settings-store",
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import("@/modules/settings/hooks/use-user-settings-store")
+      >();
+    return {
+      ...actual,
+      useUserSettings: vi.fn(() => ({
+        settings: actual.useUserSettingsStore.getState().settings,
+        setSettings: actual.useUserSettingsStore.getState().setSettings,
+        persistLocale: mockPersistLocale,
+        persistTheme: mockPersistTheme,
+      })),
+    };
+  },
+);
 
 describe("ThemeSelector", () => {
   beforeEach(() => {
-    useThemeStore.setState({ theme: "system" });
+    useUserSettingsStore.setState({ settings: { theme: "system" } });
+    mockPersistLocale.mockClear();
+    mockPersistTheme.mockClear();
   });
 
   it("renders the trigger with current theme label", () => {
-    render(<ThemeSelector {...defaultProps} />);
+    render(<ThemeSelector />);
 
     expect(
       screen.getByRole("button", { name: "Theme: System" }),
@@ -28,7 +44,7 @@ describe("ThemeSelector", () => {
   });
 
   it("opens dropdown when trigger is clicked", () => {
-    render(<ThemeSelector {...defaultProps} />);
+    render(<ThemeSelector />);
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
 
@@ -44,7 +60,7 @@ describe("ThemeSelector", () => {
     render(
       <div>
         <div data-testid="outside">Outside</div>
-        <ThemeSelector {...defaultProps} />
+        <ThemeSelector />
       </div>,
     );
 
@@ -55,29 +71,16 @@ describe("ThemeSelector", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
-  it("sets theme and closes dropdown when selecting an option", () => {
-    render(<ThemeSelector {...defaultProps} />);
+  it("calls persistTheme and closes dropdown when selecting an option", () => {
+    render(<ThemeSelector />);
 
     fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
     expect(screen.getByRole("listbox")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("option", { name: /Light/ }));
 
-    expect(useThemeStore.getState().theme).toBe("light");
+    expect(mockPersistTheme).toHaveBeenCalledWith("light");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("renders empty theme label when current theme has no matching option", () => {
-    useThemeStore.setState({ theme: "light" });
-    render(
-      <ThemeSelector
-        themeLabel="Theme"
-        themeOptions={[{ theme: "dark", label: "Dark" }]}
-      />,
-    );
-
-    const button = screen.getByRole("button", { name: /^Theme:/ });
-    expect(button).toHaveAttribute("aria-label", "Theme: ");
   });
 
   it("closes dropdown when focus moves outside", () => {
@@ -86,7 +89,7 @@ describe("ThemeSelector", () => {
         <button type="button" data-testid="outside-button">
           Outside
         </button>
-        <ThemeSelector {...defaultProps} />
+        <ThemeSelector />
       </div>,
     );
 
@@ -101,14 +104,24 @@ describe("ThemeSelector", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
-  it("calls onThemeChange when a theme option is clicked", () => {
-    const onThemeChange = vi.fn();
-    render(<ThemeSelector {...defaultProps} onThemeChange={onThemeChange} />);
+  it("calls persistTheme when a theme option is clicked", () => {
+    render(<ThemeSelector />);
 
     fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
     fireEvent.click(screen.getByRole("option", { name: /Dark/ }));
 
-    expect(onThemeChange).toHaveBeenCalledTimes(1);
-    expect(onThemeChange).toHaveBeenCalledWith("dark");
+    expect(mockPersistTheme).toHaveBeenCalledTimes(1);
+    expect(mockPersistTheme).toHaveBeenCalledWith("dark");
+  });
+
+  it("renders empty theme label when store theme has no matching option", () => {
+    useUserSettingsStore.setState({
+      settings: { theme: "invalid" as Theme },
+    });
+
+    render(<ThemeSelector />);
+
+    const button = screen.getByRole("button", { name: /^Theme:/ });
+    expect(button).toHaveAttribute("aria-label", "Theme: ");
   });
 });

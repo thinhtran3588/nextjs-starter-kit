@@ -19,27 +19,6 @@
       },
       "menu": "Menu"
     },
-    "language": {
-      "label": "Language",
-      "options": {
-        "en": "English",
-        "vi": "Vietnamese",
-        "zh": "Chinese"
-      },
-      "flags": {
-        "en": "🇺🇸",
-        "vi": "🇻🇳",
-        "zh": "🇨🇳"
-      }
-    },
-    "theme": {
-      "label": "Theme",
-      "options": {
-        "system": "System",
-        "light": "Light",
-        "dark": "Dark"
-      }
-    },
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",
@@ -65,6 +44,32 @@
         "title": "Something went wrong",
         "description": "An error occurred. Please try again later.",
         "cta": "Back to home"
+      }
+    }
+  },
+  "settings": {
+    "error": {
+      "saveFailed": "Could not save settings."
+    },
+    "language": {
+      "label": "Language",
+      "options": {
+        "en": "English",
+        "vi": "Vietnamese",
+        "zh": "Chinese"
+      },
+      "flags": {
+        "en": "🇺🇸",
+        "vi": "🇻🇳",
+        "zh": "🇨🇳"
+      }
+    },
+    "theme": {
+      "label": "Theme",
+      "options": {
+        "system": "System",
+        "light": "Light",
+        "dark": "Dark"
       }
     }
   },

@@ -1,36 +1,31 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/common/components/button";
 import { ChevronDownIcon } from "@/common/components/icons";
 import { Link, usePathname } from "@/common/routing/navigation";
+import { routing } from "@/common/routing/routing";
+import { useUserSettings } from "@/modules/settings/hooks/use-user-settings-store";
 
-export type LocaleOption = {
-  locale: string;
-  label: string;
-  flag: string;
-};
-
-type LanguageSelectorProps = {
-  languageLabel: string;
-  currentLocale: string;
-  localeOptions: LocaleOption[];
-  onLocaleChange?: (locale: string) => void;
-};
-
-export function LanguageSelector({
-  languageLabel,
-  currentLocale,
-  localeOptions,
-  onLocaleChange,
-}: LanguageSelectorProps) {
+export function LanguageSelector() {
+  const t = useTranslations("settings");
+  const locale = useLocale();
+  const { persistLocale } = useUserSettings();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const languageLabel = t("language.label");
+  const localeOptions = routing.locales.map((targetLocale) => ({
+    locale: targetLocale,
+    label: t(`language.options.${targetLocale}`),
+    flag: t(`language.flags.${targetLocale}`),
+  }));
+
   const currentLocaleOption = localeOptions.find(
-    (option) => option.locale === currentLocale,
+    (option) => option.locale === locale,
   );
 
   useEffect(() => {
@@ -84,7 +79,7 @@ export function LanguageSelector({
           aria-label={languageLabel}
         >
           {localeOptions.map((option) => {
-            const isActive = option.locale === currentLocale;
+            const isActive = option.locale === locale;
 
             return (
               <Link
@@ -99,7 +94,7 @@ export function LanguageSelector({
                     : "text-[var(--text-muted)]"
                 }`}
                 onClick={() => {
-                  onLocaleChange?.(option.locale);
+                  persistLocale(option.locale);
                   setIsOpen(false);
                 }}
               >

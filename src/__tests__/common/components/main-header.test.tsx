@@ -63,23 +63,23 @@ const menuItems: ResolvedMenuItem[] = [
   { id: "terms", label: "Terms", href: "/terms-of-service" },
 ];
 
+const defaultSettingsSlot = (
+  <>
+    <button type="button" aria-label="Theme: System">
+      Theme
+    </button>
+    <button type="button" aria-label="Language: English">
+      Language
+    </button>
+  </>
+);
+
 const baseProps = {
   badge: "Liquid Badge",
   menuItems,
-  languageLabel: "Language",
   menuLabel: "Menu",
-  currentLocale: "en",
-  localeOptions: [
-    { locale: "en", label: "English", flag: "US" },
-    { locale: "vi", label: "Vietnamese", flag: "VN" },
-  ],
-  themeLabel: "Theme",
-  themeOptions: [
-    { theme: "system" as const, label: "System" },
-    { theme: "light" as const, label: "Light" },
-    { theme: "dark" as const, label: "Dark" },
-  ],
   authSlot: <Link href="/auth/sign-in">{signInLabel}</Link>,
+  settingsSlot: defaultSettingsSlot,
 };
 
 const setScrollY = (value: number) => {
@@ -265,8 +265,17 @@ describe("MainHeader", () => {
     expect(header).not.toHaveClass("-translate-y-full");
   });
 
-  it("renders an empty locale label when missing", () => {
-    render(<MainHeader {...baseProps} currentLocale="fr" />);
+  it("renders settings slot content when provided", () => {
+    render(
+      <MainHeader
+        {...baseProps}
+        settingsSlot={
+          <button type="button" aria-label="Language: ">
+            Lang
+          </button>
+        }
+      />,
+    );
 
     const languageButton = screen.getByRole("button", { name: /^Language:/ });
     expect(languageButton).toHaveAttribute("aria-label", "Language: ");
@@ -279,6 +288,17 @@ describe("MainHeader", () => {
 
     fireEvent.click(screen.getByRole("button", { name: baseProps.menuLabel }));
     expect(screen.getByTestId("mobile-menu")).toBeInTheDocument();
+  });
+
+  it("does not render settings slot when settingsSlot is undefined", () => {
+    render(
+      <MainHeader
+        {...baseProps}
+        authSlot={undefined}
+        settingsSlot={undefined}
+      />,
+    );
+    expect(screen.queryByTestId("settings-slot")).not.toBeInTheDocument();
   });
 
   it("does not render auth slot in mobile menu when authSlot is undefined", () => {

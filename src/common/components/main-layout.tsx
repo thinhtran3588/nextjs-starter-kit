@@ -1,29 +1,25 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { MainHeader } from "@/common/components/main-header";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
-import { routing } from "@/common/routing/routing";
 
 type MainLayoutProps = {
   children: React.ReactNode;
   menuItems: ResolvedMenuItem[];
   authSlot?: React.ReactNode;
+  settingsSlot?: React.ReactNode;
 };
 
 export async function MainLayout({
   children,
   menuItems,
   authSlot,
+  settingsSlot,
 }: MainLayoutProps) {
-  const tCommon = await getTranslations("common");
-  const tHome = await getTranslations("modules.landing.pages.home");
-  const locale = await getLocale();
-
-  const themeOptions = [
-    { theme: "system" as const, label: tCommon("theme.options.system") },
-    { theme: "light" as const, label: tCommon("theme.options.light") },
-    { theme: "dark" as const, label: tCommon("theme.options.dark") },
-  ];
+  const [tCommon, tHome] = await Promise.all([
+    getTranslations("common"),
+    getTranslations("modules.landing.pages.home"),
+  ]);
 
   return (
     <div className="blueprint-grid relative min-h-screen overflow-hidden">
@@ -43,17 +39,9 @@ export async function MainLayout({
       <MainHeader
         badge={tHome("badge")}
         menuItems={menuItems}
-        languageLabel={tCommon("language.label")}
         menuLabel={tCommon("navigation.menu")}
-        currentLocale={locale}
-        localeOptions={routing.locales.map((targetLocale) => ({
-          locale: targetLocale,
-          label: tCommon(`language.options.${targetLocale}`),
-          flag: tCommon(`language.flags.${targetLocale}`),
-        }))}
-        themeLabel={tCommon("theme.label")}
-        themeOptions={themeOptions}
         authSlot={authSlot}
+        settingsSlot={settingsSlot}
       />
 
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 pt-28 pb-24 sm:pt-24">
