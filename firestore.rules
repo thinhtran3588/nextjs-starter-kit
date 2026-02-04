@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 🚫 Default: deny everything
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ✅ User settings: document ID == user UID
+    match /user-settings/{userId} {
+
+      // Create own settings document
+      allow create: if isSignedIn()
+        && isOwner(userId)
+        && !exists(/databases/$(database)/documents/user-settings/$(userId));
+
+      // Read own settings
+      allow read: if isSignedIn() && isOwner(userId);
+
+      // Update own settings
+      allow update: if isSignedIn() && isOwner(userId);
+
+      // ❌ No delete from client
+      allow delete: if false;
+    }
+
+    // 🔧 Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+  }
+}
