@@ -9,6 +9,7 @@ const translations: Record<string, Record<string, string>> = {
     "navigation.signIn": "Sign in",
     "navigation.privacy": "Privacy",
     "navigation.terms": "Terms",
+    "navigation.legal": "Legal",
     "navigation.documents": "Documents",
     "navigation.docs.architecture": "Architecture",
     "navigation.docs.developmentGuide": "Development guide",
