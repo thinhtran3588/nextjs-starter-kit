@@ -60,7 +60,7 @@ export function AuthHeaderSlot() {
             )}
           >
             <Link
-              href="/auth/profile"
+              href="/profile"
               className={cn(
                 "rounded-lg px-3 py-2 text-sm font-medium transition",
                 "text-[var(--text-muted)] hover:bg-[var(--glass-highlight)] hover:text-[var(--text-primary)]",
@@ -90,7 +90,7 @@ export function AuthHeaderSlot() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48 sm:w-auto">
           <DropdownMenuItem asChild>
-            <Link href="/auth/profile">{profileLabel}</Link>
+            <Link href="/profile">{profileLabel}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleSignOut}>
             {signOutLabel}
