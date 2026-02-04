@@ -34,13 +34,12 @@ describe("ThemeSelector", () => {
     mockPersistTheme.mockClear();
   });
 
-  it("renders the trigger with current theme label", () => {
+  it("renders the trigger with accessible theme label", () => {
     render(<ThemeSelector />);
 
     expect(
       screen.getByRole("button", { name: "Theme: System" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("System")).toBeInTheDocument();
   });
 
   it("opens dropdown when trigger is clicked", () => {

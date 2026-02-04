@@ -80,7 +80,6 @@ export function ThemeSelector() {
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <CurrentIcon className="h-3.5 w-3.5" />
-        <span className="hidden sm:inline">{currentOption?.label}</span>
         <ChevronDownIcon className="h-3 w-3" />
       </Button>
       {isOpen ? (

@@ -331,7 +331,7 @@ describe("MainHeader", () => {
     );
     expect(
       within(mobileMenu).getByRole("link", { name: "Profile" }),
-    ).toHaveAttribute("href", "/auth/profile");
+    ).toHaveAttribute("href", "/profile");
     expect(
       within(mobileMenu).getByRole("button", { name: "Sign out" }),
     ).toBeInTheDocument();

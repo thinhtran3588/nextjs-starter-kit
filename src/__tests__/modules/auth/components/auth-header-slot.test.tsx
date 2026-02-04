@@ -107,7 +107,7 @@ describe("AuthHeaderSlot", () => {
     const profileLink = await screen.findByRole("menuitem", {
       name: "Profile",
     });
-    expect(profileLink).toHaveAttribute("href", "/auth/profile");
+    expect(profileLink).toHaveAttribute("href", "/profile");
   });
 
   it("calls signOut when sign out is clicked", async () => {
@@ -150,7 +150,7 @@ describe("AuthHeaderSlot", () => {
       expect(screen.getByTestId("auth-user-name")).toHaveTextContent("Alice");
       expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute(
         "href",
-        "/auth/profile",
+        "/profile",
       );
       expect(
         screen.getByRole("button", { name: "Sign out" }),

@@ -32,9 +32,9 @@ const buttonVariants = cva(
           "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500",
       },
       size: {
-        default: "h-9 px-5 py-2.5",
-        sm: "h-8 rounded-full px-4 text-xs",
-        lg: "h-10 rounded-full px-6 text-base",
+        default: "h-9 min-w-24 px-5 py-2.5",
+        sm: "h-8 min-w-20 rounded-full px-4 text-xs",
+        lg: "h-10 min-w-28 rounded-full px-6 text-base",
         icon: "h-9 w-9 rounded-full",
         "icon-sm": "h-8 w-8 rounded-full",
         "icon-lg": "h-10 w-10 rounded-full",
