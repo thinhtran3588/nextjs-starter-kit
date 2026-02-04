@@ -1,8 +1,5 @@
-import { getLocale, getTranslations } from "next-intl/server";
-
 import { BackToHomeButton } from "@/common/components/back-to-home-button";
-import { LanguageSelector } from "@/common/components/language-selector";
-import { routing } from "@/common/routing/routing";
+import { LanguageSelector } from "@/modules/settings/components/language-selector";
 
 type AuthLayoutProps = {
   children: React.ReactNode;
@@ -13,15 +10,6 @@ export async function AuthLayout({
   children,
   showLanguageSelector = true,
 }: AuthLayoutProps) {
-  const tCommon = await getTranslations("common");
-  const locale = await getLocale();
-
-  const localeOptions = routing.locales.map((targetLocale) => ({
-    locale: targetLocale,
-    label: tCommon(`language.options.${targetLocale}`),
-    flag: tCommon(`language.flags.${targetLocale}`),
-  }));
-
   return (
     <div className="blueprint-grid relative min-h-screen overflow-hidden">
       <div
@@ -40,11 +28,7 @@ export async function AuthLayout({
         <div className="relative w-full max-w-xl">
           {showLanguageSelector ? (
             <div className="absolute top-5 right-5 z-20 min-h-[2.5rem] min-w-[5rem] sm:top-6 sm:right-6">
-              <LanguageSelector
-                languageLabel={tCommon("language.label")}
-                currentLocale={locale}
-                localeOptions={localeOptions}
-              />
+              <LanguageSelector />
             </div>
           ) : null}
           <main

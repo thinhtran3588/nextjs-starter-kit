@@ -7,6 +7,9 @@ vi.mock("firebase/app", () => ({
 vi.mock("firebase/analytics", () => ({
   getAnalytics: vi.fn(),
 }));
+vi.mock("firebase/firestore", () => ({
+  getFirestore: vi.fn(),
+}));
 
 const validFirebaseConfigJson = JSON.stringify({
   apiKey: "test-api-key",
@@ -27,6 +30,8 @@ describe("firebase-config", () => {
     vi.resetModules();
     const auth = await import("firebase/auth");
     vi.mocked(auth.getAuth).mockReturnValue({} as never);
+    const firestore = await import("firebase/firestore");
+    vi.mocked(firestore.getFirestore).mockReturnValue({} as never);
   });
 
   afterEach(() => {
@@ -79,5 +84,58 @@ describe("firebase-config", () => {
     const { getAuthInstance } =
       await import("@/application/config/firebase-config");
     expect(getAuthInstance()).toBeNull();
+  });
+
+  it("getFirestoreInstance returns null when window is undefined", async () => {
+    vi.stubGlobal("window", undefined);
+    const { getFirestoreInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getFirestoreInstance()).toBeNull();
+    vi.stubGlobal("window", originalWindow);
+  });
+
+  it("getFirestoreInstance returns firestore instance when window is defined", async () => {
+    vi.stubGlobal("window", originalWindow);
+    const mockFirestore = {};
+    const firestore = await import("firebase/firestore");
+    vi.mocked(firestore.getFirestore).mockReturnValue(mockFirestore as never);
+    vi.resetModules();
+    const { getFirestoreInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getFirestoreInstance()).toBe(mockFirestore);
+  });
+
+  it("getFirestoreInstance returns same instance on subsequent calls", async () => {
+    vi.stubGlobal("window", originalWindow);
+    const mockFirestore = {};
+    const firestore = await import("firebase/firestore");
+    vi.mocked(firestore.getFirestore).mockClear();
+    vi.mocked(firestore.getFirestore).mockReturnValue(mockFirestore as never);
+    vi.resetModules();
+    const { getFirestoreInstance } =
+      await import("@/application/config/firebase-config");
+    const first = getFirestoreInstance();
+    const second = getFirestoreInstance();
+    expect(first).toBe(second);
+    expect(first).toBe(mockFirestore);
+    expect(firestore.getFirestore).toHaveBeenCalledTimes(1);
+  });
+
+  it("getFirestoreInstance returns null when NEXT_PUBLIC_FIREBASE_CONFIG is missing", async () => {
+    vi.stubGlobal("window", originalWindow);
+    delete process.env.NEXT_PUBLIC_FIREBASE_CONFIG;
+    vi.resetModules();
+    const { getFirestoreInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getFirestoreInstance()).toBeNull();
+  });
+
+  it("getFirestoreInstance returns null when NEXT_PUBLIC_FIREBASE_CONFIG is invalid JSON", async () => {
+    vi.stubGlobal("window", originalWindow);
+    process.env.NEXT_PUBLIC_FIREBASE_CONFIG = "invalid-json";
+    vi.resetModules();
+    const { getFirestoreInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getFirestoreInstance()).toBeNull();
   });
 });

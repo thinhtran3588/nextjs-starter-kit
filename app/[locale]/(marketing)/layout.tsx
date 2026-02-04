@@ -4,6 +4,7 @@ import { getMainMenuConfig } from "@/application/config/main-menu";
 import { MainLayout } from "@/common/components/main-layout";
 import { resolveMenuItems } from "@/common/utils/menu";
 import { AuthHeaderSlot } from "@/modules/auth/components/auth-header-slot";
+import { SettingsHeaderSlot } from "@/modules/settings/components/settings-header-slot";
 
 export default async function Layout({
   children,
@@ -15,7 +16,11 @@ export default async function Layout({
   const menuItems = resolveMenuItems(menuConfig, (key) => tCommon(key));
 
   return (
-    <MainLayout menuItems={menuItems} authSlot={<AuthHeaderSlot />}>
+    <MainLayout
+      menuItems={menuItems}
+      authSlot={<AuthHeaderSlot />}
+      settingsSlot={<SettingsHeaderSlot />}
+    >
       {children}
     </MainLayout>
   );

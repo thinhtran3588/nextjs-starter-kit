@@ -1,30 +1,47 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { useLocale } from "next-intl";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { LanguageSelector } from "@/common/components/language-selector";
+import messages from "@/application/localization/en.json";
+import { LanguageSelector } from "@/modules/settings/components/language-selector";
+import { useUserSettings } from "@/modules/settings/hooks/use-user-settings-store";
 
-const defaultProps = {
-  languageLabel: "Language",
-  currentLocale: "en",
-  localeOptions: [
-    { locale: "en", label: "English", flag: "US" },
-    { locale: "vi", label: "Vietnamese", flag: "VN" },
-    { locale: "zh", label: "Chinese", flag: "CN" },
-  ],
-};
+vi.mock(
+  "@/modules/settings/hooks/use-user-settings-store",
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import("@/modules/settings/hooks/use-user-settings-store")
+      >();
+    return { ...actual, useUserSettings: vi.fn() };
+  },
+);
+
+const enFlags = messages.settings.language.flags as Record<string, string>;
 
 describe("LanguageSelector", () => {
+  beforeEach(() => {
+    vi.mocked(useLocale).mockReturnValue("en");
+    vi.mocked(useUserSettings).mockReturnValue({
+      settings: {},
+      setSettings: vi.fn(),
+      persistLocale: vi.fn(),
+      persistTheme: vi.fn(),
+    });
+  });
+
   it("renders the trigger with current locale label and flag", () => {
-    render(<LanguageSelector {...defaultProps} />);
+    render(<LanguageSelector />);
 
     expect(
       screen.getByRole("button", { name: "Language: English" }),
     ).toBeInTheDocument();
     expect(screen.getByText("English")).toBeInTheDocument();
-    expect(screen.getByText("US")).toBeInTheDocument();
+    expect(screen.getByText(enFlags.en)).toBeInTheDocument();
   });
 
   it("uses current pathname for locale links so URL is preserved when changing language", () => {
-    render(<LanguageSelector {...defaultProps} />);
+    render(<LanguageSelector />);
 
     fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
 
@@ -36,7 +53,7 @@ describe("LanguageSelector", () => {
   });
 
   it("opens dropdown when trigger is clicked", () => {
-    render(<LanguageSelector {...defaultProps} />);
+    render(<LanguageSelector />);
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
 
@@ -56,7 +73,7 @@ describe("LanguageSelector", () => {
     render(
       <div>
         <div data-testid="outside">Outside</div>
-        <LanguageSelector {...defaultProps} />
+        <LanguageSelector />
       </div>,
     );
 
@@ -73,7 +90,7 @@ describe("LanguageSelector", () => {
         <button type="button" data-testid="outside-button">
           Outside
         </button>
-        <LanguageSelector {...defaultProps} />
+        <LanguageSelector />
       </div>,
     );
 
@@ -89,7 +106,7 @@ describe("LanguageSelector", () => {
   });
 
   it("closes dropdown when selecting a locale", () => {
-    render(<LanguageSelector {...defaultProps} />);
+    render(<LanguageSelector />);
 
     fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
     expect(screen.getByRole("listbox")).toBeInTheDocument();
@@ -99,9 +116,28 @@ describe("LanguageSelector", () => {
   });
 
   it("renders empty locale label when current locale has no matching option", () => {
-    render(<LanguageSelector {...defaultProps} currentLocale="fr" />);
+    vi.mocked(useLocale).mockReturnValue("fr" as "en");
+    render(<LanguageSelector />);
 
     const button = screen.getByRole("button", { name: /^Language:/ });
     expect(button).toHaveAttribute("aria-label", "Language: ");
+  });
+
+  it("calls persistLocale when a locale option is clicked", () => {
+    const persistLocaleMock = vi.fn();
+    vi.mocked(useUserSettings).mockReturnValue({
+      settings: {},
+      setSettings: vi.fn(),
+      persistLocale: persistLocaleMock,
+      persistTheme: vi.fn(),
+    });
+
+    render(<LanguageSelector />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
+    fireEvent.click(screen.getByRole("option", { name: /Vietnamese/ }));
+
+    expect(persistLocaleMock).toHaveBeenCalledTimes(1);
+    expect(persistLocaleMock).toHaveBeenCalledWith("vi");
   });
 });

@@ -2,10 +2,8 @@
 
 import { useEffect } from "react";
 
-import {
-  getResolvedTheme,
-  useThemeStore,
-} from "@/common/hooks/use-theme-store";
+import { getResolvedTheme } from "@/common/utils/theme";
+import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
 
 function applyTheme(resolved: "light" | "dark") {
   const root = document.documentElement;
@@ -13,8 +11,11 @@ function applyTheme(resolved: "light" | "dark") {
   root.classList.add(resolved);
 }
 
+const DEFAULT_THEME = "system" as const;
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const theme = useThemeStore((state) => state.theme);
+  const theme = (useUserSettingsStore((s) => s.settings.theme) ??
+    DEFAULT_THEME) as "system" | "light" | "dark";
 
   useEffect(() => {
     const resolved = getResolvedTheme(theme);

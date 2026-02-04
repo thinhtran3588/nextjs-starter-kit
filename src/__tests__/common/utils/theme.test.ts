@@ -1,37 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-  getResolvedTheme,
-  useThemeStore,
-} from "@/common/hooks/use-theme-store";
-
-describe("useThemeStore", () => {
-  beforeEach(() => {
-    useThemeStore.setState({ theme: "system" });
-    localStorage.clear();
-  });
-
-  it("defaults to system theme", () => {
-    expect(useThemeStore.getState().theme).toBe("system");
-  });
-
-  it("setTheme updates theme", () => {
-    useThemeStore.getState().setTheme("light");
-    expect(useThemeStore.getState().theme).toBe("light");
-
-    useThemeStore.getState().setTheme("dark");
-    expect(useThemeStore.getState().theme).toBe("dark");
-
-    useThemeStore.getState().setTheme("system");
-    expect(useThemeStore.getState().theme).toBe("system");
-  });
-});
+import { getResolvedTheme } from "@/common/utils/theme";
 
 describe("getResolvedTheme", () => {
   const originalMatchMedia = window.matchMedia;
 
   beforeEach(() => {
-    useThemeStore.setState({ theme: "system" });
+    vi.clearAllMocks();
   });
 
   afterEach(() => {

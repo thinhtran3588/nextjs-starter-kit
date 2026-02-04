@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { ThemeProvider } from "@/common/components/theme-provider";
-import { useThemeStore } from "@/common/hooks/use-theme-store";
+import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
 
 describe("ThemeProvider", () => {
   it("renders children", () => {
@@ -15,7 +15,7 @@ describe("ThemeProvider", () => {
   });
 
   it("applies dark class when theme is dark", () => {
-    useThemeStore.setState({ theme: "dark" });
+    useUserSettingsStore.setState({ settings: { theme: "dark" } });
     render(
       <ThemeProvider>
         <span>Child</span>
@@ -26,7 +26,7 @@ describe("ThemeProvider", () => {
   });
 
   it("applies light class when theme is light", () => {
-    useThemeStore.setState({ theme: "light" });
+    useUserSettingsStore.setState({ settings: { theme: "light" } });
     render(
       <ThemeProvider>
         <span>Child</span>
@@ -50,7 +50,7 @@ describe("ThemeProvider", () => {
       })),
       writable: true,
     });
-    useThemeStore.setState({ theme: "system" });
+    useUserSettingsStore.setState({ settings: { theme: "system" } });
     render(
       <ThemeProvider>
         <span>Child</span>
