@@ -5,8 +5,6 @@ import { AppInitializer } from "@/application/components/app-initializer";
 import { RootLayout } from "@/common/components/root-layout";
 import { Toaster } from "@/common/components/toaster";
 import { routing } from "@/common/routing/routing";
-import { SyncAuthState } from "@/modules/auth/components/sync-auth-state";
-import { SyncUserSettings } from "@/modules/settings/components/sync-user-settings";
 
 export async function generateMetadata() {
   const t = await getTranslations("common");
@@ -34,8 +32,6 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <AppInitializer />
-      <SyncAuthState />
-      <SyncUserSettings />
       <RootLayout>{children}</RootLayout>
       <Toaster />
     </NextIntlClientProvider>
