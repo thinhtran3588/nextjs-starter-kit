@@ -74,7 +74,7 @@ flowchart TD
 2. **Develop and Validate**
    ```bash
    # Make changes, write tests
-   npm run validate  # Must pass before committing
+   npm run validate  # Must pass before committing (lint + format + tests with 100% coverage)
    ```
 
 3. **Commit and Push**

@@ -2,223 +2,93 @@
 alwaysApply: true
 ---
 
-# General instructions
+# General Instructions
 
 ## Documentation References
 
-**CRITICAL**: When making code changes, always refer to the following documentation files:
+**CRITICAL**: When making code changes, always refer to the project documentation:
 
-- **[@README.md](../../README.md)**: Project overview, features, current status, and getting started
-- **[@docs/architecture.md](../../docs/architecture.md)**: Clean Architecture, layer responsibilities, module structure (use-cases, services, DI), design patterns, and technology stack
-- **[@docs/development-guide.md](../../docs/development-guide.md)**: Step-by-step guide for creating new features, including domain entities, use cases, repositories, routes, and testing
-- **[@docs/testing-guide.md](../../docs/testing-guide.md)**: Testing practices, coverage requirements, and testing workflow
+| Document | Description |
+|----------|-------------|
+| **[Architecture](../../docs/architecture.md)** | Clean Architecture layers, module structure, data flow, design patterns, and DI with Awilix |
+| **[Coding Conventions](../../docs/coding-conventions.md)** | File naming, component props, App Router patterns, forms with Zod, and next-intl i18n |
+| **[Development Guide](../../docs/development-guide.md)** | Git workflow, branch naming, adding features, creating modules, and common patterns |
+| **[Testing Guide](../../docs/testing-guide.md)** | Vitest, React Testing Library, 100% coverage requirement, test organization, and best practices |
 
-These documents contain the authoritative information about:
+## Project Quick Reference
 
-- Architecture patterns and layer responsibilities
-- Module structure and organization
-- Development workflows and best practices
-- Code patterns and conventions
-- Testing strategies
+| Category | Details |
+|----------|---------|
+| **Framework** | Next.js (App Router), TypeScript (strict mode) |
+| **Source** | `src/` — all code; `app/` — routing only |
+| **Modules** | `src/modules/{module}/` with `domain/`, `application/`, `infrastructure/`, `presentation/` |
+| **DI** | Awilix — `useContainer()` hook, `module-configuration.ts` per module |
+| **Testing** | Vitest with 100% coverage in `src/__tests__/` |
+| **UI** | shadcn/ui, Tailwind CSS, Zustand, React Hook Form + Zod |
 
-## Project Overview
+## AI Agent Workflow
 
-The project follows Clean Architecture with a modular structure.
+### Branch Management
 
-## Key Project Facts
+**CRITICAL**: Before any code changes, you MUST:
 
-- **Web Framework**: Next.js (App Router)
-- **Language**: TypeScript (strict mode)
-- **Module System**: Feature modules under `src/modules/{module-name}/`
-- **Build Tool**: Next.js build pipeline
-- **Source Directory**: `src/`
-- **App-Level Setup**: `src/application/` — components (e.g. AppInitializer), config (firebase-config, main-menu), i18n, localization, register-container (Awilix)
-- **Shared Code**: `src/common/` — components (flat), hooks, interfaces, pages, routing, utils (container, base-use-case, cn, menu, read-doc)
-- **Module Structure**: `src/modules/{module-name}/` with `domain/` (types, schemas), `use-cases/` (application layer, resolved via container), `services/` (infrastructure, e.g. Firebase auth), `interfaces/`, `hooks/`, `components/`, `pages/`, `utils/`, and `module-configuration.ts` (Awilix registration)
-- **Routing**: `app/` is routing only; page components live in `src/modules/{module}/pages/`
-- **DI**: Awilix — container in `src/common/utils/container.ts`, registration in `src/application/register-container.ts`, per-module `module-configuration.ts`; components resolve use cases via `useContainer()` from `src/common/hooks/use-container.ts`
-- **Architecture**: Clean Architecture
-- **Testing**: Vitest with 100% coverage requirement (tests in `src/__tests__/`)
+1. Check current branch: `git branch --show-current`
+2. If on `main`: switch to `develop` first: `git checkout develop`
+3. If on `develop`: fetch and pull latest: `git fetch origin && git pull origin develop`
+4. Create feature branch from `develop`: `git checkout -b <branch-name>`
+5. **Never** commit directly to `main` or `develop`
 
-## Common Libraries
+**Always base feature branches on `develop`, never on `main`.**
 
-- **UI & Styling**: Tailwind CSS, shadcn-style components (Radix UI, CVA, clsx, tailwind-merge)
-- **State**: Zustand (e.g. module state via hooks like use-auth-user-store)
-- **Forms & Validation**: React Hook Form, Zod (`zodResolver`)
-- **i18n**: next-intl
-- **DI**: Awilix (container, register-container, module-configuration per module)
-- **Toasts**: Sonner (Toaster in root layout)
-- **Testing**: Vitest, React Testing Library (tests in `src/__tests__/`)
+See [Development Guide](../../docs/development-guide.md) for branch naming conventions.
 
-## Essential Code Conventions
+### Commit and PR Rules
 
-### File Naming
+- **Request permission** before committing: show summary, ask "May I commit these changes?"
+- **Auto-push** after commit: `git push -u origin <branch-name>`
+- **Request permission** before creating PR: ask "May I create a Pull Request?"
+- Use temp file for PR description to avoid shell escaping issues
 
-- Match existing patterns in the module and layer you are editing.
-- Prefer descriptive, kebab-case filenames for feature artifacts.
+### Validation
 
-### Code Style
+Run `npm run validate` after code changes (includes lint, format check, and tests with 100% coverage).
 
-- Prefer clarity and maintainability over cleverness.
-- Keep responsibilities small and focused.
+## Code Style Guidelines
 
 ### Import Type
 
-**CRITICAL**: Always use `import type` when importing only types (interfaces, type aliases). Use regular `import` only when you need runtime values (classes, functions, constants).
-
-- Use `import type { Foo } from '...'` when `Foo` is used only as a type.
-- Use `import type Foo from '...'` for default type imports.
-- Use regular `import` when the symbol is used at runtime (e.g. a component, function, or class you call or instantiate).
-
-**Examples:**
+Use `import type` for type-only imports:
 
 ```typescript
-// ✅ GOOD - Type-only import
+// ✅ Type-only import
 import type { User } from './types';
-import type { Props } from './component-types';
 
-// ✅ GOOD - Runtime import
+// ✅ Runtime import
 import { Button } from './button';
-import { useAuth } from './use-auth';
-
-// ❌ BAD - Regular import for type-only usage
-import { User } from './types';
 ```
-
-**Principle**: `import type` is erased at compile time and avoids pulling in runtime code. Use it whenever the import is used only in type positions.
 
 ### Code Comments
 
-**CRITICAL**: Do not write comments if the code is obvious. Code should be self-documenting through clear naming and structure.
+- Don't comment obvious code — code should be self-documenting
+- Comment **why**, not **what**
+- Document non-obvious business logic or workarounds
 
-**When NOT to add comments:**
+### Object Creation
 
-- Don't comment what the code does - the code should be clear enough
-- Don't add obvious comments like `// Set the user` above `user.set(...)`
-- Don't add comments that just repeat the code
-- Don't add comments for simple operations that are self-explanatory
-
-**When to add comments:**
-
-- Explain **why** something is done, not what is done
-- Document non-obvious business logic or domain rules
-- Explain workarounds or temporary solutions
-- Clarify complex algorithms or non-intuitive implementations
-- Document API contracts or external dependencies
-- Explain performance optimizations or architectural decisions
-
-**Principle**: If you need a comment to explain what the code does, consider refactoring the code to be more self-explanatory instead.
-
-### Object Creation Pattern
-
-**CRITICAL**: Do not create intermediate object variables if the object is only used once as a parameter to a function. Create the object inline instead.
-
-**When NOT to create intermediate variables:**
-
-- Don't create an object variable if it's only passed to a single function call
-- Don't create intermediate variables for simple object literals that are only used once
-- Prefer inline object creation for better readability and less code
-
-**When to create intermediate variables:**
-
-- The object is used multiple times
-- The object needs to be modified before use
-- The object is part of a complex transformation chain
-- Creating the variable improves readability for very complex objects
-
-**Examples:**
+Create objects inline when used once:
 
 ```typescript
-// ❌ BAD - Unnecessary intermediate variable
-const payload = {
-  email,
-  password,
-  displayName,
-};
-return authApi.register(payload);
+// ✅ Inline (used once)
+return authApi.register({ email, password });
 
-// ✅ GOOD - Inline object creation
-return authApi.register({
-  email,
-  password,
-  displayName,
-});
-
-// ✅ GOOD - Intermediate variable needed (used multiple times)
-const formData = {
-  email,
-  password,
-  displayName,
-};
-registerForm.reset(formData);
-return authApi.register(formData);
-
-// ✅ GOOD - Intermediate variable needed (modification required)
-const request = {
-  email,
-  password,
-  displayName,
-};
-if (inviteCode) {
-  request.inviteCode = inviteCode;
-}
-return authApi.register(request);
+// ✅ Variable (used multiple times or modified)
+const data = { email, password };
+form.reset(data);
+return authApi.register(data);
 ```
 
-**Principle**: Only create variables when they add value - either through reuse, modification, or improved readability for complex cases.
+### Validation Order
 
-## Validation Ordering Pattern
-
-Prefer local validation (schema, format, required fields) before any API calls. Avoid network requests when the payload is invalid or no updates are present. The server remains the source of truth and performs full validation.
-
-### For Create Flows
-
-**Order of validations:**
-
-1. **Local validations first** - Zod schema parsing and client-side formatting
-2. **Submit to API** - Only after local validation passes
-
-**Example:**
-
-```typescript
-// 1. Local validation (throws if invalid)
-const formData = registerSchema.parse(rawInput);
-
-// 2. Submit to API only after local validation
-return authApi.register(formData);
-```
-
-### For Update Flows
-
-**Order of validations:**
-
-1. **Local validations first** - Zod parsing and formatting
-2. **Check for updates** - Skip the API call if nothing changed
-3. **Submit to API** - Only when there are actual changes
-
-**Example:**
-
-```typescript
-const updates = profileUpdateSchema.parse(rawInput);
-const hasUpdates =
-  updates.displayName !== undefined || updates.username !== undefined;
-
-if (!hasUpdates) {
-  return;
-}
-
-return profileApi.updateProfile(updates);
-```
-
-## Senior Architecture Guidance
-
-- **Layering**: Domain must not depend on application or infrastructure.
-- **Separation of concerns**: One responsibility per module/class.
-- **Testability first**: Design choices must simplify testing.
-- **Scalability**: Consider 10x/100x load, async work, and caching.
-- **Security and validation**: Sanitize inputs, use value objects for format checks, and avoid logging secrets.
-- **Performance**: Add indexes for hot queries, avoid N+1, use cursor pagination when needed.
-
-## Validation Reminder
-
-After making any code changes, run `npm run validate` unless the user explicitly asks to skip validation.
+1. Local validation first (Zod schema)
+2. Check for updates (skip API if nothing changed)
+3. Submit to API

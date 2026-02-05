@@ -74,7 +74,7 @@ flowchart TD
 2. **Develop và Validate**
    ```bash
    # Thực hiện thay đổi, viết tests
-   npm run validate  # Phải pass trước khi commit
+   npm run validate  # Phải pass trước khi commit (lint + format + tests với 100% coverage)
    ```
 
 3. **Commit và Push**

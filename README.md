@@ -1,155 +1,100 @@
 # Next.js Starter Kit
 
+[![CI - Main](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml/badge.svg?branch=main)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml)
+[![CI - Develop](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml/badge.svg?branch=develop)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml)
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![Radix UI](https://img.shields.io/badge/Radix_UI-161618?style=flat&logo=radix-ui&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?style=flat&logo=zod&logoColor=white)
+![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990?style=flat&logo=reacthookform&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-DD2C00?style=flat&logo=firebase&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=flat&logo=vitest&logoColor=white)
+![Testing Library](https://img.shields.io/badge/Testing_Library-E33332?style=flat&logo=testing-library&logoColor=white)
 
-A production-ready Next.js starter kit with Clean Architecture and a modular
-structure for scalable frontend development.
+**English** | [Tiếng Việt](README-vi.md) | [中文](README-zh.md)
 
-## Overview
+A production-ready Next.js starter kit with Clean Architecture and modular structure for scalable frontend development.
 
-This starter kit provides a solid foundation for building modern Next.js
-applications with:
+## Features
 
-- Clean Architecture layering
-- Feature-based modules
-- Next.js App Router with Server Components by default
-- A complete form and validation stack
-- Internationalization (i18n) with locale routing
-- Comprehensive testing with strict coverage requirements
+- **Clean Architecture** — Domain, Application, Infrastructure, Presentation layers with Awilix DI
+- **Modular Structure** — Feature modules under `src/modules/` with clear boundaries
+- **Tech Stack** — Next.js App Router, TypeScript (strict), Tailwind CSS, shadcn/ui (Radix)
+- **Forms & Validation** — React Hook Form + Zod with type-safe schemas
+- **State & i18n** — Zustand for client state, next-intl with 3 languages (EN, VI, ZH)
+- **Testing** — Vitest + React Testing Library with 100% coverage requirement
+- **Firebase** — Auth & Firestore with abstracted interfaces for easy provider swapping
 
-## Tech Stack
-
-### Core Framework & Language
-
-- **Next.js** (App Router)
-- **React**
-- **TypeScript** (strict mode)
-
-### UI & Styling
-
-- **Tailwind CSS**
-- **shadcn/ui** (Radix-based component library)
-
-### State Management
-
-- **Zustand**
-
-### Forms & Validation
-
-- **React Hook Form**
-- **Zod**
-
-### Internationalization
-
-- **next-intl**
-
-### Testing
-
-- **Vitest**
-- **React Testing Library**
-- **100% coverage requirement**
-
-## Key Features
-
-- **Clean Architecture** with explicit layers and dependency boundaries
-- **Modular structure** under `src/modules/` for scalable development
-- **App Router routing layer** under `app/` with localized routes
-- **Form + validation stack** powered by React Hook Form + Zod
-- **i18n-ready** with `next-intl` locale routing
-- **Testing-first** culture with mandatory 100% coverage
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm
-
-### Installation
+## Quick Start
 
 ```bash
 npm install
-```
-
-### Development
-
-```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:3000`.
+The app runs at `http://localhost:3000`.
 
-### Available Scripts
+## Scripts
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build the app for production
-- `npm start` - Run the production server
-- `npm test` - Run tests
-- `npm run test:coverage` - Run tests with coverage
-- `npm run validate` - Run lint, format check, and tests
-
-## Next.js Notes
-
-This app was bootstrapped with `create-next-app` and uses the App Router.
-Routing files live under `app/[locale]/`, while feature UI lives in `src/`.
-Update the landing page in `src/modules/landing-page/pages/home/page.tsx`.
-
-The project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
-to automatically optimize and load Geist.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run validate` | Run lint, format check, and tests with coverage |
 
 ## Documentation
 
-- [Architecture Guide](docs/architecture.md)
-- [Development Guide](docs/development-guide.md)
-- [Testing Guide](docs/testing-guide.md)
+| Document | Description |
+|----------|-------------|
+| [Architecture](docs/architecture.md) | Layers, data flow, design patterns, DI with Awilix |
+| [Coding Conventions](docs/coding-conventions.md) | File naming, App Router patterns, forms, i18n |
+| [Development Guide](docs/development-guide.md) | Git workflow, adding features, creating modules |
+| [Testing Guide](docs/testing-guide.md) | Test organization, coverage, best practices |
+| [Firebase Integration](docs/firebase-integration.md) | Auth & Firestore setup, swapping providers |
 
-## Learn More
+## AI Agent Integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Next.js GitHub repository](https://github.com/vercel/next.js)
+This project includes configuration for AI coding assistants to help with development. Currently configured for [Cursor](https://cursor.com/), but can be adapted for other AI agents.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
-
-Check out the
-[Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)
-for more details.
-
-## Project Structure
+### Structure
 
 ```
-app/                      # Routing layer only (App Router)
-└── [locale]/              # Locale segment (next-intl)
-    ├── layout.tsx
-    ├── page.tsx
-    └── auth/...
-
-src/                      # Application code
-├── modules/              # Feature modules
-│   └── {module-name}/
-│       ├── domain/
-│       ├── application/
-│       ├── infrastructure/
-│       └── presentation/
-├── common/               # Shared code
-└── application/          # App-level setup (i18n, providers)
+.cursor/
+├── rules/
+│   └── general.mdc          # Project rules, conventions, and workflow
+└── skills/
+    ├── code-reviewer/       # Code review and quality checks
+    ├── nextjs-frontend-developer/  # Frontend implementation guidance
+    ├── senior-architect/    # Architecture and design decisions
+    └── ui-ux-pro-max/       # UI/UX design with component libraries
 ```
+
+### What's Included
+
+| Component | Purpose |
+|-----------|---------|
+| **Rules** | Project conventions, git workflow, code style, validation requirements |
+| **Skills** | Specialized agents for code review, frontend dev, architecture, and UI/UX |
+
+### Using with Other AI Agents
+
+To use with other AI tools (GitHub Copilot, Windsurf, etc.):
+
+1. Copy `.cursor/rules/` content to the agent's rules location (e.g., `.github/copilot-instructions.md`)
+2. Reference skill files in prompts or convert to the agent's skill format
+3. Adapt file paths and syntax as needed for your chosen tool
 
 ## Contributing
 
-Please follow the established workflow:
-
 1. Create a feature branch from `develop`
-2. Write/update tests to keep 100% coverage
+2. Write/update tests to maintain 100% coverage
 3. Run `npm run validate` before committing
 4. Open a Pull Request targeting `develop`
+
+See [Development Guide](docs/development-guide.md) for detailed workflow.
 
 ## License
 

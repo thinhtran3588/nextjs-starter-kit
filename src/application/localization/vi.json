@@ -18,7 +18,8 @@
         "architecture": "Kiến trúc",
         "codingConventions": "Quy ước coding",
         "developmentGuide": "Hướng dẫn phát triển",
-        "testingGuide": "Hướng dẫn kiểm thử"
+        "testingGuide": "Hướng dẫn kiểm thử",
+        "firebaseIntegration": "Tích hợp Firebase"
       },
       "menu": "Menu"
     },
