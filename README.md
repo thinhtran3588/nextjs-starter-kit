@@ -16,6 +16,8 @@
 
 **English** | [Tiếng Việt](README-vi.md) | [中文](README-zh.md)
 
+**[Live Demo](https://nextjs-starter-kit.gemsignal.com/en)**
+
 A production-ready Next.js starter kit with Clean Architecture and modular structure for scalable frontend development.
 
 ## Features

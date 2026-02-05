@@ -16,6 +16,8 @@
 
 [English](README.md) | [Tiếng Việt](README-vi.md) | **中文**
 
+**[在线演示](https://nextjs-starter-kit.gemsignal.com/en)**
+
 生产就绪的 Next.js 入门套件，采用 Clean Architecture 与模块化结构，支持可扩展的前端开发。
 
 ## 功能特性
