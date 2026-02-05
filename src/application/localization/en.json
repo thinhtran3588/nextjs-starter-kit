@@ -18,7 +18,8 @@
         "architecture": "Architecture",
         "codingConventions": "Coding conventions",
         "developmentGuide": "Development guide",
-        "testingGuide": "Testing guide"
+        "testingGuide": "Testing guide",
+        "firebaseIntegration": "Firebase integration"
       },
       "menu": "Menu"
     },

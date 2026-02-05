@@ -14,6 +14,7 @@ describe("main-menu", () => {
       "coding-conventions",
       "development-guide",
       "testing-guide",
+      "firebase-integration",
     ]);
   });
 
@@ -23,6 +24,7 @@ describe("main-menu", () => {
       "coding-conventions": "codingConventions",
       "development-guide": "developmentGuide",
       "testing-guide": "testingGuide",
+      "firebase-integration": "firebaseIntegration",
     });
   });
 
@@ -42,7 +44,7 @@ describe("main-menu", () => {
     expect(menu[2].id).toBe("documents");
     expect(menu[2].translationKey).toBe("navigation.documents");
     expect(menu[2].href).toBe("");
-    expect(menu[2].children).toHaveLength(4);
+    expect(menu[2].children).toHaveLength(5);
     const docSlugs = menu[2].children!.map((c) => c.id) as DocSlug[];
     expect(docSlugs).toEqual(DOC_SLUGS);
     expect(menu[2].children!.map((c) => c.href)).toEqual([
@@ -50,6 +52,7 @@ describe("main-menu", () => {
       "/docs/coding-conventions",
       "/docs/development-guide",
       "/docs/testing-guide",
+      "/docs/firebase-integration",
     ]);
   });
 });

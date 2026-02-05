@@ -14,7 +14,8 @@ This frontend follows **Clean Architecture** with a **modular** structure. The a
    - [Presentation Layer](#4-presentation-layer-srcmodulesmodulepresentation)
 5. [Module Structure](#module-structure)
 6. [Critical Design Patterns](#critical-design-patterns)
-7. [Technology Stack](#technology-stack)
+7. [Authentication](#authentication)
+8. [Technology Stack](#technology-stack)
 
 ## Architecture Overview
 
@@ -361,6 +362,83 @@ See [Coding Conventions](./coding-conventions.md) for detailed routing examples 
 **Benefits:**
 
 - Easier unit tests and swapping implementations (e.g. mock auth in tests).
+
+## Authentication
+
+This project uses **abstracted authentication** that allows swapping the underlying provider without changing application or presentation code. Firebase Auth is the current implementation for rapid MVP development.
+
+### Authentication Architecture
+
+```mermaid
+graph TD
+    subgraph Presentation["Presentation Layer"]
+        Components[Pages & Components]
+        Hooks[Auth Hooks]
+        Store[Zustand Store]
+    end
+
+    subgraph Application["Application Layer"]
+        UseCases[Auth Use Cases]
+    end
+
+    subgraph Domain["Domain Layer"]
+        Interface[AuthenticationService Interface]
+        Types[AuthUser, AuthResult Types]
+    end
+
+    subgraph Infrastructure["Infrastructure Layer"]
+        Firebase[FirebaseAuthenticationService]
+        Future[Future: Other Providers]
+    end
+
+    Components --> Hooks
+    Hooks --> Store
+    Hooks --> UseCases
+    UseCases --> Interface
+    Firebase -.implements.-> Interface
+    Future -.implements.-> Interface
+    Firebase --> Types
+    Future --> Types
+
+    style Presentation fill:#1976d2,color:#fff
+    style Application fill:#f57c00,color:#fff
+    style Domain fill:#388e3c,color:#fff
+    style Infrastructure fill:#c2185b,color:#fff
+```
+
+### How It Works
+
+1. **Domain Interface**: `AuthenticationService` in `src/modules/auth/domain/interfaces.ts` defines the contract for all auth operations (sign in, sign up, sign out, password reset, etc.)
+
+2. **Domain Types**: `AuthUser`, `AuthResult`, `AuthErrorCode` in `src/modules/auth/domain/types.ts` are provider-agnostic
+
+3. **Infrastructure Implementation**: `FirebaseAuthenticationService` implements the interface and maps Firebase-specific types/errors to domain types
+
+4. **Dependency Injection**: The service is registered in the DI container and injected into use cases
+
+5. **State Management**: `useAuthUserStore` (Zustand) holds the current user state, synced via `useSyncAuthState` hook
+
+### Swapping Authentication Providers
+
+To switch from Firebase to another provider (e.g., Auth0, Supabase, custom backend):
+
+1. Create a new service implementing `AuthenticationService` interface
+2. Update `module-configuration.ts` to register the new service
+3. No changes needed in use cases, pages, or components
+
+```typescript
+// Example: New provider implementation
+export class Auth0AuthenticationService implements AuthenticationService {
+  async signInWithEmail(email: string, password: string): Promise<AuthResult> {
+    // Auth0 implementation
+  }
+  // ... other methods
+}
+```
+
+This abstraction makes the codebase **MVP-friendly** (fast iteration with Firebase) while remaining **production-ready** (easy migration to enterprise auth solutions).
+
+For detailed Firebase setup and configuration, see [Firebase Integration](./firebase-integration.md).
 
 ## Technology Stack
 

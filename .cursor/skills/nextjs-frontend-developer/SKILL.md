@@ -1,219 +1,344 @@
 ---
 name: nextjs-frontend-developer
-description: Guides frontend implementation using Next.js (App Router), shadcn/ui, Zustand, React Hook Form, Zod, and next-intl. Use when building or modifying Next.js UI, forms, validation, internationalization (i18n), translations, or when the user mentions Next.js frontend, shadcn, Zustand, React Hook Form, Zod, or next-intl.
+description: Guides frontend implementation using Next.js (App Router), shadcn/ui, Zustand, React Hook Form, Zod, and next-intl within our Clean Architecture module structure. Use when building or modifying Next.js UI, forms, validation, internationalization (i18n), translations, or when the user mentions Next.js frontend, shadcn, Zustand, React Hook Form, Zod, or next-intl.
 ---
 
-# Next.js Frontend Developer (Next.js + shadcn/ui + Zustand + React Hook Form + Zod + next-intl)
+# Next.js Frontend Developer
 
 ## Stack Overview
 
-- **Next.js**: App Router, React Server Components by default, file-based routing.
-- **shadcn/ui**: Copy-paste components (Radix UI + Tailwind). Code lives in your repo under `components/ui/`. Use the CLI to add components or copy from [ui.shadcn.com](https://ui.shadcn.com).
-- **Zustand**: Client-only global state. No provider; use in Client Components only.
-- **React Hook Form**: Form state and submission; uncontrolled inputs, minimal re-renders. Use with shadcn form components.
-- **Zod**: Schema validation and type inference. Use for form validation (via `@hookform/resolvers/zod`) and for validating API/Server Action input.
-- **next-intl**: Internationalization (i18n) and translations. Locale-based routing (`app/[locale]/`), middleware for locale detection, messages per locale; use `getTranslations` (server) or `useTranslations` (client). [next-intl docs](https://next-intl.dev).
+- **Next.js**: App Router, React Server Components by default, file-based routing under `app/[locale]/`.
+- **shadcn/ui**: Radix UI + Tailwind components in `src/common/components/`. Use CLI to add: `npx shadcn@latest add <component>`.
+- **Zustand**: Client-only state in module-specific hooks (`src/modules/{module}/presentation/hooks/`).
+- **React Hook Form**: Form state with shadcn form components and Zod validation.
+- **Zod**: Schema validation in `src/modules/{module}/domain/schemas.ts`.
+- **next-intl**: i18n with locale routing (`app/[locale]/`), translations in `src/application/localization/`.
+- **Awilix**: Dependency injection; resolve use cases via `useContainer()` hook.
 
 ---
 
-## Next.js Conventions
+## Project Structure
 
-### App Router
+```
+app/                              # Routing layer ONLY
+└── [locale]/                     # Locale segment (next-intl)
+    ├── layout.tsx                # Wraps with providers
+    ├── (main)/                   # Route group with MainLayout
+    │   └── {feature}/page.tsx    # Imports from src/modules/
+    └── auth/                     # Auth routes with AuthLayout
 
-- **Routes**: `app/[segment]/page.tsx` = page; `app/[segment]/layout.tsx` = layout.
-- **Server vs Client**: Default is Server Component. Add `"use client"` at the top only when using hooks, browser APIs, or Zustand.
-- **Client boundary**: Keep `"use client"` as low as possible (leaf components or small wrappers).
+src/                              # All application code
+├── application/
+│   ├── components/               # AppInitializer
+│   ├── config/                   # firebase-config, main-menu
+│   ├── localization/             # en.json, vi.json, zh.json, request.ts
+│   └── register-container.ts     # DI container setup
+├── common/
+│   ├── components/               # Shared UI (button, form, input, card, etc.)
+│   ├── hooks/                    # use-container
+│   ├── routing/                  # routing.ts, navigation.ts (next-intl)
+│   └── utils/                    # cn, container, base-use-case
+└── modules/{module}/
+    ├── domain/
+    │   ├── types.ts              # Interfaces, type aliases
+    │   ├── schemas.ts            # Zod schemas for forms
+    │   └── interfaces.ts         # Service/repository interfaces
+    ├── application/              # Use cases
+    ├── infrastructure/           # Services, repositories
+    ├── presentation/
+    │   ├── components/           # Module-specific components
+    │   ├── hooks/                # Zustand stores, custom hooks
+    │   └── pages/{page}/
+    │       ├── page.tsx          # Page component
+    │       └── components/       # Page-specific components
+    └── module-configuration.ts   # DI registration
+```
 
-### File and Folder Conventions
+---
 
-- `app/` – routes, layouts, loading, error, not-found. With **next-intl**, nest under `app/[locale]/` so the first segment is the locale (e.g. `app/[locale]/page.tsx`).
-- `components/` – shared components; `components/ui/` – shadcn components.
-- `lib/` – utilities (e.g. `lib/utils.ts` with `cn()`), helpers, API clients.
-- `stores/` – Zustand stores (optional; can use `lib/stores/`).
-- `messages/` – next-intl translation JSON files (e.g. `messages/en.json`, `messages/de.json`). `i18n/` – next-intl routing config and request config (`i18n/request.ts`).
+## App Router Conventions
 
-### Data and Actions
+### Routes (app/)
 
-- **Server Components**: Fetch directly with `async` or use server-only data sources.
-- **Mutations / forms**: Prefer Server Actions in `app/` or next to the feature; call from Client Components via `action` or `formAction`.
+- **Routes are minimal**: `app/[locale]/.../page.tsx` only imports and renders from `src/modules/`.
+- **No business logic in app/**: All code lives in `src/`.
+
+```tsx
+// app/[locale]/auth/sign-in/page.tsx
+import { SignInPage } from "@/modules/auth/presentation/pages/sign-in/page";
+
+export default function Page() {
+  return <SignInPage />;
+}
+```
+
+### Server vs Client Components
+
+- Default is **Server Component**.
+- Add `"use client"` only when using hooks, browser APIs, or Zustand.
+- Keep `"use client"` as low as possible (leaf components).
 
 ---
 
 ## shadcn/ui Usage
 
-### Adding Components
+### Component Location
+
+Components live in `src/common/components/` (not `components/ui/`).
 
 ```bash
+# Add new shadcn component
 npx shadcn@latest add button
-npx shadcn@latest add card dialog dropdown-menu
+# Then move to src/common/components/ if needed
 ```
 
-Components are added under `components/ui/` (e.g. `button.tsx`, `card.tsx`). Do not treat them as a black-box npm dependency; edit the copied code as needed.
+### Import Pattern
 
-### Styling and Theming
+```tsx
+import { Button } from "@/common/components/button";
+import { Card, CardHeader, CardContent } from "@/common/components/card";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/common/components/form";
+```
 
-- Use **Tailwind** for layout and styling. Prefer existing design tokens (e.g. `primary`, `muted`, `destructive`).
-- Use the **`cn()`** helper for conditional classes: `cn("base-classes", className)`.
-- Theme is configured in `tailwind.config` and/or CSS variables (often in `app/globals.css`). Match shadcn’s expected variable names when customizing.
+### Styling
 
-### Using Components
-
-- Import from `@/components/ui/<component>` (or your configured alias).
-- Compose primitives (e.g. `Card`, `CardHeader`, `CardContent`) rather than building one-off markup when a shadcn pattern exists.
-- For forms: use shadcn form components with React Hook Form and Zod (see below).
+- Use **Tailwind** with design tokens (`primary`, `muted`, `destructive`).
+- Use **`cn()`** helper from `@/common/utils/cn` for conditional classes.
 
 ---
 
-## React Hook Form Usage
+## React Hook Form + Zod
 
-### Setup with Zod
+### Schema Location
 
-- Use `@hookform/resolvers` to connect Zod schemas: `zodResolver(schema)`.
-- Forms that use hooks need `"use client"` (or live in a Client Component).
+Schemas live in `src/modules/{module}/domain/schemas.ts`:
 
-### Form Pattern
+```ts
+// src/modules/auth/domain/schemas.ts
+import { z } from "zod";
+
+export const signInSchema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(1, "Required").max(20),
+});
+
+export type SignInFormData = z.infer<typeof signInSchema>;
+```
+
+### Form Pattern with Use Cases
 
 ```tsx
 "use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { signInSchema, type SignInFormData } from "@/modules/auth/domain/schemas";
+import { useContainer } from "@/common/hooks/use-container";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/common/components/form";
+import { Input } from "@/common/components/input";
+import { Button } from "@/common/components/button";
 
-const schema = z.object({
-  name: z.string().min(1, "Required"),
-  email: z.string().email(),
-});
-
-type FormValues = z.infer<typeof schema>;
-
-export function MyForm() {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: { name: "", email: "" },
+export function SignInForm() {
+  const { signInWithEmailUseCase } = useContainer();
+  
+  const form = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: { email: "", password: "" },
   });
+
+  const onSubmit = async (data: SignInFormData) => {
+    const result = await signInWithEmailUseCase.execute(data);
+    if (!result.success) {
+      // Handle error
+    }
+  };
 
   return (
     <Form {...form}>
-      {/* Use shadcn FormField, FormItem, FormControl, FormMessage */}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* More fields... */}
+        <Button type="submit">Sign In</Button>
+      </form>
     </Form>
   );
 }
 ```
 
-### Conventions
-
-- Define the Zod schema next to the form or in `lib/schemas/`; use `z.infer<typeof schema>` for the form type.
-- Prefer shadcn `Form`, `FormField`, `FormItem`, `FormControl`, `FormMessage` with `form` from `useForm()` and `control` for controlled fields.
-- Submit via `form.handleSubmit(onSubmit)`; call a Server Action inside `onSubmit` when using Next.js Server Actions.
-- Use `mode: "onBlur"` or `mode: "onChange"` when you need validation before submit; default is `onSubmit`.
-
----
-
-## Zod Usage
-
-### Schema Location and Shape
-
-- Place shared schemas in `lib/schemas/` (e.g. `lib/schemas/auth.ts`, `lib/schemas/user.ts`).
-- Use for form validation (with React Hook Form) and for validating request bodies in Server Actions or API routes.
-
-### Defining Schemas
-
-```ts
-import { z } from "zod";
-
-export const loginSchema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(8, "At least 8 characters"),
-});
-
-export type LoginInput = z.infer<typeof loginSchema>;
-```
-
-### With React Hook Form
-
-- Pass the schema to `zodResolver(schema)` in `useForm({ resolver: zodResolver(schema) })`.
-- Type the form with `z.infer<typeof schema>` so inputs and errors are typed.
-
-### With Server Actions
-
-- Parse and validate in the Server Action: `const parsed = schema.safeParse(formData)`; use `parsed.success` and `parsed.data` or `parsed.error.flatten()`.
-- Return field errors in a shape the client can map to form fields (e.g. `parsed.error.flatten().fieldErrors`).
-
-### Conventions
-
-- Export both the schema and the inferred type (`z.infer<typeof schema>`).
-- Use `.optional()`, `.nullable()`, `.default()` as needed; use `.refine()` or `.superRefine()` for cross-field or custom rules.
-- Keep schemas close to the feature or in `lib/schemas/` for reuse.
-
----
-
-## next-intl Usage
-
-### Setup Overview
-
-- **Routing**: Define supported locales and default in `i18n/routing.ts` with `defineRouting({ locales: ['en', 'de'], defaultLocale: 'en' })`.
-- **Proxy**: Root `proxy.ts` uses `createMiddleware(routing)` from `next-intl/middleware` so locale is detected and routes are prefixed (e.g. `/en/about`).
-- **Messages**: JSON per locale in `messages/en.json`, `messages/de.json` (nested keys, e.g. `{ "common": { "submit": "Submit" } }`).
-- **Request config**: `i18n/request.ts` uses `getRequestConfig` from `next-intl/server` to load messages for the current locale; wire it in `next.config` with the next-intl plugin or pass to `NextIntlClientProvider` in layout.
-- **App structure**: All app routes live under `app/[locale]/` (e.g. `app/[locale]/layout.tsx`, `app/[locale]/page.tsx`). Root layout wraps children with `NextIntlClientProvider` when using client translations.
-
-### Using Translations
-
-- **Server Components**: `import { getTranslations } from 'next-intl/server';` then `const t = await getTranslations('namespace');` and `t('key')` or `t('key', { param: value })`. Use the namespace that matches your message structure (e.g. `getTranslations('common')` for `messages/en.json` → `common.submit`).
-- **Client Components**: `import { useTranslations } from 'next-intl';` then `const t = useTranslations('namespace');` and `t('key')`. Component must be under the provider (layout wraps with `NextIntlClientProvider` and messages/locale).
-- **Links and navigation**: Use `Link` and `useRouter` from `next-intl` (not `next/link` / `next/navigation`) so links and redirects keep the current locale.
-
-### Conventions
-
-- Keep message keys flat or nested consistently (e.g. `common.submit`, `form.email`); use namespaces in `getTranslations`/`useTranslations` to scope.
-- For dates/numbers use next-intl formatters (`useFormatter`, or server equivalents) with the current locale.
-- Use `generateStaticParams` in layout or page to return `[{ locale: 'en' }, { locale: 'de' }]` for static generation of all locales.
-
 ---
 
 ## Zustand Usage
 
-### Store Location and Shape
+### Store Location
 
-- Place stores in `stores/` or `lib/stores/` (e.g. `stores/ui-store.ts`).
-- One store per concern when possible (e.g. UI state, auth state).
-
-### Creating a Store
+Stores live in `src/modules/{module}/presentation/hooks/`:
 
 ```ts
-// stores/ui-store.ts
+// src/modules/auth/presentation/hooks/use-auth-user-store.ts
 "use client";
 
 import { create } from "zustand";
+import type { AuthUser } from "@/modules/auth/domain/types";
 
-interface UIState {
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
+interface AuthUserStore {
+  user: AuthUser | null;
+  loading: boolean;
+  setAuthState: (user: AuthUser | null, loading: boolean) => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
-  sidebarOpen: true,
-  setSidebarOpen: (open) => set({ sidebarOpen: open }),
+export const useAuthUserStore = create<AuthUserStore>((set) => ({
+  user: null,
+  loading: true,
+  setAuthState: (user, loading) => set({ user, loading }),
 }));
 ```
 
 ### Using in Components
 
-- **Only in Client Components**: Any file that uses `useUIStore()` (or any Zustand hook) must have `"use client"` at the top.
-- Select slices to avoid unnecessary re-renders:
+```tsx
+"use client";
+
+import { useAuthUserStore } from "@/modules/auth/presentation/hooks/use-auth-user-store";
+
+export function UserInfo() {
+  const user = useAuthUserStore((s) => s.user);
+  const loading = useAuthUserStore((s) => s.loading);
+  
+  if (loading) return <div>Loading...</div>;
+  return <div>{user?.displayName}</div>;
+}
+```
+
+---
+
+## next-intl Usage
+
+### Translation Files
+
+Translations are in `src/application/localization/`:
+
+```
+src/application/localization/
+├── en.json
+├── vi.json
+├── zh.json
+└── request.ts
+```
+
+### Message Structure
+
+```json
+{
+  "common": {
+    "navigation": {
+      "home": "Home",
+      "signIn": "Sign in"
+    }
+  },
+  "modules": {
+    "auth": {
+      "pages": {
+        "sign-in": {
+          "title": "Sign in",
+          "emailLabel": "Email"
+        }
+      }
+    }
+  }
+}
+```
+
+### Server Components
+
+```tsx
+import { getTranslations } from "next-intl/server";
+
+export default async function Page() {
+  const t = await getTranslations("modules.auth.pages.sign-in");
+  return <h1>{t("title")}</h1>;
+}
+```
+
+### Client Components
 
 ```tsx
 "use client";
 
-const sidebarOpen = useUIStore((s) => s.sidebarOpen);
-const setSidebarOpen = useUIStore((s) => s.setSidebarOpen);
+import { useTranslations } from "next-intl";
+
+export function SignInForm() {
+  const t = useTranslations("modules.auth.pages.sign-in");
+  return <label>{t("emailLabel")}</label>;
+}
 ```
 
-### SSR / Hydration
+### Navigation
 
-- Zustand is client-only. Do not read store state during server render.
-- For persisted state (e.g. localStorage), use `persist` from `zustand/middleware` and ensure UI that depends on it doesn’t assume a value on first paint (handle hydration mismatch if needed).
+Use next-intl's `Link` and `useRouter` for locale-aware navigation:
+
+```tsx
+import { Link, useRouter } from "@/common/routing/navigation";
+
+// Link keeps current locale
+<Link href="/auth/sign-in">Sign In</Link>
+
+// Router keeps current locale
+const router = useRouter();
+router.push("/dashboard");
+```
+
+---
+
+## Use Cases and DI
+
+### Resolving Use Cases
+
+Use `useContainer()` hook to resolve use cases:
+
+```tsx
+"use client";
+
+import { useContainer } from "@/common/hooks/use-container";
+
+export function MyComponent() {
+  const { signInWithEmailUseCase, signOutUseCase } = useContainer();
+  
+  const handleSignIn = async () => {
+    const result = await signInWithEmailUseCase.execute({ email, password });
+  };
+}
+```
+
+### Use Case Pattern
+
+Use cases extend `BaseUseCase` and call services/repositories:
+
+```ts
+// src/modules/auth/application/sign-in-with-email-use-case.ts
+import { BaseUseCase } from "@/common/utils/base-use-case";
+import type { AuthenticationService } from "@/modules/auth/domain/interfaces";
+
+interface Deps {
+  authService: AuthenticationService;
+}
+
+export class SignInWithEmailUseCase extends BaseUseCase<Deps> {
+  async execute({ email, password }: { email: string; password: string }) {
+    return this.deps.authService.signInWithEmail(email, password);
+  }
+}
+```
 
 ---
 
@@ -221,23 +346,26 @@ const setSidebarOpen = useUIStore((s) => s.setSidebarOpen);
 
 | Task | Approach |
 |------|----------|
-| New page or route | Add `app/.../page.tsx` (and optional `layout.tsx`). Prefer Server Component unless the page needs client state/hooks. |
-| New reusable UI piece | Add to `components/`. If it matches a shadcn component, run `npx shadcn@latest add <name>`. |
-| Global UI state (sidebar, modals, theme) | Zustand store in `stores/`. Use only in Client Components. |
-| Server data on page | Fetch in async Server Component or use Server Action. |
-| Form with validation | shadcn Form + React Hook Form + Zod (`zodResolver`); submit via Server Action when possible. |
-| Translations / i18n | next-intl: `getTranslations` (server) or `useTranslations` (client); messages in `messages/{locale}.json`; routes under `app/[locale]/`; use next-intl `Link`/`useRouter` for locale-aware nav. |
-| Styling | Tailwind + `cn()`. Prefer design tokens and shadcn-compatible variables. |
+| New page | Create `src/modules/{module}/presentation/pages/{page}/page.tsx`, add route in `app/[locale]/` |
+| New component (shared) | Add to `src/common/components/`. Use shadcn CLI if applicable. |
+| New component (module-specific) | Add to `src/modules/{module}/presentation/components/` |
+| Form with validation | Zod schema in `domain/schemas.ts`, React Hook Form + shadcn Form, submit via use case |
+| Global state | Zustand store in `src/modules/{module}/presentation/hooks/` |
+| Data fetching | Use case in `application/`, resolve via `useContainer()` |
+| Translations | Add keys to `src/application/localization/*.json`, use `getTranslations` or `useTranslations` |
+| Navigation | Use `Link`/`useRouter` from `@/common/routing/navigation` |
 
 ---
 
 ## Checklist for New Features
 
-- [ ] Route lives under `app/` with correct `page.tsx` / `layout.tsx`.
-- [ ] `"use client"` only on components that use hooks, browser APIs, or Zustand.
-- [ ] UI built from `components/ui/` (shadcn) where applicable; new components added via shadcn CLI when they exist.
-- [ ] Global client state in Zustand; store used only in Client Components with selective subscriptions.
-- [ ] Data fetching in Server Components or Server Actions; no unnecessary client fetch when server can provide data.
-- [ ] Forms use React Hook Form with Zod (`zodResolver`); schemas in `lib/schemas/` or next to feature; Server Actions validate with Zod when handling submit.
-- [ ] When using next-intl: routes under `app/[locale]/`; translations via `getTranslations` (server) or `useTranslations` (client); message files in `messages/`; locale-aware `Link`/`useRouter` from `next-intl`.
-- [ ] Styling via Tailwind and `cn()`; no inline styles unless required for dynamic values.
+- [ ] Page component in `src/modules/{module}/presentation/pages/{page}/page.tsx`
+- [ ] Route file in `app/[locale]/...` imports from `src/modules/`
+- [ ] `"use client"` only where needed (hooks, Zustand, browser APIs)
+- [ ] Zod schemas in `domain/schemas.ts` with exported types
+- [ ] Forms use React Hook Form + Zod + shadcn Form components
+- [ ] Use cases in `application/`, registered in `module-configuration.ts`
+- [ ] State in Zustand stores under `presentation/hooks/`
+- [ ] Translations in `src/application/localization/*.json` (all 3 languages)
+- [ ] Navigation uses next-intl `Link`/`useRouter` from `@/common/routing/navigation`
+- [ ] Imports use path aliases (`@/modules/`, `@/common/`)

@@ -14,7 +14,8 @@ Frontend này tuân theo **Clean Architecture** với cấu trúc **module**. �
    - [Presentation Layer](#4-presentation-layer-srcmodulesmodulepresentation)
 5. [Cấu trúc module](#cấu-trúc-module)
 6. [Các mẫu thiết kế quan trọng](#các-mẫu-thiết-kế-quan-trọng)
-7. [Technology Stack](#technology-stack)
+7. [Xác thực](#xác-thực)
+8. [Technology Stack](#technology-stack)
 
 ## Tổng quan kiến trúc
 
@@ -361,6 +362,83 @@ Xem [Coding Conventions](./coding-conventions-vi.md) để biết ví dụ routi
 **Lợi ích:**
 
 - Unit test dễ hơn và có thể đổi implementation (vd. mock auth trong test).
+
+## Xác thực
+
+Dự án này sử dụng **xác thực trừu tượng hóa** cho phép thay đổi provider mà không cần sửa code application hay presentation. Firebase Auth là implementation hiện tại để phát triển MVP nhanh chóng.
+
+### Kiến trúc xác thực
+
+```mermaid
+graph TD
+    subgraph Presentation["Presentation Layer"]
+        Components[Pages & Components]
+        Hooks[Auth Hooks]
+        Store[Zustand Store]
+    end
+
+    subgraph Application["Application Layer"]
+        UseCases[Auth Use Cases]
+    end
+
+    subgraph Domain["Domain Layer"]
+        Interface[AuthenticationService Interface]
+        Types[AuthUser, AuthResult Types]
+    end
+
+    subgraph Infrastructure["Infrastructure Layer"]
+        Firebase[FirebaseAuthenticationService]
+        Future[Tương lai: Provider khác]
+    end
+
+    Components --> Hooks
+    Hooks --> Store
+    Hooks --> UseCases
+    UseCases --> Interface
+    Firebase -.implements.-> Interface
+    Future -.implements.-> Interface
+    Firebase --> Types
+    Future --> Types
+
+    style Presentation fill:#1976d2,color:#fff
+    style Application fill:#f57c00,color:#fff
+    style Domain fill:#388e3c,color:#fff
+    style Infrastructure fill:#c2185b,color:#fff
+```
+
+### Cách hoạt động
+
+1. **Domain Interface**: `AuthenticationService` trong `src/modules/auth/domain/interfaces.ts` định nghĩa contract cho tất cả thao tác auth (đăng nhập, đăng ký, đăng xuất, reset mật khẩu, v.v.)
+
+2. **Domain Types**: `AuthUser`, `AuthResult`, `AuthErrorCode` trong `src/modules/auth/domain/types.ts` không phụ thuộc provider
+
+3. **Infrastructure Implementation**: `FirebaseAuthenticationService` implement interface và map types/errors Firebase sang domain types
+
+4. **Dependency Injection**: Service được đăng ký trong DI container và inject vào use cases
+
+5. **State Management**: `useAuthUserStore` (Zustand) giữ trạng thái user hiện tại, đồng bộ qua hook `useSyncAuthState`
+
+### Thay đổi Authentication Provider
+
+Để chuyển từ Firebase sang provider khác (vd. Auth0, Supabase, backend tự xây):
+
+1. Tạo service mới implement interface `AuthenticationService`
+2. Cập nhật `module-configuration.ts` để đăng ký service mới
+3. Không cần thay đổi use cases, pages hay components
+
+```typescript
+// Ví dụ: Implementation provider mới
+export class Auth0AuthenticationService implements AuthenticationService {
+  async signInWithEmail(email: string, password: string): Promise<AuthResult> {
+    // Implementation Auth0
+  }
+  // ... các method khác
+}
+```
+
+Cách trừu tượng hóa này giúp codebase **thân thiện với MVP** (phát triển nhanh với Firebase) đồng thời **sẵn sàng production** (dễ migrate sang giải pháp auth enterprise).
+
+Để biết chi tiết setup và cấu hình Firebase, xem [Tích hợp Firebase](./firebase-integration-vi.md).
 
 ## Technology Stack
 

@@ -18,7 +18,8 @@
         "architecture": "架构",
         "codingConventions": "编码规范",
         "developmentGuide": "开发指南",
-        "testingGuide": "测试指南"
+        "testingGuide": "测试指南",
+        "firebaseIntegration": "Firebase 集成"
       },
       "menu": "菜单"
     },

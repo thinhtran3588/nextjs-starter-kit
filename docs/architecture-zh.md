@@ -14,7 +14,8 @@
    - [Presentation Layer](#4-presentation-layer-srcmodulesmodulepresentation)
 5. [模块结构](#模块结构)
 6. [关键设计模式](#关键设计模式)
-7. [Technology Stack](#technology-stack)
+7. [身份验证](#身份验证)
+8. [Technology Stack](#technology-stack)
 
 ## 架构概览
 
@@ -361,6 +362,83 @@ src/                               # 应用代码均在此
 **收益：**
 
 - 单元测试更简单，可替换实现（如测试中 mock auth）。
+
+## 身份验证
+
+本项目使用**抽象化身份验证**，允许在不修改 application 或 presentation 代码的情况下更换底层 provider。Firebase Auth 是当前的实现，用于快速 MVP 开发。
+
+### 身份验证架构
+
+```mermaid
+graph TD
+    subgraph Presentation["Presentation Layer"]
+        Components[Pages & Components]
+        Hooks[Auth Hooks]
+        Store[Zustand Store]
+    end
+
+    subgraph Application["Application Layer"]
+        UseCases[Auth Use Cases]
+    end
+
+    subgraph Domain["Domain Layer"]
+        Interface[AuthenticationService Interface]
+        Types[AuthUser, AuthResult Types]
+    end
+
+    subgraph Infrastructure["Infrastructure Layer"]
+        Firebase[FirebaseAuthenticationService]
+        Future[未来：其他 Provider]
+    end
+
+    Components --> Hooks
+    Hooks --> Store
+    Hooks --> UseCases
+    UseCases --> Interface
+    Firebase -.implements.-> Interface
+    Future -.implements.-> Interface
+    Firebase --> Types
+    Future --> Types
+
+    style Presentation fill:#1976d2,color:#fff
+    style Application fill:#f57c00,color:#fff
+    style Domain fill:#388e3c,color:#fff
+    style Infrastructure fill:#c2185b,color:#fff
+```
+
+### 工作原理
+
+1. **Domain Interface**：`src/modules/auth/domain/interfaces.ts` 中的 `AuthenticationService` 定义所有 auth 操作的契约（登录、注册、登出、密码重置等）
+
+2. **Domain Types**：`src/modules/auth/domain/types.ts` 中的 `AuthUser`、`AuthResult`、`AuthErrorCode` 与 provider 无关
+
+3. **Infrastructure Implementation**：`FirebaseAuthenticationService` 实现 interface 并将 Firebase 特定的 types/errors 映射到 domain types
+
+4. **Dependency Injection**：Service 在 DI container 中注册并注入到 use cases
+
+5. **State Management**：`useAuthUserStore`（Zustand）保存当前用户状态，通过 `useSyncAuthState` hook 同步
+
+### 更换 Authentication Provider
+
+要从 Firebase 切换到其他 provider（如 Auth0、Supabase、自建后端）：
+
+1. 创建新 service 实现 `AuthenticationService` interface
+2. 更新 `module-configuration.ts` 注册新 service
+3. 无需修改 use cases、pages 或 components
+
+```typescript
+// 示例：新 provider 实现
+export class Auth0AuthenticationService implements AuthenticationService {
+  async signInWithEmail(email: string, password: string): Promise<AuthResult> {
+    // Auth0 实现
+  }
+  // ... 其他方法
+}
+```
+
+这种抽象使代码库**适合 MVP**（使用 Firebase 快速迭代）同时保持**生产就绪**（易于迁移到企业级认证方案）。
+
+详细的 Firebase 设置与配置，请参阅 [Firebase 集成](./firebase-integration-zh.md)。
 
 ## Technology Stack
 
