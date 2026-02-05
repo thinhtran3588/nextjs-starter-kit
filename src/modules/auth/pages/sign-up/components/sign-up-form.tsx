@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -35,8 +36,11 @@ export function SignUpForm() {
   const t = useTranslations("modules.auth.pages.sign-up");
   const tCommon = useTranslations("common.navigation");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const container = useContainer();
   const [errorCode, setErrorCode] = useState<string | null>(null);
+
+  const returnUrl = searchParams.get("returnUrl") ?? "/";
 
   const signUpSchema = useMemo(
     () => getSignUpSchema((key) => t(`validation.${key}`)),
@@ -64,7 +68,7 @@ export function SignUpForm() {
       displayName: values.fullName,
     });
     if (result.success) {
-      router.replace("/");
+      router.replace(returnUrl);
       return;
     }
     setErrorCode(result.error);
@@ -175,7 +179,11 @@ export function SignUpForm() {
       <p className="text-center text-sm text-[var(--text-muted)]">
         {t("hasAccountPrompt")}{" "}
         <Link
-          href="/auth/sign-in"
+          href={
+            returnUrl !== "/"
+              ? `/auth/sign-in?returnUrl=${encodeURIComponent(returnUrl)}`
+              : "/auth/sign-in"
+          }
           className="text-[var(--accent)] hover:underline"
         >
           {t("signInLink")}

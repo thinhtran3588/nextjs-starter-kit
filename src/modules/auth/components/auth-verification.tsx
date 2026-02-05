@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import { LoaderIcon } from "@/common/components/icons";
-import { useRouter } from "@/common/routing/navigation";
+import { usePathname, useRouter } from "@/common/routing/navigation";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
 
 type AuthVerificationProps = {
@@ -16,14 +16,16 @@ export function AuthVerification({
   signInPath = "/auth/sign-in",
 }: AuthVerificationProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const user = useAuthUserStore((s) => s.user);
   const loading = useAuthUserStore((s) => s.loading);
 
   useEffect(() => {
     if (!loading && !user) {
-      router.replace(signInPath);
+      const returnUrl = encodeURIComponent(pathname);
+      router.replace(`${signInPath}?returnUrl=${returnUrl}`);
     }
-  }, [loading, user, router, signInPath]);
+  }, [loading, user, router, signInPath, pathname]);
 
   if (loading) {
     return (

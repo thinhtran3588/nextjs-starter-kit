@@ -155,6 +155,7 @@
           "signInTypeApple": "Apple",
           "signInTypeOther": "Other",
           "saveButton": "Save",
+          "editButton": "Edit",
           "passwordSectionTitle": "Update password",
           "oldPasswordLabel": "Current password",
           "newPasswordLabel": "New password",

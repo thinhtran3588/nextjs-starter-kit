@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -37,9 +38,12 @@ export function SignInForm() {
   const t = useTranslations("modules.auth.pages.sign-in");
   const tCommon = useTranslations("common.navigation");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const container = useContainer();
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  const returnUrl = searchParams.get("returnUrl") ?? "/";
 
   const signInSchema = useMemo(
     () => getSignInSchema((key) => t(`validation.${key}`)),
@@ -60,7 +64,7 @@ export function SignInForm() {
     const result = await useCase.execute({});
     setGoogleLoading(false);
     if (result.success) {
-      router.replace("/");
+      router.replace(returnUrl);
       return;
     }
     setErrorCode(result.error);
@@ -76,7 +80,7 @@ export function SignInForm() {
       password: values.password,
     });
     if (result.success) {
-      router.replace("/");
+      router.replace(returnUrl);
       return;
     }
     setErrorCode(result.error);
@@ -193,7 +197,11 @@ export function SignInForm() {
       <p className="text-center text-sm text-[var(--text-muted)]">
         {t("noAccountPrompt")}{" "}
         <Link
-          href="/auth/sign-up"
+          href={
+            returnUrl !== "/"
+              ? `/auth/sign-up?returnUrl=${encodeURIComponent(returnUrl)}`
+              : "/auth/sign-up"
+          }
           className="text-[var(--accent)] hover:underline"
         >
           {t("signUpLink")}

@@ -154,6 +154,7 @@
           "signInTypeApple": "Apple",
           "signInTypeOther": "其他",
           "saveButton": "保存",
+          "editButton": "编辑",
           "passwordSectionTitle": "修改密码",
           "oldPasswordLabel": "当前密码",
           "newPasswordLabel": "新密码",

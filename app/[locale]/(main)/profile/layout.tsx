@@ -1,9 +1,14 @@
 import { Page } from "@/common/components/page";
+import { AuthVerification } from "@/modules/auth/components/auth-verification";
 
 export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <Page>{children}</Page>;
+  return (
+    <Page>
+      <AuthVerification>{children}</AuthVerification>
+    </Page>
+  );
 }
