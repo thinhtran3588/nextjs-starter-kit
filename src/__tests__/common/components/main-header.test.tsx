@@ -336,4 +336,22 @@ describe("MainHeader", () => {
       within(mobileMenu).getByRole("button", { name: "Sign out" }),
     ).toBeInTheDocument();
   });
+
+  it("renders GitHub link when githubUrl is provided", () => {
+    render(
+      <MainHeader {...baseProps} githubUrl="https://github.com/test/repo" />,
+    );
+
+    const githubLink = screen.getByTestId("github-link");
+    expect(githubLink).toHaveAttribute("href", "https://github.com/test/repo");
+    expect(githubLink).toHaveAttribute("target", "_blank");
+    expect(githubLink).toHaveAttribute("rel", "noopener noreferrer");
+    expect(githubLink).toHaveAttribute("aria-label", "GitHub");
+  });
+
+  it("does not render GitHub link when githubUrl is not provided", () => {
+    render(<MainHeader {...baseProps} />);
+
+    expect(screen.queryByTestId("github-link")).not.toBeInTheDocument();
+  });
 });

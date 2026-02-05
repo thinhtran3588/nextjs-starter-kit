@@ -39,21 +39,21 @@ npm run dev
 
 ## 脚本命令
 
-| 命令 | 说明 |
-|------|------|
-| `npm run dev` | 启动开发服务器 |
-| `npm run build` | 构建生产版本 |
+| 命令               | 说明                                |
+| ------------------ | ----------------------------------- |
+| `npm run dev`      | 启动开发服务器                      |
+| `npm run build`    | 构建生产版本                        |
 | `npm run validate` | 运行 lint、格式检查和带覆盖率的测试 |
 
 ## 文档
 
-| 文档 | 说明 |
-|------|------|
-| [架构](docs/architecture-zh.md) | 层级结构、数据流、设计模式、Awilix 依赖注入 |
-| [编码规范](docs/coding-conventions-zh.md) | 文件命名、App Router 模式、表单、国际化 |
-| [开发指南](docs/development-guide-zh.md) | Git 工作流、添加功能、创建模块 |
-| [测试指南](docs/testing-guide-zh.md) | 测试组织、覆盖率、最佳实践 |
-| [Firebase 集成](docs/firebase-integration-zh.md) | Auth 与 Firestore 设置、更换 provider |
+| 文档                                             | 说明                                        |
+| ------------------------------------------------ | ------------------------------------------- |
+| [架构](docs/architecture-zh.md)                  | 层级结构、数据流、设计模式、Awilix 依赖注入 |
+| [编码规范](docs/coding-conventions-zh.md)        | 文件命名、App Router 模式、表单、国际化     |
+| [开发指南](docs/development-guide-zh.md)         | Git 工作流、添加功能、创建模块              |
+| [测试指南](docs/testing-guide-zh.md)             | 测试组织、覆盖率、最佳实践                  |
+| [Firebase 集成](docs/firebase-integration-zh.md) | Auth 与 Firestore 设置、更换 provider       |
 
 ## AI Agent 集成
 
@@ -74,9 +74,9 @@ npm run dev
 
 ### 包含内容
 
-| 组件 | 用途 |
-|------|------|
-| **Rules** | 项目约定、git 工作流、代码风格、验证要求 |
+| 组件       | 用途                                              |
+| ---------- | ------------------------------------------------- |
+| **Rules**  | 项目约定、git 工作流、代码风格、验证要求          |
 | **Skills** | 用于代码审查、前端开发、架构和 UI/UX 的专业 agent |
 
 ### 与其他 AI Agent 配合使用
