@@ -31,6 +31,16 @@ vi.mock("firebase/firestore", () => ({
   doc: vi.fn(),
   getDoc: vi.fn(),
   setDoc: vi.fn(),
+  collection: vi.fn(),
+  getDocs: vi.fn(),
+  query: vi.fn(),
+  orderBy: vi.fn(),
+  documentId: vi.fn(),
+  where: vi.fn(),
+  limit: vi.fn(),
+  startAfter: vi.fn(),
+  updateDoc: vi.fn(),
+  deleteDoc: vi.fn(),
 }));
 
 if (getContainerOrNull() === null) {

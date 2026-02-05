@@ -2,6 +2,7 @@
   "common": {
     "navigation": {
       "home": "Trang chủ",
+      "app": "Ứng dụng",
       "goToApp": "Đi đến ứng dụng chính",
       "backToHome": "Quay lại trang chủ",
       "signIn": "Đăng nhập",
@@ -179,10 +180,83 @@
         }
       }
     },
-    "main": {
+    "books": {
+      "form": {
+        "title": "Tên sách",
+        "description": "Mô tả",
+        "authors": "Tác giả",
+        "authorsPlaceholder": "Gõ và nhấn Enter để thêm",
+        "genres": "Thể loại",
+        "genresPlaceholder": "Gõ và nhấn Enter để thêm",
+        "links": "Liên kết",
+        "linksPlaceholder": "Gõ URL và nhấn Enter để thêm",
+        "cancel": "Hủy",
+        "validation": {
+          "titleRequired": "Vui lòng nhập tên sách",
+          "titleMaxLength": "Tối đa 200 ký tự",
+          "descriptionRequired": "Vui lòng nhập mô tả",
+          "descriptionMaxLength": "Tối đa 1000 ký tự",
+          "authorsRequired": "Cần ít nhất một tác giả"
+        }
+      },
       "pages": {
-        "app": {
-          "title": "Ứng dụng chính"
+        "list": {
+          "title": "Sách",
+          "titleColumn": "Tên sách",
+          "create": "Tạo sách",
+          "searchPlaceholder": "Tìm theo tên…",
+          "pageSize": "Mỗi trang",
+          "viewDetail": "Xem",
+          "delete": "Xóa",
+          "previous": "Trước",
+          "next": "Sau",
+          "loading": "Đang tải…",
+          "empty": "Chưa có sách.",
+          "signInRequired": "Đăng nhập để quản lý sách.",
+          "authorsLabel": "Tác giả",
+          "genresLabel": "Thể loại",
+          "actionsLabel": "Thao tác",
+          "confirmDelete": "Xóa \"{title}\"?",
+          "cancel": "Hủy",
+          "deleted": "Đã xóa sách.",
+          "errors": {
+            "loadFailed": "Không tải được sách.",
+            "deleteFailed": "Không xóa được sách."
+          }
+        },
+        "create": {
+          "title": "Tạo sách",
+          "submit": "Tạo",
+          "signInRequired": "Đăng nhập để tạo sách.",
+          "created": "Đã tạo sách.",
+          "errors": {
+            "signInRequired": "Yêu cầu đăng nhập.",
+            "createFailed": "Không tạo được sách."
+          }
+        },
+        "detail": {
+          "title": "Chi tiết sách",
+          "notFound": "Không tìm thấy sách.",
+          "signInRequired": "Đăng nhập để xem sách này.",
+          "loading": "Đang tải…",
+          "edit": "Sửa",
+          "backToList": "Quay lại",
+          "save": "Lưu",
+          "updated": "Đã cập nhật sách.",
+          "cancel": "Hủy",
+          "delete": "Xóa",
+          "authorsLabel": "Tác giả",
+          "descriptionLabel": "Mô tả",
+          "genresLabel": "Thể loại",
+          "linksLabel": "Liên kết",
+          "emptyValue": "—",
+          "confirmDelete": "Xóa sách này?",
+          "deleted": "Đã xóa sách.",
+          "errors": {
+            "loadFailed": "Không tải được sách.",
+            "updateFailed": "Không cập nhật được sách.",
+            "deleteFailed": "Không xóa được sách."
+          }
         }
       }
     },

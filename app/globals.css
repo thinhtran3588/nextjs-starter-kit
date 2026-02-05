@@ -16,7 +16,12 @@
   --accent-strong: #8bb8ff;
   --accent-electric: #7c8cff;
   --accent-glow: rgba(107, 154, 255, 0.35);
+  --accent-glow-strong: rgba(107, 154, 255, 0.55);
   --accent-purple: rgba(139, 92, 246, 0.5);
+  --button-primary-focus: #8bb8ff;
+  --button-primary-focus-a: #8bb8ff;
+  --button-primary-focus-b: #9bc4ff;
+  --button-primary-focus-c: rgba(159, 126, 255, 0.7);
   --mint: #67e8c4;
   --header-glass-bg: rgba(5, 8, 16, 0.88);
   --header-glass-border: rgba(140, 175, 255, 0.14);
@@ -26,6 +31,8 @@
   --orb-3: rgba(139, 92, 246, 0.22);
   --glass-bg-dropdown: rgba(18, 24, 42, 0.96);
   --blueprint-line: rgba(148, 163, 184, 0.06);
+  --modal-overlay: rgba(0, 0, 0, 0.6);
+  --secondary-bg: rgba(20, 28, 48, 0.72);
 }
 
 .light {
@@ -45,6 +52,11 @@
   --accent-electric: #3b82f6;
   --accent-purple: #6366f1;
   --accent-glow: rgba(37, 99, 235, 0.2);
+  --accent-glow-strong: rgba(37, 99, 235, 0.35);
+  --button-primary-focus: #1d4ed8;
+  --button-primary-focus-a: #1d4ed8;
+  --button-primary-focus-b: #2563eb;
+  --button-primary-focus-c: #4338ca;
   --mint: #0d9488;
   --header-glass-bg: rgba(241, 245, 249, 0.97);
   --header-glass-border: rgba(59, 130, 246, 0.2);
@@ -53,6 +65,47 @@
   --orb-2: rgba(14, 165, 233, 0.14);
   --orb-3: rgba(20, 184, 166, 0.12);
   --blueprint-line: rgba(15, 23, 42, 0.06);
+  --modal-overlay: rgba(15, 23, 42, 0.4);
+  --secondary-bg: rgba(226, 232, 240, 0.85);
+}
+
+.btn-primary:focus-visible {
+  background: linear-gradient(
+    135deg,
+    var(--button-primary-focus-a) 0%,
+    var(--button-primary-focus-b) 50%,
+    var(--button-primary-focus-c) 100%
+  ) !important;
+  outline: none;
+  box-shadow: none;
+  transition-property: background, transform, opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}
+
+[data-slot="button"]:focus-visible {
+  outline: none;
+  transition-property: box-shadow, transform, opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}
+
+[data-slot="button"].btn-default:focus-visible,
+[data-slot="button"].btn-secondary:focus-visible,
+[data-slot="button"].btn-outline:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+[data-slot="button"].btn-default.glass-panel:focus-visible,
+[data-slot="button"].btn-secondary.glass-panel:focus-visible {
+  background: var(--surface-soft);
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 12px 28px var(--accent-glow);
+}
+
+[data-slot="button"].btn-destructive:focus-visible {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
 }
 
 body {
@@ -121,6 +174,14 @@ html.light body {
   -webkit-backdrop-filter: blur(18px);
 }
 
+.btn-default.glass-panel {
+  background: var(--surface-soft);
+}
+
+.btn-secondary.glass-panel {
+  background: var(--secondary-bg);
+}
+
 .glass-panel-strong {
   background: var(--glass-bg-strong);
   border: 1px solid var(--glass-border);
@@ -150,6 +211,42 @@ html.light body {
 
 .glass-outline {
   border: 1px solid var(--glass-highlight);
+}
+
+.tag-pill {
+  border: 1px solid var(--glass-border);
+}
+
+.chip-primary {
+  background: linear-gradient(
+    135deg,
+    var(--accent) 0%,
+    var(--accent-electric) 50%,
+    var(--accent-purple) 100%
+  );
+  border-color: transparent;
+  color: white;
+}
+
+.chip-default {
+  background: var(--surface-soft);
+  color: var(--text-primary);
+}
+
+.chip-secondary {
+  background: var(--secondary-bg);
+  color: var(--text-muted);
+}
+
+.chip-outline {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.chip-destructive {
+  background: rgb(220 38 38);
+  border-color: transparent;
+  color: white;
 }
 
 .glow-orb {
@@ -234,6 +331,147 @@ html.light body {
 .liquid-border > * {
   position: relative;
   z-index: 1;
+}
+
+.liquid-border-static {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-border-static::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 160deg,
+    var(--liquid-a),
+    var(--liquid-b),
+    var(--liquid-a)
+  );
+  z-index: 0;
+}
+
+.liquid-border-static > * {
+  position: relative;
+  z-index: 1;
+}
+
+.default-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.default-panel::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 160deg,
+    var(--liquid-a),
+    var(--liquid-b),
+    var(--liquid-a)
+  );
+  z-index: 0;
+  animation: none;
+}
+
+.light .default-panel::after {
+  background: conic-gradient(
+    from 160deg,
+    rgba(59, 130, 246, 0.25),
+    rgba(20, 184, 166, 0.2),
+    rgba(59, 130, 246, 0.25)
+  );
+}
+
+.dark .default-panel::after {
+  display: none;
+}
+
+.default-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.modal-panel {
+  overflow: hidden;
+}
+
+.modal-panel::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 160deg,
+    var(--liquid-a),
+    var(--liquid-b),
+    var(--liquid-a)
+  );
+  z-index: 0;
+  animation: none;
+}
+
+.light .modal-panel::after {
+  background: conic-gradient(
+    from 160deg,
+    rgba(59, 130, 246, 0.25),
+    rgba(20, 184, 166, 0.2),
+    rgba(59, 130, 246, 0.25)
+  );
+}
+
+.light .modal-panel {
+  background: var(--glass-bg-strong);
+  box-shadow:
+    0 1px 0 var(--glass-highlight),
+    var(--glass-shadow);
+}
+
+.dark .modal-panel::after {
+  display: none;
+}
+
+.modal-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.modal-panel .modal-header {
+  margin: 0;
+  padding: 0 0 0.25rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.modal-panel .modal-header-title {
+  align-self: flex-start;
+  width: max-content;
+  max-width: 100%;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+
+.title-accent-underline {
+  display: inline-block;
+  width: max-content;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent);
+}
+
+.modal-panel .modal-body {
+  min-height: 0;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  padding: 0.5rem 0 0.5rem;
+}
+
+.modal-panel .modal-body > *:last-child {
+  margin-bottom: 0;
 }
 
 .reveal {

@@ -26,6 +26,21 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // ✅ Books: each user can only manage their own books (subcollection)
+    match /users/{userId}/books/{bookId} {
+      allow read: if isSignedIn() && isOwner(userId);
+
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.createdBy == request.auth.uid;
+
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.createdBy == resource.data.createdBy;
+
+      allow delete: if isSignedIn() && isOwner(userId);
+    }
+
     // 🔧 Helpers
     function isSignedIn() {
       return request.auth != null;

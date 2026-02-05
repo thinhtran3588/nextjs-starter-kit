@@ -2,6 +2,7 @@
   "common": {
     "navigation": {
       "home": "Home",
+      "app": "App",
       "goToApp": "Go to main app",
       "backToHome": "Back to home",
       "signIn": "Sign in",
@@ -179,10 +180,83 @@
         }
       }
     },
-    "main": {
+    "books": {
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "authors": "Authors",
+        "authorsPlaceholder": "Type and press Enter to add",
+        "genres": "Genres",
+        "genresPlaceholder": "Type and press Enter to add",
+        "links": "Links",
+        "linksPlaceholder": "Type URL and press Enter to add",
+        "cancel": "Cancel",
+        "validation": {
+          "titleRequired": "Title is required",
+          "titleMaxLength": "Max 200 characters",
+          "descriptionRequired": "Description is required",
+          "descriptionMaxLength": "Max 1000 characters",
+          "authorsRequired": "At least one author is required"
+        }
+      },
       "pages": {
-        "app": {
-          "title": "Main App"
+        "list": {
+          "title": "Books",
+          "titleColumn": "Title",
+          "create": "Create book",
+          "searchPlaceholder": "Search by title…",
+          "pageSize": "Per page",
+          "viewDetail": "View",
+          "delete": "Delete",
+          "previous": "Previous",
+          "next": "Next",
+          "loading": "Loading…",
+          "empty": "No books yet.",
+          "signInRequired": "Sign in to manage your books.",
+          "authorsLabel": "Authors",
+          "genresLabel": "Genres",
+          "actionsLabel": "Actions",
+          "confirmDelete": "Delete \"{title}\"?",
+          "cancel": "Cancel",
+          "deleted": "Book deleted.",
+          "errors": {
+            "loadFailed": "Failed to load books.",
+            "deleteFailed": "Failed to delete book."
+          }
+        },
+        "create": {
+          "title": "Create book",
+          "submit": "Create",
+          "signInRequired": "Sign in to create a book.",
+          "created": "Book created.",
+          "errors": {
+            "signInRequired": "Sign in required.",
+            "createFailed": "Failed to create book."
+          }
+        },
+        "detail": {
+          "title": "Book Detail",
+          "notFound": "Book not found.",
+          "signInRequired": "Sign in to view this book.",
+          "loading": "Loading…",
+          "edit": "Edit",
+          "backToList": "Back",
+          "save": "Save",
+          "updated": "Book updated.",
+          "cancel": "Cancel",
+          "delete": "Delete",
+          "authorsLabel": "Authors",
+          "descriptionLabel": "Description",
+          "genresLabel": "Genres",
+          "linksLabel": "Links",
+          "emptyValue": "—",
+          "confirmDelete": "Delete this book?",
+          "deleted": "Book deleted.",
+          "errors": {
+            "loadFailed": "Failed to load book.",
+            "updateFailed": "Failed to update book.",
+            "deleteFailed": "Failed to delete book."
+          }
         }
       }
     },

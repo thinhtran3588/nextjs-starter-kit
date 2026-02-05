@@ -2,6 +2,7 @@
   "common": {
     "navigation": {
       "home": "主页",
+      "app": "应用",
       "goToApp": "进入主应用",
       "backToHome": "返回主页",
       "signIn": "登录",
@@ -178,10 +179,82 @@
         }
       }
     },
-    "main": {
+    "books": {
+      "form": {
+        "title": "标题",
+        "description": "描述",
+        "authors": "作者",
+        "authorsPlaceholder": "输入后按 Enter 添加",
+        "genres": "体裁",
+        "genresPlaceholder": "输入后按 Enter 添加",
+        "links": "链接",
+        "linksPlaceholder": "输入 URL 后按 Enter 添加",
+        "cancel": "取消",
+        "validation": {
+          "titleRequired": "请输入标题",
+          "titleMaxLength": "最多 200 个字符",
+          "descriptionRequired": "请输入描述",
+          "descriptionMaxLength": "最多 1000 个字符",
+          "authorsRequired": "至少需要一位作者"
+        }
+      },
       "pages": {
-        "app": {
-          "title": "主应用"
+        "list": {
+          "title": "图书",
+          "titleColumn": "标题",
+          "create": "创建图书",
+          "searchPlaceholder": "按标题搜索…",
+          "pageSize": "每页",
+          "viewDetail": "查看",
+          "delete": "删除",
+          "previous": "上一页",
+          "next": "下一页",
+          "loading": "加载中…",
+          "empty": "暂无图书。",
+          "signInRequired": "请登录以管理图书。",
+          "authorsLabel": "作者",
+          "genresLabel": "体裁",
+          "actionsLabel": "操作",
+          "confirmDelete": "删除「{title}」？",
+          "deleted": "已删除图书。",
+          "errors": {
+            "loadFailed": "加载图书失败。",
+            "deleteFailed": "删除图书失败。"
+          }
+        },
+        "create": {
+          "title": "创建图书",
+          "submit": "创建",
+          "signInRequired": "请登录以创建图书。",
+          "created": "图书已创建。",
+          "errors": {
+            "signInRequired": "请先登录。",
+            "createFailed": "创建图书失败。"
+          }
+        },
+        "detail": {
+          "title": "图书详情",
+          "notFound": "未找到图书。",
+          "signInRequired": "请登录以查看此书。",
+          "loading": "加载中…",
+          "edit": "编辑",
+          "backToList": "返回",
+          "save": "保存",
+          "updated": "图书已更新。",
+          "cancel": "取消",
+          "delete": "删除",
+          "authorsLabel": "作者",
+          "descriptionLabel": "描述",
+          "genresLabel": "体裁",
+          "linksLabel": "链接",
+          "emptyValue": "—",
+          "confirmDelete": "确定删除此书？",
+          "deleted": "图书已删除。",
+          "errors": {
+            "loadFailed": "加载图书失败。",
+            "updateFailed": "更新图书失败。",
+            "deleteFailed": "删除图书失败。"
+          }
         }
       }
     },

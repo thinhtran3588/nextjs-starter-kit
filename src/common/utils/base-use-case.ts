@@ -15,6 +15,7 @@ export abstract class BaseUseCase {
       const data = await action();
       return { success: true, data };
     } catch (err) {
+      console.error(err);
       const error = mapError !== undefined ? mapError(err) : (err as TError);
       return { success: false, error };
     }
