@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
+import { MainFooter } from "@/common/components/main-footer";
 import { MainHeader } from "@/common/components/main-header";
 import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
 
@@ -22,7 +23,7 @@ export async function MainLayout({
   ]);
 
   return (
-    <div className="blueprint-grid relative min-h-screen overflow-hidden">
+    <div className="blueprint-grid relative flex min-h-screen flex-col overflow-hidden">
       <div
         className="glow-orb top-[-10%] left-[-10%] h-[420px] w-[420px] bg-[var(--orb-1)]"
         aria-hidden
@@ -44,9 +45,17 @@ export async function MainLayout({
         settingsSlot={settingsSlot}
       />
 
-      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 pt-28 pb-24 sm:pt-24">
+      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-24 px-6 pt-28 pb-24 sm:pt-24">
         {children}
       </main>
+
+      <MainFooter
+        privacyLabel={tCommon("navigation.privacy")}
+        privacyHref="/privacy-policy"
+        termsLabel={tCommon("navigation.terms")}
+        termsHref="/terms-of-service"
+        copyright={tCommon("footer.copyright")}
+      />
     </div>
   );
 }

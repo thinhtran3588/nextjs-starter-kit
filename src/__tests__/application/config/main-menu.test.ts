@@ -24,9 +24,9 @@ describe("main-menu", () => {
     });
   });
 
-  it("getMainMenuConfig returns menu items with home, app, documents, legal (privacy and terms)", () => {
+  it("getMainMenuConfig returns menu items with home, app, and documents", () => {
     const menu = getMainMenuConfig();
-    expect(menu).toHaveLength(4);
+    expect(menu).toHaveLength(3);
     expect(menu[0]).toEqual({
       id: "home",
       translationKey: "navigation.home",
@@ -48,19 +48,5 @@ describe("main-menu", () => {
       "/docs/development-guide",
       "/docs/testing-guide",
     ]);
-    expect(menu[3].id).toBe("legal");
-    expect(menu[3].translationKey).toBe("navigation.legal");
-    expect(menu[3].href).toBe("");
-    expect(menu[3].children).toHaveLength(2);
-    expect(menu[3].children![0]).toEqual({
-      id: "privacy",
-      translationKey: "navigation.privacy",
-      href: "/privacy-policy",
-    });
-    expect(menu[3].children![1]).toEqual({
-      id: "terms",
-      translationKey: "navigation.terms",
-      href: "/terms-of-service",
-    });
   });
 });

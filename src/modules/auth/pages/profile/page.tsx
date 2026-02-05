@@ -8,8 +8,8 @@ export function ProfilePage() {
   const t = useTranslations("modules.auth.pages.profile");
 
   return (
-    <div className="space-y-6">
-      <h1 className="mt-14 mb-6 text-4xl font-semibold text-[var(--text-primary)] sm:text-5xl">
+    <div className="flex flex-col gap-6">
+      <h1 className="title-accent-underline text-2xl font-semibold text-[var(--text-primary)]">
         {t("title")}
       </h1>
       <ProfileForm />
