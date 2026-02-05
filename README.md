@@ -39,21 +39,21 @@ The app runs at `http://localhost:3000`.
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
+| Command            | Description                                     |
+| ------------------ | ----------------------------------------------- |
+| `npm run dev`      | Start development server                        |
+| `npm run build`    | Build for production                            |
 | `npm run validate` | Run lint, format check, and tests with coverage |
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [Architecture](docs/architecture.md) | Layers, data flow, design patterns, DI with Awilix |
-| [Coding Conventions](docs/coding-conventions.md) | File naming, App Router patterns, forms, i18n |
-| [Development Guide](docs/development-guide.md) | Git workflow, adding features, creating modules |
-| [Testing Guide](docs/testing-guide.md) | Test organization, coverage, best practices |
-| [Firebase Integration](docs/firebase-integration.md) | Auth & Firestore setup, swapping providers |
+| Document                                             | Description                                        |
+| ---------------------------------------------------- | -------------------------------------------------- |
+| [Architecture](docs/architecture.md)                 | Layers, data flow, design patterns, DI with Awilix |
+| [Coding Conventions](docs/coding-conventions.md)     | File naming, App Router patterns, forms, i18n      |
+| [Development Guide](docs/development-guide.md)       | Git workflow, adding features, creating modules    |
+| [Testing Guide](docs/testing-guide.md)               | Test organization, coverage, best practices        |
+| [Firebase Integration](docs/firebase-integration.md) | Auth & Firestore setup, swapping providers         |
 
 ## AI Agent Integration
 
@@ -74,9 +74,9 @@ This project includes configuration for AI coding assistants to help with develo
 
 ### What's Included
 
-| Component | Purpose |
-|-----------|---------|
-| **Rules** | Project conventions, git workflow, code style, validation requirements |
+| Component  | Purpose                                                                   |
+| ---------- | ------------------------------------------------------------------------- |
+| **Rules**  | Project conventions, git workflow, code style, validation requirements    |
 | **Skills** | Specialized agents for code review, frontend dev, architecture, and UI/UX |
 
 ### Using with Other AI Agents

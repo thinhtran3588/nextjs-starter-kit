@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/common/components/button";
 import { DocumentsDropdown } from "@/common/components/documents-dropdown";
-import { MenuIcon } from "@/common/components/icons";
+import { GitHubIcon, MenuIcon } from "@/common/components/icons";
 import { MobileMenuProvider } from "@/common/contexts/mobile-menu-context";
 import type { ResolvedMenuItem } from "@/common/interfaces";
 import { Link, usePathname } from "@/common/routing/navigation";
@@ -15,6 +15,7 @@ type MainHeaderProps = {
   badge: string;
   menuItems: ResolvedMenuItem[];
   menuLabel: string;
+  githubUrl?: string;
   authSlot?: React.ReactNode;
   settingsSlot?: React.ReactNode;
 };
@@ -31,6 +32,7 @@ export function MainHeader({
   badge,
   menuItems,
   menuLabel,
+  githubUrl,
   authSlot,
   settingsSlot,
 }: MainHeaderProps) {
@@ -122,6 +124,18 @@ export function MainHeader({
                 ),
               )}
             </nav>
+            {githubUrl ? (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--text-muted)] transition hover:text-[var(--text-primary)]"
+                aria-label="GitHub"
+                data-testid="github-link"
+              >
+                <GitHubIcon className="h-5 w-5" />
+              </a>
+            ) : null}
             {settingsSlot != null ? (
               <div
                 className="flex items-center gap-3"

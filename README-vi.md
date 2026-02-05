@@ -39,21 +39,21 @@ npm run dev
 
 ## Scripts
 
-| Lệnh | Mô tả |
-|------|-------|
-| `npm run dev` | Khởi động server phát triển |
-| `npm run build` | Build cho production |
+| Lệnh               | Mô tả                                            |
+| ------------------ | ------------------------------------------------ |
+| `npm run dev`      | Khởi động server phát triển                      |
+| `npm run build`    | Build cho production                             |
 | `npm run validate` | Chạy lint, kiểm tra format và tests với coverage |
 
 ## Tài liệu
 
-| Tài liệu | Mô tả |
-|----------|-------|
-| [Kiến trúc](docs/architecture-vi.md) | Các layer, luồng dữ liệu, design patterns, DI với Awilix |
-| [Quy ước Coding](docs/coding-conventions-vi.md) | Đặt tên file, patterns App Router, forms, i18n |
-| [Hướng dẫn Phát triển](docs/development-guide-vi.md) | Git workflow, thêm tính năng, tạo modules |
-| [Hướng dẫn Testing](docs/testing-guide-vi.md) | Tổ chức test, coverage, best practices |
-| [Tích hợp Firebase](docs/firebase-integration-vi.md) | Cài đặt Auth & Firestore, thay đổi providers |
+| Tài liệu                                             | Mô tả                                                    |
+| ---------------------------------------------------- | -------------------------------------------------------- |
+| [Kiến trúc](docs/architecture-vi.md)                 | Các layer, luồng dữ liệu, design patterns, DI với Awilix |
+| [Quy ước Coding](docs/coding-conventions-vi.md)      | Đặt tên file, patterns App Router, forms, i18n           |
+| [Hướng dẫn Phát triển](docs/development-guide-vi.md) | Git workflow, thêm tính năng, tạo modules                |
+| [Hướng dẫn Testing](docs/testing-guide-vi.md)        | Tổ chức test, coverage, best practices                   |
+| [Tích hợp Firebase](docs/firebase-integration-vi.md) | Cài đặt Auth & Firestore, thay đổi providers             |
 
 ## Tích hợp AI Agent
 
@@ -74,9 +74,9 @@ Dự án này bao gồm cấu hình cho các trợ lý AI coding để hỗ tr�
 
 ### Nội dung bao gồm
 
-| Thành phần | Mục đích |
-|------------|----------|
-| **Rules** | Conventions dự án, git workflow, code style, yêu cầu validation |
+| Thành phần | Mục đích                                                                |
+| ---------- | ----------------------------------------------------------------------- |
+| **Rules**  | Conventions dự án, git workflow, code style, yêu cầu validation         |
 | **Skills** | Các agent chuyên biệt cho code review, frontend dev, kiến trúc và UI/UX |
 
 ### Sử dụng với AI Agent khác

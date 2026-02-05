@@ -39,4 +39,17 @@ describe("MainFooter", () => {
 
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
+
+  it("renders version when provided", () => {
+    render(<MainFooter {...defaultProps} version="1.2.3" />);
+
+    const versionElement = screen.getByTestId("app-version");
+    expect(versionElement).toHaveTextContent("v1.2.3");
+  });
+
+  it("does not render version when not provided", () => {
+    render(<MainFooter {...defaultProps} />);
+
+    expect(screen.queryByTestId("app-version")).not.toBeInTheDocument();
+  });
 });
