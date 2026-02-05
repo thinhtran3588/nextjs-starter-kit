@@ -36,22 +36,5 @@ export function getMainMenuConfig(): MenuItem[] {
         href: `/docs/${slug}`,
       })),
     },
-    {
-      id: "legal",
-      translationKey: "navigation.legal",
-      href: "",
-      children: [
-        {
-          id: "privacy",
-          translationKey: "navigation.privacy",
-          href: "/privacy-policy",
-        },
-        {
-          id: "terms",
-          translationKey: "navigation.terms",
-          href: "/terms-of-service",
-        },
-      ],
-    },
   ];
 }

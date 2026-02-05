@@ -21,6 +21,9 @@
       },
       "menu": "Menu"
     },
+    "footer": {
+      "copyright": "© 2026 Next.js Starter Kit. All rights reserved."
+    },
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",

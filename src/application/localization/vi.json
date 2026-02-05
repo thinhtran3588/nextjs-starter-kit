@@ -21,6 +21,9 @@
       },
       "menu": "Menu"
     },
+    "footer": {
+      "copyright": "© 2026 Next.js Starter Kit. Bảo lưu mọi quyền."
+    },
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",

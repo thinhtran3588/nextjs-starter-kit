@@ -15,6 +15,7 @@ const translations: Record<string, Record<string, string>> = {
     "navigation.docs.developmentGuide": "Development guide",
     "navigation.docs.testingGuide": "Testing guide",
     "navigation.menu": "Menu",
+    "footer.copyright": "© 2026 Test. All rights reserved.",
   },
   settings: {
     "language.label": "Language",
@@ -36,8 +37,7 @@ const translations: Record<string, Record<string, string>> = {
 
 const menuItems: ResolvedMenuItem[] = [
   { id: "home", label: "Home", href: "/" },
-  { id: "privacy", label: "Privacy", href: "/privacy-policy" },
-  { id: "terms", label: "Terms", href: "/terms-of-service" },
+  { id: "app", label: "App", href: "/app/books" },
 ];
 
 vi.mock("next-intl/server", () => ({
@@ -68,5 +68,31 @@ describe("MainLayout", () => {
     expect(
       screen.getByText(translations.settings["language.options.en"]),
     ).toBeInTheDocument();
+  });
+
+  it("renders the footer with copyright and legal links", async () => {
+    const { MainLayout } = await import("@/common/components/main-layout");
+
+    render(
+      await MainLayout({
+        children: <div>Content</div>,
+        menuItems,
+      }),
+    );
+
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.common["footer.copyright"]),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", {
+        name: translations.common["navigation.privacy"],
+      }),
+    ).toHaveAttribute("href", "/privacy-policy");
+    expect(
+      screen.getByRole("link", {
+        name: translations.common["navigation.terms"],
+      }),
+    ).toHaveAttribute("href", "/terms-of-service");
   });
 });
