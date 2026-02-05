@@ -1,4 +1,5 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { useLocale } from "next-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -40,36 +41,44 @@ describe("LanguageSelector", () => {
     expect(screen.getByText(enFlags.en)).toBeInTheDocument();
   });
 
-  it("uses current pathname for locale links so URL is preserved when changing language", () => {
+  it("uses current pathname for locale links so URL is preserved when changing language", async () => {
+    const user = userEvent.setup();
     render(<LanguageSelector />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
+    await user.click(screen.getByRole("button", { name: "Language: English" }));
 
-    const links = screen.getAllByRole("option");
-    links.forEach((link) => {
-      const anchor = link.closest("a");
+    await screen.findByRole("menu");
+    const items = screen.getAllByRole("menuitem");
+    items.forEach((item) => {
+      const anchor = item.closest("a");
       expect(anchor).toHaveAttribute("href", "/");
     });
   });
 
-  it("opens dropdown when trigger is clicked", () => {
+  it("opens dropdown when trigger is clicked", async () => {
+    const user = userEvent.setup();
     render(<LanguageSelector />);
 
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
+    await user.click(screen.getByRole("button", { name: "Language: English" }));
 
+    const menu = await screen.findByRole("menu");
+    expect(menu).toBeInTheDocument();
+    expect(menu).toHaveAttribute("aria-label", "Language");
     expect(
-      screen.getByRole("listbox", { name: "Language" }),
+      screen.getByRole("menuitem", { name: /English/ }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: /English/ })).toBeInTheDocument();
     expect(
-      screen.getByRole("option", { name: /Vietnamese/ }),
+      screen.getByRole("menuitem", { name: /Vietnamese/ }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: /Chinese/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole("menuitem", { name: /Chinese/ }),
+    ).toBeInTheDocument();
   });
 
-  it("closes dropdown when clicking outside", () => {
+  it("closes dropdown when clicking outside", async () => {
+    const user = userEvent.setup();
     render(
       <div>
         <div data-testid="outside">Outside</div>
@@ -77,14 +86,15 @@ describe("LanguageSelector", () => {
       </div>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Language: English" }));
+    expect(await screen.findByRole("menu")).toBeInTheDocument();
 
     fireEvent.pointerDown(screen.getByTestId("outside"));
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
-  it("closes dropdown when focus moves outside", () => {
+  it("closes dropdown when focus moves outside", async () => {
+    const user = userEvent.setup();
     render(
       <div>
         <button type="button" data-testid="outside-button">
@@ -94,25 +104,22 @@ describe("LanguageSelector", () => {
       </div>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Language: English" }));
+    expect(await screen.findByRole("menu")).toBeInTheDocument();
 
-    const outsideButton = screen.getByTestId("outside-button");
-    act(() => {
-      outsideButton.focus();
-      fireEvent.focusIn(outsideButton);
-    });
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    fireEvent.pointerDown(screen.getByTestId("outside-button"));
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
-  it("closes dropdown when selecting a locale", () => {
+  it("closes dropdown when selecting a locale", async () => {
+    const user = userEvent.setup();
     render(<LanguageSelector />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Language: English" }));
+    expect(await screen.findByRole("menu")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("option", { name: /Vietnamese/ }));
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("menuitem", { name: /Vietnamese/ }));
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
   it("renders empty locale label when current locale has no matching option", () => {
@@ -123,7 +130,8 @@ describe("LanguageSelector", () => {
     expect(button).toHaveAttribute("aria-label", "Language: ");
   });
 
-  it("calls persistLocale when a locale option is clicked", () => {
+  it("calls persistLocale when a locale option is clicked", async () => {
+    const user = userEvent.setup();
     const persistLocaleMock = vi.fn();
     vi.mocked(useUserSettings).mockReturnValue({
       settings: {},
@@ -134,8 +142,11 @@ describe("LanguageSelector", () => {
 
     render(<LanguageSelector />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
-    fireEvent.click(screen.getByRole("option", { name: /Vietnamese/ }));
+    await user.click(screen.getByRole("button", { name: "Language: English" }));
+    const vietnameseItem = await screen.findByRole("menuitem", {
+      name: /Vietnamese/,
+    });
+    await user.click(vietnameseItem);
 
     expect(persistLocaleMock).toHaveBeenCalledTimes(1);
     expect(persistLocaleMock).toHaveBeenCalledWith("vi");

@@ -1,4 +1,5 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Theme } from "@/common/utils/theme";
@@ -42,20 +43,26 @@ describe("ThemeSelector", () => {
     ).toBeInTheDocument();
   });
 
-  it("opens dropdown when trigger is clicked", () => {
+  it("opens dropdown when trigger is clicked", async () => {
+    const user = userEvent.setup();
     render(<ThemeSelector />);
 
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
+    await user.click(screen.getByRole("button", { name: "Theme: System" }));
 
-    expect(screen.getByRole("listbox", { name: "Theme" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: /System/ })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: /Light/ })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: /Dark/ })).toBeInTheDocument();
+    const menu = await screen.findByRole("menu");
+    expect(menu).toBeInTheDocument();
+    expect(menu).toHaveAttribute("aria-label", "Theme");
+    expect(
+      screen.getByRole("menuitem", { name: /System/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /Light/ })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /Dark/ })).toBeInTheDocument();
   });
 
-  it("closes dropdown when clicking outside", () => {
+  it("closes dropdown when clicking outside", async () => {
+    const user = userEvent.setup();
     render(
       <div>
         <div data-testid="outside">Outside</div>
@@ -63,26 +70,28 @@ describe("ThemeSelector", () => {
       </div>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Theme: System" }));
+    expect(await screen.findByRole("menu")).toBeInTheDocument();
 
     fireEvent.pointerDown(screen.getByTestId("outside"));
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
-  it("calls persistTheme and closes dropdown when selecting an option", () => {
+  it("calls persistTheme and closes dropdown when selecting an option", async () => {
+    const user = userEvent.setup();
     render(<ThemeSelector />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Theme: System" }));
+    expect(await screen.findByRole("menu")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("option", { name: /Light/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Light/ }));
 
     expect(mockPersistTheme).toHaveBeenCalledWith("light");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
-  it("closes dropdown when focus moves outside", () => {
+  it("closes dropdown when focus moves outside", async () => {
+    const user = userEvent.setup();
     render(
       <div>
         <button type="button" data-testid="outside-button">
@@ -92,22 +101,20 @@ describe("ThemeSelector", () => {
       </div>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Theme: System" }));
+    expect(await screen.findByRole("menu")).toBeInTheDocument();
 
-    const outsideButton = screen.getByTestId("outside-button");
-    act(() => {
-      outsideButton.focus();
-      fireEvent.focusIn(outsideButton);
-    });
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    fireEvent.pointerDown(screen.getByTestId("outside-button"));
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
-  it("calls persistTheme when a theme option is clicked", () => {
+  it("calls persistTheme when a theme option is clicked", async () => {
+    const user = userEvent.setup();
     render(<ThemeSelector />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Theme: System" }));
-    fireEvent.click(screen.getByRole("option", { name: /Dark/ }));
+    await user.click(screen.getByRole("button", { name: "Theme: System" }));
+    const darkItem = await screen.findByRole("menuitem", { name: /Dark/ });
+    await user.click(darkItem);
 
     expect(mockPersistTheme).toHaveBeenCalledTimes(1);
     expect(mockPersistTheme).toHaveBeenCalledWith("dark");

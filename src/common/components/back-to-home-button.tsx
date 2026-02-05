@@ -11,8 +11,8 @@ export function BackToHomeButton() {
 
   return (
     <Button asChild variant="secondary" size="sm">
-      <Link href="/">
-        <BackArrowIcon />
+      <Link href="/" className="inline-flex items-center gap-2">
+        <BackArrowIcon className="size-4 shrink-0" />
         {t("backToHome")}
       </Link>
     </Button>

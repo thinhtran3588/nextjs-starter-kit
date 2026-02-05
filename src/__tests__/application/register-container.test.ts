@@ -82,4 +82,19 @@ describe("register-container", () => {
     expect(typeof loadUseCase.execute).toBe("function");
     expect(typeof saveUseCase.execute).toBe("function");
   });
+
+  it("returns a container that resolves books repository and use cases", () => {
+    const container = getContainer();
+    const repo = container.resolve("bookRepository") as {
+      find: (userId: string, query: unknown) => Promise<unknown>;
+      get: (userId: string, bookId: string) => Promise<unknown>;
+    };
+    const findUseCase = container.resolve("findBooksUseCase") as {
+      execute: (input: unknown) => Promise<unknown>;
+    };
+    expect(repo).toBeDefined();
+    expect(typeof repo.find).toBe("function");
+    expect(typeof repo.get).toBe("function");
+    expect(typeof findUseCase.execute).toBe("function");
+  });
 });

@@ -8,14 +8,6 @@ import { toast } from "sonner";
 
 import { Button } from "@/common/components/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/common/components/dialog";
-import {
   Form,
   FormControl,
   FormField,
@@ -30,6 +22,7 @@ import {
   UserIcon,
 } from "@/common/components/icons";
 import { Input } from "@/common/components/input";
+import { DialogClose, Modal } from "@/common/components/modal";
 import { useContainer } from "@/common/hooks/use-container";
 import {
   getProfileSchema,
@@ -219,24 +212,24 @@ export function ProfileForm() {
             ) : null}
             <div className="flex flex-wrap items-center gap-2">
               {user.authType === AuthType.Email ? (
-                <Dialog
-                  open={passwordModalOpen}
-                  onOpenChange={(open) => {
-                    setPasswordModalOpen(open);
-                    if (!open) {
-                      setPasswordErrorCode(null);
-                    }
-                  }}
-                >
-                  <DialogTrigger asChild>
-                    <Button type="button" variant="secondary">
-                      {t("changePasswordButton")}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent aria-describedby={undefined}>
-                    <DialogHeader>
-                      <DialogTitle>{t("passwordSectionTitle")}</DialogTitle>
-                    </DialogHeader>
+                <>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setPasswordModalOpen(true)}
+                  >
+                    {t("changePasswordButton")}
+                  </Button>
+                  <Modal
+                    open={passwordModalOpen}
+                    onOpenChange={(open) => {
+                      setPasswordModalOpen(open);
+                      if (!open) {
+                        setPasswordErrorCode(null);
+                      }
+                    }}
+                    title={t("passwordSectionTitle")}
+                  >
                     <Form {...passwordForm}>
                       <form
                         onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
@@ -302,8 +295,8 @@ export function ProfileForm() {
                         </div>
                       </form>
                     </Form>
-                  </DialogContent>
-                </Dialog>
+                  </Modal>
+                </>
               ) : null}
               <Button
                 type="submit"

@@ -22,6 +22,11 @@ export function getMainMenuConfig(): MenuItem[] {
       href: "/",
     },
     {
+      id: "app",
+      translationKey: "navigation.app",
+      href: "/app/books",
+    },
+    {
       id: "documents",
       translationKey: "navigation.documents",
       href: "",

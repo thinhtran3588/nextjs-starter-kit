@@ -1,5 +1,7 @@
-import { AppPage } from "@/modules/main/pages/app/page";
+import { getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
 
-export default function Page() {
-  return <AppPage />;
+export default async function Page() {
+  const locale = await getLocale();
+  redirect(`/${locale}/app/books`);
 }

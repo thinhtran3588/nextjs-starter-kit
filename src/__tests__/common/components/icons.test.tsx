@@ -12,8 +12,11 @@ import {
   MenuIcon,
   MonitorIcon,
   MoonIcon,
+  PencilIcon,
+  PlusIcon,
   SunIcon,
   UserIcon,
+  XIcon,
 } from "@/common/components/icons";
 
 describe("Icons", () => {
@@ -34,9 +37,10 @@ describe("Icons", () => {
     expect(container.querySelector("svg")).toBeInTheDocument();
   });
 
-  it("BackArrowIcon renders without className prop", () => {
-    const { container } = render(<BackArrowIcon />);
+  it("BackArrowIcon renders with optional className", () => {
+    const { container } = render(<BackArrowIcon className="size-4" />);
     expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(container.querySelector("svg")).toHaveClass("size-4");
   });
 
   it("LoaderIcon renders with className", () => {
@@ -79,5 +83,18 @@ describe("Icons", () => {
     expect(c1.querySelector("svg")).toBeInTheDocument();
     expect(c2.querySelector("svg")).toBeInTheDocument();
     expect(c3.querySelector("svg")).toBeInTheDocument();
+  });
+
+  it("XIcon renders", () => {
+    const { container } = render(<XIcon className="size-3" />);
+    expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(container.querySelector("svg")).toHaveClass("size-3");
+  });
+
+  it("PencilIcon and PlusIcon render", () => {
+    const { container: c1 } = render(<PencilIcon className="size-4" />);
+    const { container: c2 } = render(<PlusIcon className="size-4" />);
+    expect(c1.querySelector("svg")).toBeInTheDocument();
+    expect(c2.querySelector("svg")).toBeInTheDocument();
   });
 });

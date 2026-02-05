@@ -6,10 +6,10 @@ import {
 } from "@/application/config/firebase-config";
 import { createContainer, setContainer } from "@/common/utils/container";
 import { registerModule as registerAuthModule } from "@/modules/auth/module-configuration";
+import { registerModule as registerBooksModule } from "@/modules/books/module-configuration";
 import { registerModule as registerDocsModule } from "@/modules/docs/module-configuration";
 import { registerModule as registerLandingPageModule } from "@/modules/landing-page/module-configuration";
 import { registerModule as registerLegalModule } from "@/modules/legal/module-configuration";
-import { registerModule as registerMainModule } from "@/modules/main/module-configuration";
 import { registerModule as registerSettingsModule } from "@/modules/settings/module-configuration";
 
 export function registerContainer(container: AwilixContainer<object>): void {
@@ -18,10 +18,10 @@ export function registerContainer(container: AwilixContainer<object>): void {
     getFirestoreInstance: asValue(getFirestoreInstance),
   });
   registerAuthModule(container);
+  registerBooksModule(container);
   registerDocsModule(container);
   registerLandingPageModule(container);
   registerLegalModule(container);
-  registerMainModule(container);
   registerSettingsModule(container);
 }
 
