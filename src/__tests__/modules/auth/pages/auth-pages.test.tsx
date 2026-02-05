@@ -17,8 +17,14 @@ vi.mock("@/common/routing/navigation", async (importOriginal) => {
   return {
     ...actual,
     useRouter: () => ({ ...actual.useRouter(), replace: mockReplace }),
+    usePathname: () => "/",
   };
 });
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => ({
+    get: () => null,
+  }),
+}));
 
 describe("Auth pages", () => {
   it("renders the sign in page", async () => {
@@ -65,12 +71,12 @@ describe("Auth pages", () => {
     render(<ProfilePage />);
     expect(
       screen.getByRole("button", {
-        name: messages.modules.auth.pages.profile.saveButton,
+        name: messages.modules.auth.pages.profile.editButton,
       }),
     ).toBeInTheDocument();
   });
 
-  it("redirects to sign-in when profile page is opened with no user", async () => {
+  it("redirects to sign-in with returnUrl when profile page is opened with no user", async () => {
     mockReplace.mockClear();
     useAuthUserStore.setState({ user: null, loading: false });
 
@@ -81,7 +87,7 @@ describe("Auth pages", () => {
     );
 
     await waitFor(() => {
-      expect(mockReplace).toHaveBeenCalledWith("/auth/sign-in");
+      expect(mockReplace).toHaveBeenCalledWith("/auth/sign-in?returnUrl=%2F");
     });
   });
 });

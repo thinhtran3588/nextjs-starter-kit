@@ -155,6 +155,7 @@
           "signInTypeApple": "Apple",
           "signInTypeOther": "Khác",
           "saveButton": "Lưu",
+          "editButton": "Chỉnh sửa",
           "passwordSectionTitle": "Đổi mật khẩu",
           "oldPasswordLabel": "Mật khẩu hiện tại",
           "newPasswordLabel": "Mật khẩu mới",

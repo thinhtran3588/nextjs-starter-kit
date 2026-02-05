@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/common/components/button";
+import { ButtonGroup } from "@/common/components/button-group";
 import {
   Form,
   FormControl,
@@ -19,21 +20,19 @@ import {
   AppleIcon,
   GoogleIcon,
   MailIcon,
+  PencilIcon,
   UserIcon,
 } from "@/common/components/icons";
 import { Input } from "@/common/components/input";
-import { DialogClose, Modal } from "@/common/components/modal";
 import { useContainer } from "@/common/hooks/use-container";
 import {
   getProfileSchema,
-  getUpdatePasswordSchema,
   type ProfileInput,
-  type UpdatePasswordInput,
 } from "@/modules/auth/domain/schemas";
 import { AuthType, type AuthErrorCode } from "@/modules/auth/domain/types";
 import { useAuthUserStore } from "@/modules/auth/hooks/use-auth-user-store";
-import type { UpdatePasswordUseCase } from "@/modules/auth/use-cases/update-password-use-case";
 import type { UpdateProfileUseCase } from "@/modules/auth/use-cases/update-profile-use-case";
+import { ChangePasswordModal } from "./change-password-modal";
 
 const AUTH_TYPE_ICON: Record<
   string,
@@ -59,18 +58,12 @@ export function ProfileForm() {
   const loading = useAuthUserStore((s) => s.loading);
   const setAuthState = useAuthUserStore((s) => s.setAuthState);
 
+  const [editing, setEditing] = useState(false);
   const [profileErrorCode, setProfileErrorCode] = useState<string | null>(null);
-  const [passwordErrorCode, setPasswordErrorCode] = useState<string | null>(
-    null,
-  );
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
 
   const profileSchema = useMemo(
     () => getProfileSchema((key) => t(`validation.${key}`)),
-    [t],
-  );
-  const updatePasswordSchema = useMemo(
-    () => getUpdatePasswordSchema((key) => t(`validation.${key}`)),
     [t],
   );
 
@@ -78,15 +71,6 @@ export function ProfileForm() {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       displayName: user?.displayName ?? undefined,
-    },
-  });
-
-  const passwordForm = useForm<UpdatePasswordInput>({
-    resolver: zodResolver(updatePasswordSchema),
-    defaultValues: {
-      oldPassword: "",
-      newPassword: "",
-      confirmPassword: "",
     },
   });
 
@@ -116,6 +100,7 @@ export function ProfileForm() {
       values.displayName === undefined ||
       values.displayName === user?.displayName
     ) {
+      setEditing(false);
       return;
     }
     const useCase = container.resolve(
@@ -130,31 +115,16 @@ export function ProfileForm() {
       if (user) {
         setAuthState({ ...user, displayName: newDisplayName }, false);
       }
+      setEditing(false);
       return;
     }
     setProfileErrorCode(result.error);
   }
 
-  async function onPasswordSubmit(values: UpdatePasswordInput) {
-    setPasswordErrorCode(null);
-    const useCase = container.resolve(
-      "updatePasswordUseCase",
-    ) as UpdatePasswordUseCase;
-    const result = await useCase.execute({
-      oldPassword: values.oldPassword,
-      newPassword: values.newPassword,
-    });
-    if (result.success) {
-      passwordForm.reset({
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-      setPasswordModalOpen(false);
-      toast.success(t("passwordSuccessMessage"));
-      return;
-    }
-    setPasswordErrorCode(result.error);
+  function handleCancel() {
+    profileForm.reset({ displayName: user?.displayName ?? "" });
+    setProfileErrorCode(null);
+    setEditing(false);
   }
 
   const AuthIcon = AUTH_TYPE_ICON[user.authType] ?? UserIcon;
@@ -162,13 +132,9 @@ export function ProfileForm() {
     profileErrorCode !== null
       ? t(`errors.${ERROR_KEY_MAP[profileErrorCode as AuthErrorCode]}`)
       : null;
-  const passwordErrorMessage =
-    passwordErrorCode !== null
-      ? t(`errors.${ERROR_KEY_MAP[passwordErrorCode as AuthErrorCode]}`)
-      : null;
 
   return (
-    <div className="space-y-8 text-left">
+    <div className="space-y-6 text-left">
       <div className="space-y-4">
         <div>
           <p className="text-sm font-medium text-[var(--text-muted)]">
@@ -193,15 +159,23 @@ export function ProfileForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fullNameLabel")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder={t("fullNameLabel")}
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
+                  {editing ? (
+                    <>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder={t("fullNameLabel")}
+                          {...field}
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </>
+                  ) : (
+                    <p className="text-[var(--text-primary)]">
+                      {field.value || "—"}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
@@ -210,105 +184,52 @@ export function ProfileForm() {
                 {profileErrorMessage}
               </p>
             ) : null}
-            <div className="flex flex-wrap items-center gap-2">
-              {user.authType === AuthType.Email ? (
-                <>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setPasswordModalOpen(true)}
-                  >
-                    {t("changePasswordButton")}
-                  </Button>
-                  <Modal
-                    open={passwordModalOpen}
-                    onOpenChange={(open) => {
-                      setPasswordModalOpen(open);
-                      if (!open) {
-                        setPasswordErrorCode(null);
-                      }
-                    }}
-                    title={t("passwordSectionTitle")}
-                  >
-                    <Form {...passwordForm}>
-                      <form
-                        onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
-                        className="space-y-4"
-                      >
-                        <FormField
-                          control={passwordForm.control}
-                          name="oldPassword"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("oldPasswordLabel")}</FormLabel>
-                              <FormControl>
-                                <Input type="password" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={passwordForm.control}
-                          name="newPassword"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("newPasswordLabel")}</FormLabel>
-                              <FormControl>
-                                <Input type="password" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={passwordForm.control}
-                          name="confirmPassword"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("confirmPasswordLabel")}</FormLabel>
-                              <FormControl>
-                                <Input type="password" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {passwordErrorMessage ? (
-                          <p className="text-sm text-red-500" role="alert">
-                            {passwordErrorMessage}
-                          </p>
-                        ) : null}
-                        <div className="flex flex-wrap items-center gap-2">
-                          <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                              {t("cancelButton")}
-                            </Button>
-                          </DialogClose>
-                          <Button
-                            type="submit"
-                            variant="primary"
-                            loading={passwordForm.formState.isSubmitting}
-                          >
-                            {t("updatePasswordButton")}
-                          </Button>
-                        </div>
-                      </form>
-                    </Form>
-                  </Modal>
-                </>
-              ) : null}
-              <Button
-                type="submit"
-                variant="primary"
-                loading={profileForm.formState.isSubmitting}
-              >
-                {t("saveButton")}
-              </Button>
-            </div>
           </form>
         </Form>
       </div>
+
+      <ButtonGroup>
+        {editing ? (
+          <>
+            <Button
+              type="submit"
+              variant="primary"
+              loading={profileForm.formState.isSubmitting}
+              onClick={profileForm.handleSubmit(onProfileSubmit)}
+            >
+              {t("saveButton")}
+            </Button>
+            <Button type="button" variant="secondary" onClick={handleCancel}>
+              {t("cancelButton")}
+            </Button>
+          </>
+        ) : (
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => setEditing(true)}
+          >
+            <PencilIcon className="size-4" />
+            {t("editButton")}
+          </Button>
+        )}
+        {user.authType === AuthType.Email ? (
+          <>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setPasswordModalOpen(true)}
+            >
+              {t("changePasswordButton")}
+            </Button>
+            <ChangePasswordModal
+              open={passwordModalOpen}
+              onOpenChange={setPasswordModalOpen}
+              onSuccess={() => toast.success(t("passwordSuccessMessage"))}
+            />
+          </>
+        ) : null}
+      </ButtonGroup>
     </div>
   );
 }

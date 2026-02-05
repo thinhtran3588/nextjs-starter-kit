@@ -4,6 +4,7 @@ import { getMainMenuConfig } from "@/application/config/main-menu";
 import { MainLayout } from "@/common/components/main-layout";
 import { resolveMenuItems } from "@/common/utils/menu";
 import { AuthHeaderSlot } from "@/modules/auth/components/auth-header-slot";
+import { AuthVerification } from "@/modules/auth/components/auth-verification";
 import { SettingsHeaderSlot } from "@/modules/settings/components/settings-header-slot";
 
 export default async function AppLayout({
@@ -21,7 +22,7 @@ export default async function AppLayout({
       authSlot={<AuthHeaderSlot />}
       settingsSlot={<SettingsHeaderSlot />}
     >
-      {children}
+      <AuthVerification>{children}</AuthVerification>
     </MainLayout>
   );
 }
