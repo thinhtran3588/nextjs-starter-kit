@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { MenuItem } from "@/common/interfaces/menu-item";
+import type { MenuItem } from "@/common/interfaces";
 import { resolveMenuItems } from "@/common/utils/menu";
 
 describe("resolveMenuItems", () => {

@@ -2,15 +2,29 @@
 
 Frontend này tuân theo **Clean Architecture** với cấu trúc **module**. Ứng dụng dễ bảo trì, dễ testing và phù hợp với Next.js cùng UI stack đã chọn.
 
+## Mục lục
+
+1. [Tổng quan kiến trúc](#tổng-quan-kiến-trúc)
+2. [Cấu trúc layer](#cấu-trúc-layer)
+3. [Luồng dữ liệu](#luồng-dữ-liệu)
+4. [Trách nhiệm từng layer](#trách-nhiệm-từng-layer)
+   - [Domain Layer](#1-domain-layer-srcmodulesmoduledomain)
+   - [Application Layer](#2-application-layer-srcmodulesmoduleapplication)
+   - [Infrastructure Layer](#3-infrastructure-layer-srcmodulesmoduleinfrastructure)
+   - [Presentation Layer](#4-presentation-layer-srcmodulesmodulepresentation)
+5. [Cấu trúc module](#cấu-trúc-module)
+6. [Các mẫu thiết kế quan trọng](#các-mẫu-thiết-kế-quan-trọng)
+7. [Technology Stack](#technology-stack)
+
 ## Tổng quan kiến trúc
 
 Giải pháp được tổ chức theo các layer đảm bảo tách biệt trách nhiệm và đảo ngược phụ thuộc:
 
 ```mermaid
 graph TD
-    A[Presentation Layer<br/>Pages, Components] --> B[Application Layer<br/>Use Cases]
+    A[Presentation Layer<br/>Pages, Components, Hooks] --> B[Application Layer<br/>Use Cases]
     B --> C[Domain Layer<br/>Types, Schemas, Interfaces]
-    D[Infrastructure Layer<br/>API Client, External Services] --> C
+    D[Infrastructure Layer<br/>Services, Repositories] --> C
 
     style A fill:#1976d2,color:#fff
     style B fill:#f57c00,color:#fff
@@ -22,56 +36,57 @@ graph TD
 
 - **Presentation Layer**: Điểm vào tương tác người dùng—trang Next.js, layout và component React. Layer này render UI và xử lý đầu vào, ủy thác logic nghiệp vụ và dữ liệu cho application layer.
 
-- **Application Layer**: Điều phối use case và logic ứng dụng—lấy dữ liệu, xử lý gửi form, validation và phối hợp quy tắc domain với infrastructure. Không có UI hay chi tiết framework ở đây.
+- **Application Layer**: Điều phối use case và logic ứng dụng—lấy dữ liệu, xử lý gửi form, điều phối validation và phối hợp quy tắc domain với infrastructure. Không có UI hay chi tiết framework ở đây.
 
 - **Domain Layer**: Types cốt lõi, Zod schemas và interfaces dùng trong toàn app. Không phụ thuộc bên ngoài; định nghĩa hình dạng dữ liệu và quy tắc validation (vd. API contracts, form payloads).
 
-- **Infrastructure Layer**: Triển khai kỹ thuật—API client (HTTP tới backend) và dịch vụ bên ngoài. Thực hiện interface do application hoặc domain layer định nghĩa.
+- **Infrastructure Layer**: Triển khai kỹ thuật—services (tích hợp bên ngoài như Firebase) và repositories (truy cập dữ liệu). Thực hiện interface do domain layer định nghĩa.
 
 ## Cấu trúc layer
 
 Cấu trúc layer đầy đủ với tất cả thành phần:
 
 ```mermaid
-graph TB
-    subgraph Presentation["Presentation Layer"]
-        AppRoutes("App Routes<br/>app/[locale]/**/page.tsx<br/>Routing only")
-        ModulePages("Module Pages<br/>src/modules/**/pages/")
-        Components("Components<br/>src/modules/**/components/<br/>src/common/components/")
+graph LR
+    subgraph Presentation["🖥️ Presentation"]
+        direction TB
+        Routes[Routes]
+        Pages[Pages]
+        Components[Components]
+        Hooks[Hooks]
     end
 
-    subgraph Application["Application Layer"]
-        UseCases("Use Cases<br/>src/modules/**/use-cases/<br/>Orchestrate app flows")
-        DataFetching("Data Fetching<br/>Server or Client data")
-        DI("DI Container<br/>Awilix, module-configuration")
+    subgraph Application["⚙️ Application"]
+        direction TB
+        UseCases[Use Cases]
     end
 
-    subgraph Domain["Domain Layer"]
-        Types("Types<br/>Interfaces, API contracts")
-        Schemas("Zod Schemas<br/>Validation, form shapes")
-        Constants("Constants<br/>Domain constants")
+    subgraph Domain["📦 Domain"]
+        direction TB
+        Types[Types & Interfaces]
+        Schemas[Zod Schemas]
     end
 
-    subgraph Infrastructure["Infrastructure Layer"]
-        Services("Services<br/>src/modules/**/services/<br/>External integrations")
-        ApiClient("API Client<br/>Backend HTTP when used")
-        Repositories("Repositories<br/>Client persistence when used")
+    subgraph Infrastructure["🔌 Infrastructure"]
+        direction TB
+        Services[Services]
+        Repositories[Repositories]
     end
 
-    AppRoutes --> ModulePages
-    ModulePages --> UseCases
-    ModulePages --> DataFetching
+    Routes --> Pages
+    Pages --> UseCases
+    Pages --> Components
+    Pages --> Hooks
+    Pages --> Types
     Components --> UseCases
-    DataFetching --> UseCases
-    UseCases --> Types
-    UseCases --> Schemas
-    UseCases --> DI
+    Components --> Hooks
+    Components --> Schemas
+    Hooks --> UseCases
     UseCases --> Services
-    UseCases --> ApiClient
     UseCases --> Repositories
-    Schemas --> Types
+    UseCases --> Types
     Services --> Types
-    ApiClient --> Types
+    Repositories --> Types
 
     style Presentation fill:#1976d2,color:#fff
     style Application fill:#f57c00,color:#fff
@@ -79,22 +94,37 @@ graph TB
     style Infrastructure fill:#c2185b,color:#fff
 ```
 
+**Chi tiết layer:**
+
+| Layer | Vị trí | Nội dung |
+|-------|--------|----------|
+| **Presentation** | `app/`, `presentation/` | Routes, Pages, Components, Hooks |
+| **Application** | `application/` | Use Cases |
+| **Domain** | `domain/` | types.ts, schemas.ts, interfaces.ts |
+| **Infrastructure** | `infrastructure/` | Services, Repositories |
+
+**Thiết lập cấp app** (không phải layer): `src/application/` chứa `register-container.ts` và app config. DI Container utilities nằm trong `src/common/utils/container.ts`.
+
 ## Luồng dữ liệu
 
 ### Luồng đọc (Server hoặc Client Page)
 
 ```mermaid
 flowchart TD
-    User[User<br/>Requests page] --> Page[Page / Layout<br/>Server or Client Component]
-    Page --> UseCase[Use Case<br/>resolved from container or data function]
-    UseCase --> Service[Service / API Client<br/>GET or external call]
-    Service --> Page
-    Page --> UI[UI<br/>Rendered with data]
+    User[User<br/>Yêu cầu trang] --> Page[Page / Layout<br/>Server hoặc Client Component]
+    Page --> UseCase[Use Case<br/>execute, điều phối luồng]
+    UseCase --> Service[Service / Repository<br/>GET hoặc gọi bên ngoài]
+    Service --> Backend[Backend hoặc External API]
+    Backend --> Service
+    Service --> UseCase
+    UseCase --> Page
+    Page --> UI[UI<br/>Render với dữ liệu]
 
     style User fill:#1976d2,color:#fff
     style Page fill:#1976d2,color:#fff
     style UseCase fill:#f57c00,color:#fff
     style Service fill:#c2185b,color:#fff
+    style Backend fill:#7b1fa2,color:#fff
     style UI fill:#1976d2,color:#fff
 ```
 
@@ -102,21 +132,21 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    User[User<br/>Submits form] --> Component[Client Component<br/>Form with RHF + Zod]
-    Component --> Resolve[useContainer<br/>Resolve use case]
-    Resolve --> UseCase[Use Case<br/>execute, orchestrates flow]
-    UseCase --> Service[Service / API Client<br/>External call]
-    Service --> Backend[Backend or External API]
+    User[User<br/>Gửi form] --> Component[Client Component<br/>React Hook Form + Zod]
+    Component --> UseCase[Use Case<br/>execute, điều phối luồng]
+    UseCase --> Service[Service / Repository<br/>Gọi bên ngoài]
+    Service --> Backend[Backend hoặc External API]
     Backend --> Service
     Service --> UseCase
-    UseCase --> Component[Response / handle result]
+    UseCase --> Component
+    Component --> UI[UI<br/>Xử lý kết quả]
 
     style User fill:#1976d2,color:#fff
     style Component fill:#1976d2,color:#fff
-    style Resolve fill:#f57c00,color:#fff
     style UseCase fill:#f57c00,color:#fff
     style Service fill:#c2185b,color:#fff
     style Backend fill:#7b1fa2,color:#fff
+    style UI fill:#1976d2,color:#fff
 ```
 
 ## Trách nhiệm từng layer
@@ -136,14 +166,14 @@ Types và validation cốt lõi, không phụ thuộc bên ngoài. Khái niệm 
 - Không phụ thuộc layer khác hay framework.
 - Chỉ types và schemas; không I/O, không React, không Next.
 
-### 2. Application Layer (`src/modules/{module}/use-cases/` + DI)
+### 2. Application Layer (`src/modules/{module}/application/`)
 
-Điều phối use case và logic ứng dụng. Use case được resolve từ Awilix container; module đăng ký qua `module-configuration.ts`.
+Điều phối use case và logic ứng dụng. Use case được resolve từ DI container; module đăng ký qua `module-configuration.ts`.
 
 **Thành phần:**
 
-- **Use Cases**: Class (hoặc hàm) trong `src/modules/{module}/use-cases/` thực hiện luồng ứng dụng (vd. `SignInWithEmailUseCase`, `UpdateProfileUseCase`). Kế thừa `BaseUseCase` từ `src/common/utils/base-use-case.ts`, dùng domain types/schemas và phụ thuộc services hoặc API client qua container.
-- **Module state**: State cấp module (vd. Zustand) expose qua hooks trong `src/modules/{module}/hooks/` (vd. `use-auth-user-store.ts`).
+- **Use Cases**: Class (hoặc hàm) trong `src/modules/{module}/application/` thực hiện luồng ứng dụng (vd. `sign-in-with-email-use-case.ts`, `update-profile-use-case.ts`). Kế thừa `BaseUseCase` từ `src/common/utils/base-use-case.ts`, dùng domain types/schemas và phụ thuộc services hoặc API client qua container.
+- **Module state**: State cấp module (vd. Zustand) expose qua hooks trong `src/modules/{module}/presentation/hooks/` (vd. `use-auth-user-store.ts`).
 - **Data-fetching**: Server hoặc Client Components tải dữ liệu bằng cách resolve và gọi use case từ container.
 
 **Nguyên tắc:**
@@ -151,30 +181,32 @@ Types và validation cốt lõi, không phụ thuộc bên ngoài. Khái niệm 
 - Chỉ phụ thuộc Domain và Infrastructure (inject qua Awilix).
 - Không UI, không React trong class use case; chỉ điều phối.
 
-### 3. Infrastructure Layer (`src/modules/{module}/services/`)
+### 3. Infrastructure Layer (`src/modules/{module}/infrastructure/`)
 
 Triển khai vấn đề kỹ thuật và tích hợp bên ngoài. API client hoặc repositories theo module khi cần.
 
 **Thành phần:**
 
-- **Services**: Tích hợp bên ngoài trong `src/modules/{module}/services/` (vd. `FirebaseAuthenticationService` trong auth). Thực hiện interface định nghĩa trong `src/modules/{module}/interfaces/`.
+- **Services**: Tích hợp bên ngoài trong `src/modules/{module}/infrastructure/services/` (vd. `firebase-auth-service.ts` trong auth). Thực hiện interface định nghĩa trong `src/modules/{module}/domain/interfaces.ts`.
+- **Repositories**: Triển khai truy cập dữ liệu trong `src/modules/{module}/infrastructure/repositories/` (vd. `firestore-book-repository.ts` trong books). Thực hiện interface định nghĩa trong `src/modules/{module}/domain/interfaces.ts`.
 - **API Client**: Khi app gọi backend HTTP API, client có thể nằm trong `src/common/` hoặc theo module và được đăng ký trong container.
-- **Repositories**: Adapter lưu trữ phía client (localStorage, IndexedDB, cookies) khi cần.
 
 **Nguyên tắc:**
 
 - Thực hiện interface dùng bởi use case (inject qua container).
 - Mọi I/O bên ngoài và dùng SDK nằm ở đây.
 
-### 4. Presentation Layer (pages, components)
+### 4. Presentation Layer (`src/modules/{module}/presentation/`)
 
 Xử lý tương tác người dùng và render UI.
 
 **Thành phần:**
 
-- **App Routes**: `app/[locale]/**/page.tsx` (và route group như `(marketing)`) chỉ là routing layer. Chúng import và render page component từ `src/modules/{module}/pages/`.
-- **Module Pages**: `src/modules/{module}/pages/{page}/page.tsx` chứa page component thực tế. Page có thể là Server hoặc Client Component; component riêng trang nằm trong `pages/{page}/components/`.
-- **Components**: Component dùng chung module trong `src/modules/{module}/components/`; component dùng chung trong `src/common/components/` (vd. form, input, label, root-layout, main-layout). Dùng `"use client"` chỉ khi cần (hooks, browser APIs, Zustand).
+- **App Routes**: `app/[locale]/**/page.tsx` (và route group như `(main)`) chỉ là routing layer. Chúng import và render page component từ `src/modules/{module}/presentation/pages/`.
+- **Module Pages**: `src/modules/{module}/presentation/pages/{page}/page.tsx` chứa page component thực tế. Page có thể là Server hoặc Client Component; component riêng trang nằm trong `presentation/pages/{page}/components/`.
+- **Module Components**: Component dùng chung module trong `src/modules/{module}/presentation/components/`.
+- **Module Hooks**: Hooks riêng module trong `src/modules/{module}/presentation/hooks/` (vd. `use-auth-user-store.ts`, `use-sync-auth-state.ts`).
+- **Common Components**: Component dùng chung trong `src/common/components/` (vd. form, input, label, root-layout, main-layout). Dùng `"use client"` chỉ khi cần (hooks, browser APIs, Zustand).
 
 **Nguyên tắc:**
 
@@ -191,145 +223,55 @@ App dùng `/src` làm thư mục nguồn chính, giữ `/app` chỉ cho routing.
 ```text
 app/                               # Chỉ routing layer (Next.js App Router)
 ├── [locale]/                      # Segment locale (next-intl)
-│   ├── layout.tsx                 # Root layout: AppInitializer, SyncAuthState, RootLayout, Toaster
-│   ├── error.tsx                  # Error boundary
-│   ├── not-found.tsx              # Not-found handler
-│   ├── (marketing)/               # Route group: trang marketing
-│   │   ├── layout.tsx             # MainLayout với menu, AuthHeaderSlot
-│   │   ├── page.tsx               # Trang landing (LandingPage từ module landing-page)
-│   │   ├── docs/
-│   │   │   └── [slug]/
-│   │   │       └── page.tsx       # Trang doc từ module docs
-│   │   ├── privacy-policy/
-│   │   │   └── page.tsx           # Module legal
-│   │   └── terms-of-service/
-│   │       └── page.tsx           # Module legal
-│   ├── app/
-│   │   └── page.tsx               # Trang app từ module main
-│   └── auth/
-│       ├── layout.tsx             # AuthLayout từ module auth
-│       ├── sign-in/
-│       │   └── page.tsx           # SignInPage từ module auth
-│       ├── sign-up/
-│       │   └── page.tsx           # SignUpPage từ module auth
-│       ├── forgot-password/
-│       │   └── page.tsx           # ForgotPasswordPage từ module auth
-│       └── profile/
-│           └── page.tsx           # Trang profile từ module auth
-├── globals.css                    # Global styles
-├── layout.tsx                     # Root app layout
-└── not-found.tsx                  # Root not-found fallback
+│   ├── layout.tsx, error.tsx, not-found.tsx
+│   ├── (main)/                    # Route group: trang chính
+│   │   ├── page.tsx, docs/, profile/, ...
+│   └── auth/                      # Routes auth
+│       ├── sign-in/, sign-up/, forgot-password/
+├── globals.css, layout.tsx, not-found.tsx
 
 src/                               # Toàn bộ code ứng dụng ở đây
-├── __tests__/                     # Test mirror src (application/, common/, modules/) + test-utils/
+├── __tests__/                     # Tests phản chiếu cấu trúc src
 ├── application/                   # Thiết lập cấp app
-│   ├── components/                # Component cấp app (vd. AppInitializer)
-│   ├── config/                    # Cấu hình app (firebase-config, main-menu)
-│   ├── i18n/                      # Helper request next-intl (getRequestConfig)
-│   ├── localization/              # JSON bản dịch next-intl (en, vi, zh)
-│   └── register-container.ts      # Đăng ký container Awilix, đăng ký module
+│   ├── components/                # AppInitializer
+│   ├── config/                    # firebase-config, main-menu
+│   ├── localization/              # request.ts, en.json, vi.json, zh.json
+│   └── register-container.ts
 ├── common/                        # Code dùng chung mọi module
-│   ├── components/                # Component dùng chung (flat)
-│   │   ├── button.tsx             # Button, Card, Dialog, Form, Input, Label
-│   │   ├── root-layout.tsx        # RootLayout
-│   │   ├── main-layout.tsx        # MainLayout, MainHeader
-│   │   ├── toaster.tsx            # Toaster (Sonner)
-│   │   └── ...                    # app-initializer, back-to-home-button, icons, v.v.
-│   ├── hooks/                     # Hooks dùng chung (vd. use-container)
-│   ├── interfaces/                # Interface dùng chung (vd. menu-item)
-│   ├── pages/                     # Component trang dùng chung (error-page, not-found-page)
-│   ├── routing/                   # Routing next-intl
-│   │   ├── routing.ts             # Locales, cấu hình routing
-│   │   ├── navigation.ts          # Link, useRouter, usePathname
-│   │   └── request.ts             # getRequestConfig messages (dùng application/localization)
-│   └── utils/                     # Tiện ích (cn, container, base-use-case, menu, read-doc)
+│   ├── components/                # button, form, main-layout, ...
+│   ├── hooks/                     # use-container
+│   ├── interfaces.ts              # MenuItem, ResolvedMenuItem
+│   ├── pages/                     # error-page, not-found-page
+│   ├── routing/                   # routing.ts, navigation.ts
+│   └── utils/                     # cn, container, base-use-case, ...
 │
-├── modules/                       # Module tính năng
-│   ├── auth/                      # Module auth (Firebase, sign-in, sign-up, profile)
-│   │   ├── domain/
-│   │   │   ├── types.ts           # Types auth
-│   │   │   └── schemas.ts         # Zod schemas auth (login, register, profile)
-│   │   ├── use-cases/             # Use case auth (sign-in, sign-up, sign-out, v.v.)
-│   │   ├── services/              # Firebase auth service (implement interface auth)
-│   │   ├── interfaces/           # Interface BaseAuthenticationService
-│   │   ├── hooks/                 # use-auth-user-store, use-sync-auth-state
-│   │   ├── components/            # AuthLayout, AuthVerification, SyncAuthState, AuthHeaderSlot
-│   │   ├── pages/                 # Trang (mỗi trang một thư mục)
-│   │   │   ├── sign-in/
-│   │   │   │   ├── page.tsx       # Trang đăng nhập
-│   │   │   │   └── components/   # sign-in-form
-│   │   │   ├── sign-up/
-│   │   │   │   ├── page.tsx       # Trang đăng ký
-│   │   │   │   └── components/   # sign-up-form
-│   │   │   ├── forgot-password/
-│   │   │   │   ├── page.tsx       # Trang quên mật khẩu
-│   │   │   │   └── components/   # forgot-password-form
-│   │   │   └── profile/
-│   │   │       ├── page.tsx       # Trang profile
-│   │   │       └── components/   # profile-form
-│   │   ├── utils/                 # map-auth-error, v.v.
-│   │   └── module-configuration.ts # Awilix: đăng ký auth services và use cases
-│   │
-│   ├── docs/                      # Module docs (markdown theo slug)
-│   │   ├── components/            # MarkdownContent, MermaidDiagram
-│   │   ├── pages/doc/page.tsx     # Component trang doc
-│   │   └── module-configuration.ts
-│   ├── landing-page/              # Module trang landing
-│   │   ├── pages/home/            # Trang chủ + component scroll-reveal
-│   │   └── module-configuration.ts
-│   ├── legal/                     # Trang pháp lý (privacy, terms)
-│   │   ├── pages/privacy-policy/  # và terms-of-service
-│   │   └── module-configuration.ts
-│   ├── main/                      # Trang app chính (sau đăng nhập)
-│   │   ├── pages/app/page.tsx
+├── modules/                       # Module tính năng (Clean Architecture)
+│   ├── auth/                      # Ví dụ: Module Auth
+│   │   ├── domain/                # types.ts, schemas.ts, interfaces.ts
+│   │   ├── application/           # sign-in-use-case.ts, sign-out-use-case.ts, ...
+│   │   ├── infrastructure/        # services/firebase-auth-service.ts
+│   │   ├── presentation/
+│   │   │   ├── components/        # auth-layout, auth-header-slot, ...
+│   │   │   ├── hooks/             # use-auth-user-store, use-sync-auth-state
+│   │   │   └── pages/             # sign-in/, sign-up/, profile/
+│   │   ├── utils/
 │   │   └── module-configuration.ts
 │   │
-│   └── {module-name}/             # Module mới cùng cấu trúc
-│       ├── domain/                # types.ts, schemas.ts (khi cần)
-│       ├── use-cases/             # Class use case, resolve qua container
-│       ├── services/             # Dịch vụ bên ngoài (khi cần)
-│       ├── interfaces/            # Interface service/port (khi cần)
-│       ├── hooks/                 # Hooks state module (khi cần)
-│       ├── components/            # Component dùng chung module
-│       ├── pages/                 # pages/{page}/page.tsx + components/
-│       ├── utils/                 # Tiện ích module (khi cần)
-│       └── module-configuration.ts # registerModule(container)
+│   ├── books/                     # Ví dụ: Module Books (CRUD)
+│   ├── settings/                  # Ví dụ: Module User settings
+│   ├── docs/, landing-page/       # Các module khác
+│   │
+│   └── {module-name}/             # Template module
+│       ├── domain/                # types.ts, schemas.ts, interfaces.ts
+│       ├── application/           # File use case
+│       ├── infrastructure/        # services/, repositories/
+│       ├── presentation/          # pages/, components/, hooks/
+│       └── module-configuration.ts
 ```
 
-### App Routes (chỉ routing layer)
+Route group (vd. `(main)`) dùng layout chung cung cấp `MainLayout` với menu và auth slot; route auth dùng `AuthLayout`. Cách này giữ `/app` tối thiểu và toàn bộ code trong `/src` để dễ tổ chức và testing.
 
-Thư mục `/app` chỉ chứa file routing Next.js, import từ `/src`:
-
-```tsx
-// app/[locale]/auth/sign-in/page.tsx
-import { SignInPage } from "@/modules/auth/pages/sign-in/page";
-
-export default function Page() {
-  return <SignInPage />;
-}
-```
-
-```tsx
-// app/[locale]/layout.tsx
-import { AppInitializer } from "@/application/components/app-initializer";
-import { RootLayout } from "@/common/components/root-layout";
-import { Toaster } from "@/common/components/toaster";
-import { SyncAuthState } from "@/modules/auth/components/sync-auth-state";
-
-export default async function LocaleLayout({ children, params }: { ... }) {
-  // ... thiết lập next-intl
-  return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <AppInitializer />
-      <SyncAuthState />
-      <RootLayout>{children}</RootLayout>
-      <Toaster />
-    </NextIntlClientProvider>
-  );
-}
-```
-
-Route group (vd. `(marketing)`) dùng layout chung cung cấp MainLayout với menu và auth slot; route auth dùng AuthLayout. Cách này giữ `/app` tối thiểu và toàn bộ code trong `/src` để dễ tổ chức và kiểm thử.
+Xem [Coding Conventions](./coding-conventions-vi.md) để biết ví dụ routing và patterns chi tiết.
 
 ## Các mẫu thiết kế quan trọng
 
@@ -339,26 +281,26 @@ Route group (vd. `(marketing)`) dùng layout chung cung cấp MainLayout với m
 
 **Triển khai:**
 
-- **Domain**: Types, Zod schemas, constants—không framework, không I/O.
-- **Application**: Use case (trong `use-cases/`); chỉ phụ thuộc Domain và interface Infrastructure, resolve qua Awilix.
-- **Infrastructure**: Services (trong `services/`) và API client tùy chọn; thực hiện interface dùng bởi use case.
-- **Presentation**: Pages và components; phụ thuộc Application (và types Domain).
+- **Domain**: Types, Zod schemas, interfaces—không framework, không I/O.
+- **Application**: Use case (trong `application/`); chỉ phụ thuộc Domain và interface Infrastructure, resolve qua Awilix.
+- **Infrastructure**: Services và repositories (trong `infrastructure/`); thực hiện interface từ domain.
+- **Presentation**: Pages, components và hooks (trong `presentation/`); phụ thuộc Application và types Domain.
 
 **Lợi ích:**
 
-- Dễ kiểm thử: Logic application và domain có thể test không cần UI hay HTTP thật.
+- Dễ testing: Logic application và domain có thể test không cần UI hay HTTP thật.
 - Dễ bảo trì: Thay đổi trong một layer được giới hạn.
 - Linh hoạt: Đổi API client hoặc cách auth mà không đổi use case.
 
 ### 2. Cấu trúc tính năng theo module
 
-**Mục đích**: Gom tính năng (auth, docs, landing, legal, main) và ranh giới rõ ràng.
+**Mục đích**: Gom tính năng (auth, books, docs, landing-page, settings) và ranh giới rõ ràng.
 
 **Triển khai:**
 
 - Toàn bộ code trong `/src`; `/app` chỉ cho routing.
-- Gom theo tính năng trong `src/modules/{feature}/` với `domain/`, `use-cases/`, `services/`, `interfaces/`, `hooks/`, `components/`, `pages/`, `utils/` và `module-configuration.ts` cho đăng ký DI.
-- Code dùng chung (components, hooks, routing, utils, container) trong `src/common/`. Thiết lập cấp app (đăng ký container, config, i18n, localization) trong `src/application/`.
+- Gom theo tính năng trong `src/modules/{feature}/` với `domain/` (types, schemas, interfaces), `application/` (use cases), `infrastructure/` (services, repositories), `presentation/` (pages, components, hooks), `utils/` và `module-configuration.ts` cho đăng ký DI.
+- Code dùng chung (components, hooks, routing, utils, container) trong `src/common/`. Thiết lập cấp app (đăng ký container, config, localization) trong `src/application/`.
 
 **Lợi ích:**
 
@@ -372,8 +314,8 @@ Route group (vd. `(marketing)`) dùng layout chung cung cấp MainLayout với m
 
 **Triển khai:**
 
-- Container tạo trong `src/common/utils/container.ts` và đăng ký trong `src/application/register-container.ts`.
-- Mỗi module expose `registerModule(container)` trong `module-configuration.ts`, đăng ký use case và services (vd. `asClass(SignInWithEmailUseCase).singleton()`).
+- Container tạo trong `src/common/utils/container.ts` với `injectionMode: InjectionMode.PROXY` và đăng ký trong `src/application/register-container.ts`.
+- Mỗi module expose `registerModule(container)` trong `module-configuration.ts`, đăng ký use case và services (vd. `asFunction(cradle => new SignInWithEmailUseCase(cradle.authService)).singleton()`).
 - Components resolve use case qua `useContainer()` từ `src/common/hooks/use-container.ts` và gọi `execute()`.
 - Phụ thuộc cấp app (vd. instance Firebase auth) đăng ký trong `register-container.ts`.
 
@@ -388,7 +330,7 @@ Route group (vd. `(marketing)`) dùng layout chung cung cấp MainLayout với m
 **Triển khai:**
 
 - Khi app gọi backend API, API client có thể nằm trong `src/common/` hoặc theo module và đăng ký trong container. Dùng domain types cho request/response.
-- Tích hợp bên ngoài (vd. Firebase) nằm trong `src/modules/{module}/services/` và implement interface trong `src/modules/{module}/interfaces/`. Use case phụ thuộc các interface này và nhận implementation qua container.
+- Tích hợp bên ngoài (vd. Firebase) nằm trong `src/modules/{module}/infrastructure/services/` và implement interface trong `src/modules/{module}/domain/interfaces.ts`. Use case phụ thuộc các interface này và nhận implementation qua container.
 
 **Lợi ích:**
 
@@ -414,7 +356,7 @@ Route group (vd. `(marketing)`) dùng layout chung cung cấp MainLayout với m
 
 **Triển khai:**
 
-- Interface (vd. `BaseAuthenticationService`) nằm trong `src/modules/{module}/interfaces/`. Use case phụ thuộc các interface này; implementation (vd. `FirebaseAuthenticationService`) nằm trong `services/` và đăng ký trong container.
+- Interface (vd. `AuthenticationService`) nằm trong `src/modules/{module}/domain/interfaces.ts`. Use case phụ thuộc các interface này; implementation (vd. `FirebaseAuthenticationService`) nằm trong `infrastructure/services/` và đăng ký trong container.
 
 **Lợi ích:**
 
@@ -422,58 +364,18 @@ Route group (vd. `(marketing)`) dùng layout chung cung cấp MainLayout với m
 
 ## Technology Stack
 
-- **Framework**: Next.js (App Router), React
-- **Language**: TypeScript (strict mode)
-- **UI**: Component kiểu shadcn (Radix UI + Tailwind CSS, CVA, clsx, tailwind-merge)
-- **State**: Zustand (state chỉ client, vd. auth user store)
-- **Forms**: React Hook Form với Zod (`@hookform/resolvers/zod`)
-- **Validation**: Zod (form validation)
-- **i18n**: next-intl (locale-based routing, messages, `getTranslations` / `useTranslations`)
-- **DI**: Awilix (container, `register-container.ts`, `module-configuration.ts` mỗi module)
-- **Auth**: Firebase (tùy chọn; module auth dùng Firebase Authentication)
-- **Toasts**: Sonner (qua Toaster trong root layout)
-- **Testing**: Vitest và React Testing Library (test trong `src/__tests__/`)
+| Danh mục | Công nghệ |
+|----------|-----------|
+| **Framework** | Next.js (App Router), React |
+| **Ngôn ngữ** | TypeScript (strict mode) |
+| **UI** | Component kiểu shadcn (Radix UI + Tailwind CSS) |
+| **State** | Zustand (state chỉ client) |
+| **Forms** | React Hook Form + Zod |
+| **i18n** | next-intl |
+| **DI** | Awilix |
+| **Auth** | Firebase (tùy chọn) |
+| **Testing** | Vitest, React Testing Library |
 
-## Next.js và quy ước
+---
 
-### App Router (chỉ routing)
-
-- **Routes**: `app/[locale]/{segment}/page.tsx` cho routing; các file này import page component từ `src/modules/{module}/pages/`.
-- **Không code trong /app**: Toàn bộ logic nghiệp vụ, components và services trong `/src`. Thư mục `/app` chỉ xử lý routing Next.js.
-- **Server vs Client**: Pages và components có thể là Server hoặc Client Components. Mặc định Server Components; thêm `"use client"` chỉ cho hooks, browser APIs hoặc Zustand.
-- **Client boundary**: Giữ `"use client"` càng thấp càng tốt (leaf component hoặc wrapper nhỏ).
-
-### Data Fetching và Mutations
-
-- **Server Components**: Lấy dữ liệu qua use case (trong `src/modules/{module}/use-cases/`, resolve từ container khi cần); không `fetch` trực tiếp trong component khi đó là use case.
-- **Client Components**: Với mutations (form), resolve use case qua `useContainer()` và gọi `execute()`. Use case dùng services hoặc API client để giao tiếp với backend hoặc API bên ngoài. Client Components cũng có thể lấy dữ liệu qua use case khi cần.
-- **Forms**: Validate với Zod (React Hook Form), rồi gọi application services để gửi dữ liệu lên backend.
-
-### Quy ước file và thư mục
-
-- **Mọi file và thư mục dùng kebab-case** (chữ thường, nối bằng dấu gạch ngang), trừ file route dành riêng Next.js như `page.tsx`, `layout.tsx`.
-- **Component có props phải định nghĩa props type** và dùng trong chữ ký component.
-- **Component không có props** không định nghĩa props type và không có tham số props.
-- `app/` – chỉ routing (page.tsx, layout.tsx, error.tsx, not-found.tsx); dưới `app/[locale]/` với next-intl và route group tùy chọn (vd. `(marketing)`). Import từ `/src`.
-- `src/application/` – thiết lập cấp app: components (AppInitializer), config (firebase-config, main-menu), i18n (request), localization (translation JSON), register-container.
-- `src/common/components/` – component dùng chung (flat: button, card, dialog, form, input, label, root-layout, main-layout, toaster, v.v.).
-- `src/common/hooks/` – hooks dùng chung (vd. use-container).
-- `src/common/interfaces/` – interface dùng chung (vd. menu-item).
-- `src/common/pages/` – component trang dùng chung (error-page, not-found-page).
-- `src/common/routing/` – routing next-intl (routing.ts), navigation (Link, useRouter, usePathname), request (getRequestConfig messages).
-- `src/common/utils/` – tiện ích (cn, container, base-use-case, menu, read-doc).
-- `src/modules/{module}/` – module tính năng: domain, use-cases, services, interfaces, hooks, components, pages, utils, module-configuration.ts.
-- `src/application/localization/` – file JSON bản dịch next-intl theo locale (en, vi, zh).
-- `src/__tests__/` – test mirror src (application/, common/, modules/).
-
-### Forms và Validation
-
-- Dùng React Hook Form với Zod (`zodResolver(schema)`) và Form components từ `src/common/components/`.
-- Khi submit form, resolve use case tương ứng qua `useContainer()` và gọi `execute()` với dữ liệu form đã validate. Use case ủy thác cho services hoặc API client.
-- Xử lý lỗi API và map vào form state khi cần (vd. qua utils module như `map-auth-error`).
-
-### Quốc tế hóa (next-intl)
-
-- Routing theo locale: `app/[locale]/...`; middleware phát hiện locale.
-- Server: `getTranslations('namespace')`; client: `useTranslations('namespace')`.
-- Dùng next-intl `Link` và `useRouter` cho điều hướng theo locale.
+Về coding conventions, tổ chức file và patterns theo framework, xem [Coding Conventions](./coding-conventions-vi.md).

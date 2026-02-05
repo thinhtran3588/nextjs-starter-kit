@@ -3,8 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { getMainMenuConfig } from "@/application/config/main-menu";
 import { MainLayout } from "@/common/components/main-layout";
 import { resolveMenuItems } from "@/common/utils/menu";
-import { AuthHeaderSlot } from "@/modules/auth/components/auth-header-slot";
-import { SettingsHeaderSlot } from "@/modules/settings/components/settings-header-slot";
+import { AuthHeaderSlot } from "@/modules/auth/presentation/components/auth-header-slot";
+import { SettingsHeaderSlot } from "@/modules/settings/presentation/components/settings-header-slot";
 
 export default async function Layout({
   children,

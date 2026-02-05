@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import { MainFooter } from "@/common/components/main-footer";
 import { MainHeader } from "@/common/components/main-header";
-import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import type { ResolvedMenuItem } from "@/common/interfaces";
 
 type MainLayoutProps = {
   children: React.ReactNode;

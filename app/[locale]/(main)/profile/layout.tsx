@@ -1,5 +1,5 @@
 import { Page } from "@/common/components/page";
-import { AuthVerification } from "@/modules/auth/components/auth-verification";
+import { AuthVerification } from "@/modules/auth/presentation/components/auth-verification";
 
 export default function ProfileLayout({
   children,

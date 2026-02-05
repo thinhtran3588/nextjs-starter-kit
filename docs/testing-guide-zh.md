@@ -1,233 +1,299 @@
 # Testing Guide
 
-本文档描述前端测试方式，与 `docs/architecture.md` 中的 Clean Architecture 对齐，并与后端测试指南保持同等严格程度。
+本文档描述与 [Architecture](./architecture-zh.md) 中定义的 Clean Architecture patterns 对齐的测试方式。
 
-## Table of Contents
+## 目录
 
-1. [Overview](#overview)
-2. [Test Configuration](#test-configuration)
-3. [Test Types](#test-types)
-4. [Test Organization](#test-organization)
-5. [Test Coverage Requirements](#test-coverage-requirements)
-6. [Writing Tests](#writing-tests)
-7. [Test Utilities and Helpers](#test-utilities-and-helpers)
-8. [Running Tests](#running-tests)
-9. [Best Practices](#best-practices)
+1. [概览](#概览)
+2. [测试配置](#测试配置)
+3. [测试组织](#测试组织)
+4. [测试类型](#测试类型)
+5. [编写测试](#编写测试)
+   - [Use Case Tests](#use-case-tests)
+   - [Component Tests](#component-tests)
+   - [Schema Tests](#schema-tests)
+6. [测试工具](#测试工具)
+7. [Coverage 要求](#coverage-要求)
+8. [运行测试](#运行测试)
+9. [最佳实践](#最佳实践)
 
-## Overview
+## 概览
 
-前端使用 **Vitest** 做测试，**React Testing Library** 做 UI 测试，采用分层、模块化策略：
+项目使用 **Vitest** 进行测试，**React Testing Library** 用于 UI 测试。
 
-- **Unit Tests**：在隔离环境下验证 domain、application、infrastructure 逻辑。
-- **Component Tests**：验证用户在 UI 上的交互与展示组件行为。
-- **Integration Tests**：验证跨 application 逻辑、API client 与 UI 的 module 流程。
-- **E2E Tests（若配置）**：在真实浏览器中验证完整用户流程。
+### 核心原则
 
-### Key Testing Principles
+1. **100% Coverage 为必需** - 所有 lines、functions、branches 和 statements 都必须覆盖
+2. **测试行为而非实现** - 关注结果而非内部细节
+3. **隔离优先** - Mock 外部服务与依赖
+4. **镜像源码结构** - Tests 遵循与源码相同的目录结构
 
-1. **100% Coverage Mandatory**：lines、functions、branches、statements 均需覆盖。
-2. **Test Close to the User**：优先测行为与结果，而非实现细节。
-3. **Isolation First**：在 unit/component 测试中 mock 外部服务与 API。
-4. **Readable Tests**：测试名清晰、结构一致、断言明确。
+## 测试配置
 
-## Test Configuration
+配置在 `vitest.config.ts` 中：
 
-测试配置放在 `vitest.config.ts`。前端常见配置包括：
+- **Environment**：`jsdom` 提供 DOM APIs
+- **Setup file**：`src/__tests__/test-utils/setup.ts`
+- **Coverage thresholds**：所有指标 100%
+- **Path aliases**：与 `@/` → `src/` 对齐
 
-- **Environment**：`jsdom` 提供 DOM API
-- **Setup file**：`src/__tests__/test-utils/setup.ts`，注册 `@testing-library/jest-dom`、mock 浏览器 API 与环境变量
-- **Coverage thresholds**：各项指标 100%
-- **Path aliases**：与项目别名一致（如 `@/` → `src/`）
+## 测试组织
 
-有疑问时参考项目中的 `vitest.config.ts` 与 `package.json` 脚本。
+Tests 在 `src/__tests__/` 下镜像源码结构：
 
-## Test Types
+```text
+src/__tests__/
+├── application/              # 应用级测试
+│   ├── components/           # AppInitializer 测试
+│   └── register-container.test.ts
+├── common/
+│   ├── components/           # 共享组件测试
+│   ├── hooks/                # 共享 hook 测试
+│   └── utils/                # 工具测试
+├── modules/
+│   └── {module}/
+│       ├── domain/           # Schema 测试
+│       ├── application/      # Use case 测试
+│       └── presentation/
+│           ├── components/   # 组件测试
+│           ├── hooks/        # Hook 测试
+│           └── pages/        # 页面测试
+└── test-utils/
+    ├── setup.ts              # 全局 setup
+    └── ...                   # 测试 helpers
+```
+
+### 文件命名
+
+- 测试文件以 `.test.ts` 或 `.test.tsx` 结尾
+- 与源文件名对应：`sign-in-form.tsx` → `sign-in-form.test.tsx`
+
+## 测试类型
 
 ### Unit Tests
 
-**Purpose**：在不渲染 React 的情况下测试纯逻辑与函数。
+**目的**：无需 React 渲染即可测试纯逻辑。
 
-**Targets**：
-
-- Domain types 与 Zod schemas
-- Application use cases 与 stores
-- Infrastructure API client 的 helpers 与 utilities
-
-**Tools**：`vitest`、`vi.fn()`、`vi.mock()`
+**目标**：
+- Domain schemas（`domain/schemas.ts`）
+- Use cases（`application/*-use-case.ts`）
+- Utilities（`utils/`）
 
 ### Component Tests
 
-**Purpose**：验证 UI 行为与用户交互。
+**目的**：验证 UI 行为与用户交互。
 
-**Targets**：
-
-- `src/modules/{module}/pages/` 下的页面级 components
-- `src/common/components/` 下的共享 components
-- 使用 React Hook Form 与 Zod 的表单流程
-
-**Tools**：React Testing Library、`user-event`、`@testing-library/jest-dom`
+**目标**：
+- Page components（`presentation/pages/`）
+- 共享组件（`presentation/components/`、`common/components/`）
+- 带 validation 的表单
 
 ### Integration Tests
 
-**Purpose**：验证跨多层的 module 流程。
+**目的**：验证跨层流程。
 
-**Targets**：
+**目标**：
+- Component + use case 协作
+- 错误处理流程
+- 模块专属流程（auth、books、settings）
 
-- component + application use case + API client 的协作
-- 错误处理与校验展示
-- 按 module 的流程（auth、settings、dashboard 等）
+## 编写测试
 
-**Tools**：React Testing Library + 被 mock 的 API（推荐 MSW）
+### Use Case Tests
 
-### E2E Tests (Optional)
+```typescript
+// src/__tests__/modules/auth/application/sign-in-with-email-use-case.test.ts
+import { SignInWithEmailUseCase } from "@/modules/auth/application/sign-in-with-email-use-case";
+import type { AuthenticationService } from "@/modules/auth/domain/interfaces";
 
-若配置 E2E，用 Playwright 或 Cypress 等在真实浏览器中验证完整用户流程，应覆盖：
+describe("SignInWithEmailUseCase", () => {
+  let useCase: SignInWithEmailUseCase;
+  let mockAuthService: AuthenticationService;
 
-- 认证流程
-- 关键导航路径
-- 端到端表单提交
+  beforeEach(() => {
+    mockAuthService = {
+      signInWithEmail: vi.fn(),
+      signInWithGoogle: vi.fn(),
+      signUpWithEmail: vi.fn(),
+      signOut: vi.fn(),
+      sendPasswordReset: vi.fn(),
+      subscribeToAuthState: vi.fn(),
+      updateDisplayName: vi.fn(),
+      updatePassword: vi.fn(),
+    };
+    useCase = new SignInWithEmailUseCase(mockAuthService);
+  });
 
-## Test Organization
-
-测试目录与生产代码结构对应：
-
-```
-src/__tests__/
-├── unit/
-│   ├── common/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   └── infrastructure/
-│   └── modules/
-│       └── {module-name}/
-│           ├── domain/
-│           ├── application/
-│           ├── infrastructure/
-│           └── presentation/
-├── integration/
-│   └── modules/{module-name}/
-├── e2e/                       # If configured
-└── test-utils/
-    ├── setup.ts
-    ├── render.tsx
-    └── fixtures.ts
-```
-
-### File Naming Convention
-
-- 测试文件以 `.test.ts` 或 `.spec.ts` 结尾。
-- 尽量与源文件名称和位置对应。
-- 示例：`login-form.tsx` → `login-form.test.tsx`。
-
-## Test Coverage Requirements
-
-以下指标**必须达到 100%**：
-
-- **Lines**
-- **Functions**
-- **Branches**
-- **Statements**
-
-### Branch Coverage Notes
-
-所有条件分支都要有测试，包括：
-
-- 空值合并（`??`）
-- 三元运算符（`? :`）
-- 可选链（`?.`）
-- 逻辑运算符（`&&`、`||`）
-
-### Coverage Exclusions
-
-仅对以下内容可排除覆盖：
-
-- 纯类型定义与枚举
-- 配置文件
-- 测试用工具
-
-## Writing Tests
-
-### Structure Pattern
-
-采用 Arrange-Act-Assert (AAA) 模式：
-
-1. **Arrange**：准备输入、mocks 与环境。
-2. **Act**：执行被测行为。
-3. **Assert**：断言输出与副作用。
-
-### Example: Component Test
-
-```tsx
-import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { LoginForm } from '@/modules/auth/pages/login/components/login-form';
-
-describe('LoginForm', () => {
-  it('submits valid credentials', async () => {
-    const user = userEvent.setup();
-    render(<LoginForm />);
-
-    await user.type(screen.getByLabelText(/email/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/password/i), 'ValidPass123!');
-    await user.click(screen.getByRole('button', { name: /sign in/i }));
-
-    expect(
-      screen.getByText(/signing in/i)
-    ).toBeInTheDocument();
+  it("用凭据调用 auth service", async () => {
+    await useCase.execute({ email: "test@example.com", password: "password123" });
+    
+    expect(mockAuthService.signInWithEmail).toHaveBeenCalledWith(
+      "test@example.com",
+      "password123"
+    );
   });
 });
 ```
 
-### Testing Server vs Client Components
+### Component Tests
 
-- 默认使用 **Server Components**；仅 Client Components 使用 hooks。
-- 测试时关注 **输出**与**行为**。
-- 尽量缩小 `use client` 边界，只测必要的 client 部分。
+```typescript
+// src/__tests__/modules/auth/presentation/pages/sign-in/components/sign-in-form.test.tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { SignInForm } from "@/modules/auth/presentation/pages/sign-in/components/sign-in-form";
 
-## Test Utilities and Helpers
+describe("SignInForm", () => {
+  it("提交有效凭据", async () => {
+    const user = userEvent.setup();
+    render(<SignInForm />);
 
-在 `src/__tests__/test-utils/` 下提供共享测试工具：
+    await user.type(screen.getByLabelText(/email/i), "user@example.com");
+    await user.type(screen.getByLabelText(/password/i), "ValidPass123!");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
 
-- `render.tsx`：用 providers（i18n、theme、store）包装组件。
-- `fixtures.ts`：共享测试数据。
-- `setup.ts`：全局 setup（jest-dom、mocks）。
+    expect(screen.getByText(/signing in/i)).toBeInTheDocument();
+  });
 
-这些工具有助于减少重复并保持测试风格一致。
+  it("对无效 email 显示 validation 错误", async () => {
+    const user = userEvent.setup();
+    render(<SignInForm />);
 
-## Running Tests
+    await user.type(screen.getByLabelText(/email/i), "invalid");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
 
-常用脚本（以 `package.json` 为准）：
-
-```bash
-npm test
-npm run test:watch
-npm run test:coverage
-npm run test:ui
-npm run validate
+    expect(screen.getByText(/invalid email/i)).toBeInTheDocument();
+  });
+});
 ```
 
-## Best Practices
+### Schema Tests
 
-1. **Test behavior, not implementation**
-2. **优先用 role/label 查询**，少用 `data-testid`
-3. **用 MSW 等 mock 外部 API**，保证测试稳定
-4. **慎用易碎的 snapshot**，除非收益明确
-5. **保持测试快速**，E2E 只用于关键流程
-6. **覆盖边界情况**（null、空值、非法输入）
-7. **维持 100% coverage** 的各项指标
+```typescript
+// src/__tests__/modules/auth/domain/schemas.test.ts
+import { loginSchema } from "@/modules/auth/domain/schemas";
 
-## Summary
+describe("loginSchema", () => {
+  it("验证正确输入", () => {
+    const result = loginSchema.safeParse({
+      email: "test@example.com",
+      password: "password123",
+    });
+    
+    expect(result.success).toBe(true);
+  });
 
-本指南在与项目 Clean Architecture 一致的前提下约定前端测试标准：
+  it("拒绝无效 email", () => {
+    const result = loginSchema.safeParse({
+      email: "invalid",
+      password: "password123",
+    });
+    
+    expect(result.success).toBe(false);
+  });
+});
+```
 
-1. **100% coverage** 为硬性要求
-2. **测试组织**与 module 结构对应
-3. **Unit、component、integration 与可选的 E2E** 各有分工
-4. **统一的 utilities** 便于编写与维护测试
+## 测试工具
 
-更多参考：
+共享 helpers 在 `src/__tests__/test-utils/`：
 
-- [Architecture Guide](./architecture.md)
-- [Development Guide](./development-guide.md)
-- [README](../README.md)
+| 文件 | 用途 |
+|------|------|
+| `setup.ts` | 全局 setup（jest-dom、mocks、environment） |
+| `render.tsx` | 带 providers 的自定义 render（如需要） |
+| `fixtures.ts` | 共享测试数据 |
+
+### Setup 示例
+
+```typescript
+// src/__tests__/test-utils/setup.ts
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
+
+// Mock browser APIs
+Object.defineProperty(window, "matchMedia", {
+  value: vi.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  })),
+});
+```
+
+## Coverage 要求
+
+以下指标**必须 100%**：
+
+| 指标 | 阈值 |
+|------|------|
+| Lines | 100% |
+| Functions | 100% |
+| Branches | 100% |
+| Statements | 100% |
+
+### Branch Coverage
+
+每个条件都必须测试：
+- 三元运算符（`? :`）
+- 逻辑运算符（`&&`、`||`）
+- 可选链（`?.`）
+- 空值合并（`??`）
+
+### Coverage 排除项
+
+仅对以下可排除覆盖：
+- 纯类型定义
+- 配置文件
+- 测试工具本身
+
+## 运行测试
+
+```bash
+npm test              # 运行所有测试
+npm run test:watch    # Watch 模式
+npm run test:coverage # 带 coverage 报告
+npm run validate      # 完整 validation（包含测试）
+```
+
+## 最佳实践
+
+1. **使用 Arrange-Act-Assert（AAA）模式**
+   ```typescript
+   it("做某事", () => {
+     // Arrange
+     const input = { ... };
+     
+     // Act
+     const result = doSomething(input);
+     
+     // Assert
+     expect(result).toBe(expected);
+   });
+   ```
+
+2. **优先用 role/label 查询**而非 `data-testid`
+   ```typescript
+   // 好
+   screen.getByRole("button", { name: /submit/i });
+   screen.getByLabelText(/email/i);
+   
+   // 避免
+   screen.getByTestId("submit-button");
+   ```
+
+3. **在边界处 mock** - mock services/repositories，而非 use cases
+   ```typescript
+   // 好 - mock service interface
+   const mockService: AuthenticationService = { ... };
+   
+   // 避免 - mock 内部实现
+   vi.mock("firebase/auth");
+   ```
+
+4. **测试错误情况** - 覆盖 validation 错误、API 失败、边界情况
+
+5. **保持测试快速** - mock 外部调用，避免不必要的渲染
+
+6. **每个测试一个断言焦点** - 如测试同一行为可有多个断言

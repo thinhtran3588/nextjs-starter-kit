@@ -11,6 +11,7 @@ describe("main-menu", () => {
   it("exports expected doc slugs", () => {
     expect(DOC_SLUGS).toEqual([
       "architecture",
+      "coding-conventions",
       "development-guide",
       "testing-guide",
     ]);
@@ -19,6 +20,7 @@ describe("main-menu", () => {
   it("DOC_I18N_KEYS maps each slug to an i18n key", () => {
     expect(DOC_I18N_KEYS).toEqual({
       architecture: "architecture",
+      "coding-conventions": "codingConventions",
       "development-guide": "developmentGuide",
       "testing-guide": "testingGuide",
     });
@@ -40,11 +42,12 @@ describe("main-menu", () => {
     expect(menu[2].id).toBe("documents");
     expect(menu[2].translationKey).toBe("navigation.documents");
     expect(menu[2].href).toBe("");
-    expect(menu[2].children).toHaveLength(3);
+    expect(menu[2].children).toHaveLength(4);
     const docSlugs = menu[2].children!.map((c) => c.id) as DocSlug[];
     expect(docSlugs).toEqual(DOC_SLUGS);
     expect(menu[2].children!.map((c) => c.href)).toEqual([
       "/docs/architecture",
+      "/docs/coding-conventions",
       "/docs/development-guide",
       "/docs/testing-guide",
     ]);

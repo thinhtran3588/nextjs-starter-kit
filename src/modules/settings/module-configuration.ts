@@ -1,8 +1,8 @@
 import { asFunction, type AwilixContainer } from "awilix";
 
-import { FirestoreUserSettingsRepository } from "@/modules/settings/repositories/firestore-user-settings-repository";
-import { LoadUserSettingsUseCase } from "@/modules/settings/use-cases/load-user-settings-use-case";
-import { SaveUserSettingsUseCase } from "@/modules/settings/use-cases/save-user-settings-use-case";
+import { LoadUserSettingsUseCase } from "@/modules/settings/application/load-user-settings-use-case";
+import { SaveUserSettingsUseCase } from "@/modules/settings/application/save-user-settings-use-case";
+import { FirestoreUserSettingsRepository } from "@/modules/settings/infrastructure/repositories/firestore-user-settings-repository";
 
 type GetFirestoreInstance = () => import("firebase/firestore").Firestore | null;
 

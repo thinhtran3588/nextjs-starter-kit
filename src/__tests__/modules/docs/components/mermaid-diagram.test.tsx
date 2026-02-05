@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import type React from "react";
 import { vi } from "vitest";
-import { MermaidDiagram } from "@/modules/docs/components/mermaid-diagram";
+import { MermaidDiagram } from "@/modules/docs/presentation/components/mermaid-diagram";
 
 const mockRender = vi.fn();
 vi.mock("mermaid", () => ({

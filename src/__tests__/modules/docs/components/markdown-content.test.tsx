@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { MarkdownContent } from "@/modules/docs/components/markdown-content";
+import { MarkdownContent } from "@/modules/docs/presentation/components/markdown-content";
 
 describe("MarkdownContent", () => {
   it("renders markdown content as HTML", () => {

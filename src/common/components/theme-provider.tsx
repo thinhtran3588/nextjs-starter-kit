@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import { getResolvedTheme } from "@/common/utils/theme";
-import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
+import { useUserSettingsStore } from "@/modules/settings/presentation/hooks/use-user-settings-store";
 
 function applyTheme(resolved: "light" | "dark") {
   const root = document.documentElement;

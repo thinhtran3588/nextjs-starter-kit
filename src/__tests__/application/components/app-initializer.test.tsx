@@ -22,11 +22,11 @@ vi.mock("@/common/utils/container", async (importOriginal) => {
   };
 });
 
-vi.mock("@/modules/auth/hooks/use-sync-auth-state", () => ({
+vi.mock("@/modules/auth/presentation/hooks/use-sync-auth-state", () => ({
   useSyncAuthState: (...args: unknown[]) => mockUseSyncAuthState(...args),
 }));
 
-vi.mock("@/modules/settings/hooks/use-sync-user-settings", () => ({
+vi.mock("@/modules/settings/presentation/hooks/use-sync-user-settings", () => ({
   useSyncUserSettings: (...args: unknown[]) => mockUseSyncUserSettings(...args),
 }));
 

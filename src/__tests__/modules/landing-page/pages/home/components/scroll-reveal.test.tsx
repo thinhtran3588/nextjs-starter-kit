@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import { ScrollReveal } from "@/modules/landing-page/pages/home/components/scroll-reveal";
+import { ScrollReveal } from "@/modules/landing-page/presentation/pages/home/components/scroll-reveal";
 
 describe("ScrollReveal", () => {
   it("renders children", () => {

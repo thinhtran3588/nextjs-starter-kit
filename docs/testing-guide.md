@@ -1,249 +1,300 @@
 # Testing Guide
 
-This document describes the frontend testing approach for the Cognimap web
-application. It aligns with the modular Clean Architecture in
-`docs/architecture.md` and mirrors the rigor of the backend testing guide.
+This document describes the testing approach aligned with the Clean Architecture patterns defined in [Architecture](./architecture.md).
 
 ## Table of Contents
 
 1. [Overview](#overview)
 2. [Test Configuration](#test-configuration)
-3. [Test Types](#test-types)
-4. [Test Organization](#test-organization)
-5. [Test Coverage Requirements](#test-coverage-requirements)
-6. [Writing Tests](#writing-tests)
-7. [Test Utilities and Helpers](#test-utilities-and-helpers)
+3. [Test Organization](#test-organization)
+4. [Test Types](#test-types)
+5. [Writing Tests](#writing-tests)
+   - [Use Case Tests](#use-case-tests)
+   - [Component Tests](#component-tests)
+   - [Schema Tests](#schema-tests)
+6. [Test Utilities](#test-utilities)
+7. [Coverage Requirements](#coverage-requirements)
 8. [Running Tests](#running-tests)
 9. [Best Practices](#best-practices)
 
 ## Overview
 
-The frontend uses **Vitest** for testing, with **React Testing Library** for UI
-tests. The strategy follows a layered, modular approach:
+The project uses **Vitest** for testing with **React Testing Library** for UI tests.
 
-- **Unit Tests**: Validate domain, application, and infrastructure logic in
-  isolation.
-- **Component Tests**: Validate presentation components as users interact with
-  the UI.
-- **Integration Tests**: Validate module flows that combine application logic,
-  API client, and UI.
-- **E2E Tests (if configured)**: Validate full user journeys in a browser
-  environment.
+### Key Principles
 
-### Key Testing Principles
-
-1. **100% Coverage Mandatory**: All lines, functions, branches, and statements
-   must be covered.
-2. **Test Close to the User**: Prefer testing behavior and outcomes rather than
-   implementation details.
-3. **Isolation First**: Mock external services and API calls in unit/component
-   tests.
-4. **Readable Tests**: Clear test names, consistent structure, and explicit
-   expectations.
+1. **100% Coverage Mandatory** - All lines, functions, branches, and statements must be covered
+2. **Test Behavior, Not Implementation** - Focus on outcomes rather than internal details
+3. **Isolation First** - Mock external services and dependencies
+4. **Mirror Source Structure** - Tests follow the same folder structure as source code
 
 ## Test Configuration
 
-The test configuration should live in `vitest.config.ts`. Typical frontend
-settings include:
+Configuration in `vitest.config.ts`:
 
 - **Environment**: `jsdom` for DOM APIs
-- **Setup file**: `src/__tests__/test-utils/setup.ts` to register
-  `@testing-library/jest-dom`, mock browser APIs, and set environment variables
+- **Setup file**: `src/__tests__/test-utils/setup.ts`
 - **Coverage thresholds**: 100% across all metrics
-- **Path aliases**: Align with application aliases (e.g. `@/` → `src/`)
+- **Path aliases**: Aligned with `@/` → `src/`
 
-When in doubt, refer to the project configuration in `vitest.config.ts` and the
-current `package.json` scripts.
+## Test Organization
+
+Tests mirror the source structure under `src/__tests__/`:
+
+```text
+src/__tests__/
+├── application/              # App-level tests
+│   ├── components/           # AppInitializer tests
+│   └── register-container.test.ts
+├── common/
+│   ├── components/           # Shared component tests
+│   ├── hooks/                # Shared hook tests
+│   └── utils/                # Utility tests
+├── modules/
+│   └── {module}/
+│       ├── domain/           # Schema tests
+│       ├── application/      # Use case tests
+│       └── presentation/
+│           ├── components/   # Component tests
+│           ├── hooks/        # Hook tests
+│           └── pages/        # Page tests
+└── test-utils/
+    ├── setup.ts              # Global setup
+    └── ...                   # Test helpers
+```
+
+### File Naming
+
+- Tests end in `.test.ts` or `.test.tsx`
+- Match source file name: `sign-in-form.tsx` → `sign-in-form.test.tsx`
 
 ## Test Types
 
 ### Unit Tests
 
-**Purpose**: Test pure logic and functions without React rendering.
+**Purpose**: Test pure logic without React rendering.
 
 **Targets**:
-
-- Domain types and Zod schemas
-- Application use cases and stores
-- Infrastructure API client helpers and utilities
-
-**Tools**: `vitest`, `vi.fn()`, `vi.mock()`
+- Domain schemas (`domain/schemas.ts`)
+- Use cases (`application/*-use-case.ts`)
+- Utilities (`utils/`)
 
 ### Component Tests
 
 **Purpose**: Validate UI behavior and user interactions.
 
 **Targets**:
-
-- Page-level components in `src/modules/{module}/pages/`
-- Shared components in `src/common/components/`
-- Form flows using React Hook Form and Zod
-
-**Tools**: React Testing Library, `user-event`, `@testing-library/jest-dom`
+- Page components (`presentation/pages/`)
+- Shared components (`presentation/components/`, `common/components/`)
+- Forms with validation
 
 ### Integration Tests
 
-**Purpose**: Validate module flows that cross multiple layers.
+**Purpose**: Validate flows across multiple layers.
 
 **Targets**:
-
-- Component + application use case + API client coordination
-- Error handling and validation surfaces
-- Module-specific flows (auth, settings, dashboard)
-
-**Tools**: React Testing Library + mocked API (MSW recommended)
-
-### E2E Tests (Optional)
-
-If configured, E2E tests validate full user journeys in a real browser using a
-tool like Playwright or Cypress. These tests should cover:
-
-- Authentication flows
-- Critical navigation paths
-- End-to-end form submission
-
-## Test Organization
-
-Organize tests to mirror the production structure:
-
-```
-src/__tests__/
-├── unit/
-│   ├── common/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   └── infrastructure/
-│   └── modules/
-│       └── {module-name}/
-│           ├── domain/
-│           ├── application/
-│           ├── infrastructure/
-│           └── presentation/
-├── integration/
-│   └── modules/{module-name}/
-├── e2e/                       # If configured
-└── test-utils/
-    ├── setup.ts
-    ├── render.tsx
-    └── fixtures.ts
-```
-
-### File Naming Convention
-
-- Tests end in `.test.ts` or `.spec.ts`
-- Match the source file name and location when possible
-- Example: `login-form.tsx` → `login-form.test.tsx`
-
-## Test Coverage Requirements
-
-**100% coverage is mandatory** for:
-
-- **Lines**
-- **Functions**
-- **Branches**
-- **Statements**
-
-### Branch Coverage Notes
-
-Every conditional branch must be tested, including:
-
-- Nullish coalescing (`??`)
-- Ternary operators (`? :`)
-- Optional chaining (`?.`)
-- Logical operators (`&&`, `||`)
-
-### Coverage Exclusions
-
-Skip tests only for:
-
-- Pure type definitions and enums
-- Configuration files
-- Test utilities
+- Component + use case coordination
+- Error handling flows
+- Module-specific flows (auth, books, settings)
 
 ## Writing Tests
 
-### Structure Pattern
+### Use Case Tests
 
-Use the Arrange-Act-Assert (AAA) pattern:
+```typescript
+// src/__tests__/modules/auth/application/sign-in-with-email-use-case.test.ts
+import { SignInWithEmailUseCase } from "@/modules/auth/application/sign-in-with-email-use-case";
+import type { AuthenticationService } from "@/modules/auth/domain/interfaces";
 
-1. **Arrange**: Set up inputs, mocks, and environment
-2. **Act**: Execute the behavior
-3. **Assert**: Verify output and side effects
+describe("SignInWithEmailUseCase", () => {
+  let useCase: SignInWithEmailUseCase;
+  let mockAuthService: AuthenticationService;
 
-### Example: Component Test
+  beforeEach(() => {
+    mockAuthService = {
+      signInWithEmail: vi.fn(),
+      signInWithGoogle: vi.fn(),
+      signUpWithEmail: vi.fn(),
+      signOut: vi.fn(),
+      sendPasswordReset: vi.fn(),
+      subscribeToAuthState: vi.fn(),
+      updateDisplayName: vi.fn(),
+      updatePassword: vi.fn(),
+    };
+    useCase = new SignInWithEmailUseCase(mockAuthService);
+  });
 
-```tsx
-import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { LoginForm } from '@/modules/auth/pages/login/components/login-form';
-
-describe('LoginForm', () => {
-  it('submits valid credentials', async () => {
-    const user = userEvent.setup();
-    render(<LoginForm />);
-
-    await user.type(screen.getByLabelText(/email/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/password/i), 'ValidPass123!');
-    await user.click(screen.getByRole('button', { name: /sign in/i }));
-
-    expect(
-      screen.getByText(/signing in/i)
-    ).toBeInTheDocument();
+  it("calls auth service with credentials", async () => {
+    await useCase.execute({ email: "test@example.com", password: "password123" });
+    
+    expect(mockAuthService.signInWithEmail).toHaveBeenCalledWith(
+      "test@example.com",
+      "password123"
+    );
   });
 });
 ```
 
-### Testing Server vs Client Components
+### Component Tests
 
-- Default to **Server Components**; only Client Components can use hooks.
-- For tests, focus on the **component output** and the **behavior**.
-- Keep `use client` boundaries minimal and test the smallest client surface.
+```typescript
+// src/__tests__/modules/auth/presentation/pages/sign-in/components/sign-in-form.test.tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { SignInForm } from "@/modules/auth/presentation/pages/sign-in/components/sign-in-form";
 
-## Test Utilities and Helpers
+describe("SignInForm", () => {
+  it("submits valid credentials", async () => {
+    const user = userEvent.setup();
+    render(<SignInForm />);
 
-Create shared test helpers in `src/__tests__/test-utils/`:
+    await user.type(screen.getByLabelText(/email/i), "user@example.com");
+    await user.type(screen.getByLabelText(/password/i), "ValidPass123!");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
 
-- `render.tsx`: Wraps components with providers (i18n, theme, store)
-- `fixtures.ts`: Shared test data
-- `setup.ts`: Global test setup (jest-dom, mocks)
+    expect(screen.getByText(/signing in/i)).toBeInTheDocument();
+  });
 
-These helpers reduce boilerplate and keep tests consistent.
+  it("shows validation error for invalid email", async () => {
+    const user = userEvent.setup();
+    render(<SignInForm />);
+
+    await user.type(screen.getByLabelText(/email/i), "invalid");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
+
+    expect(screen.getByText(/invalid email/i)).toBeInTheDocument();
+  });
+});
+```
+
+### Schema Tests
+
+```typescript
+// src/__tests__/modules/auth/domain/schemas.test.ts
+import { loginSchema } from "@/modules/auth/domain/schemas";
+
+describe("loginSchema", () => {
+  it("validates correct input", () => {
+    const result = loginSchema.safeParse({
+      email: "test@example.com",
+      password: "password123",
+    });
+    
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects invalid email", () => {
+    const result = loginSchema.safeParse({
+      email: "invalid",
+      password: "password123",
+    });
+    
+    expect(result.success).toBe(false);
+  });
+});
+```
+
+## Test Utilities
+
+Shared helpers in `src/__tests__/test-utils/`:
+
+| File | Purpose |
+|------|---------|
+| `setup.ts` | Global setup (jest-dom, mocks, environment) |
+| `render.tsx` | Custom render with providers (if needed) |
+| `fixtures.ts` | Shared test data |
+
+### Example Setup
+
+```typescript
+// src/__tests__/test-utils/setup.ts
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
+
+// Mock browser APIs
+Object.defineProperty(window, "matchMedia", {
+  value: vi.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  })),
+});
+```
+
+## Coverage Requirements
+
+**100% coverage is mandatory** for:
+
+| Metric | Threshold |
+|--------|-----------|
+| Lines | 100% |
+| Functions | 100% |
+| Branches | 100% |
+| Statements | 100% |
+
+### Branch Coverage
+
+Every conditional must be tested:
+- Ternary operators (`? :`)
+- Logical operators (`&&`, `||`)
+- Optional chaining (`?.`)
+- Nullish coalescing (`??`)
+
+### Coverage Exclusions
+
+Skip tests only for:
+- Pure type definitions
+- Configuration files
+- Test utilities themselves
 
 ## Running Tests
 
-Common scripts (check `package.json` for exact names):
-
 ```bash
-npm test
-npm run test:watch
-npm run test:coverage
-npm run test:ui
-npm run validate
+npm test              # Run all tests
+npm run test:watch    # Watch mode
+npm run test:coverage # With coverage report
+npm run validate      # Full validation (includes tests)
 ```
 
 ## Best Practices
 
-1. **Test behavior, not implementation**
+1. **Use Arrange-Act-Assert (AAA) pattern**
+   ```typescript
+   it("does something", () => {
+     // Arrange
+     const input = { ... };
+     
+     // Act
+     const result = doSomething(input);
+     
+     // Assert
+     expect(result).toBe(expected);
+   });
+   ```
+
 2. **Prefer queries by role/label** over `data-testid`
-3. **Mock external APIs** with MSW for stable tests
-4. **Avoid brittle snapshots** unless they add clear value
-5. **Keep tests fast**; reserve E2E for critical flows
-6. **Cover edge cases** (null, empty values, invalid inputs)
-7. **Maintain 100% coverage** for all metrics
+   ```typescript
+   // Good
+   screen.getByRole("button", { name: /submit/i });
+   screen.getByLabelText(/email/i);
+   
+   // Avoid
+   screen.getByTestId("submit-button");
+   ```
 
-## Summary
+3. **Mock at the boundary** - Mock services/repositories, not use cases
+   ```typescript
+   // Good - mock the service interface
+   const mockService: AuthenticationService = { ... };
+   
+   // Avoid - mocking internal implementation
+   vi.mock("firebase/auth");
+   ```
 
-This guide establishes frontend testing standards aligned with the project's
-Clean Architecture:
+4. **Test error cases** - Cover validation errors, API failures, edge cases
 
-1. **100% coverage** is mandatory
-2. **Test organization** mirrors the module structure
-3. **Unit, component, integration, and optional E2E** tests each have a role
-4. **Consistent utilities** make tests easier to write and maintain
+5. **Keep tests fast** - Mock external calls, avoid unnecessary rendering
 
-For more details, see:
+6. **One assertion focus per test** - Multiple assertions are fine if testing one behavior
 
-- [Architecture Guide](./architecture.md)
-- [Development Guide](./development-guide.md)
-- [README](../README.md)

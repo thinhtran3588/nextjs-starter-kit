@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { MainHeader } from "@/common/components/main-header";
-import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import type { ResolvedMenuItem } from "@/common/interfaces";
 import { Link } from "@/common/routing/navigation";
 
 let mockAuthUser: {
@@ -21,7 +21,7 @@ vi.mock("@/common/hooks/use-container", () => ({
   })),
 }));
 
-vi.mock("@/modules/auth/hooks/use-auth-user-store", () => ({
+vi.mock("@/modules/auth/presentation/hooks/use-auth-user-store", () => ({
   useAuthUserStore: (
     selector: (s: { user: typeof mockAuthUser; loading: boolean }) => unknown,
   ) => selector({ user: mockAuthUser, loading: mockAuthLoading }),
@@ -312,7 +312,7 @@ describe("MainHeader", () => {
 
   it("shows user name, Profile, and Sign out directly in mobile menu when signed in", async () => {
     const { AuthHeaderSlot } =
-      await import("@/modules/auth/components/auth-header-slot");
+      await import("@/modules/auth/presentation/components/auth-header-slot");
     mockAuthUser = {
       id: "uid-1",
       email: "a@b.com",

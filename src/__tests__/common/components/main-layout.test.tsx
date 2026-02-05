@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
-import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import type { ResolvedMenuItem } from "@/common/interfaces";
 
 const translations: Record<string, Record<string, string>> = {
   common: {

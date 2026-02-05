@@ -1,4 +1,4 @@
-import { SignInPage } from "@/modules/auth/pages/sign-in/page";
+import { SignInPage } from "@/modules/auth/presentation/pages/sign-in/page";
 
 export default function Page() {
   return <SignInPage />;

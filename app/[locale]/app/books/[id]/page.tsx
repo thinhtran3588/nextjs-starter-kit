@@ -1,4 +1,4 @@
-import { BookDetailPage } from "@/modules/books/pages/detail/page";
+import { BookDetailPage } from "@/modules/books/presentation/pages/detail/page";
 
 type PageProps = {
   params: Promise<{ id: string }>;
