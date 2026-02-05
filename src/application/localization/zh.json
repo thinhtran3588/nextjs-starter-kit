@@ -16,6 +16,7 @@
       "documents": "文档",
       "docs": {
         "architecture": "架构",
+        "codingConventions": "编码规范",
         "developmentGuide": "开发指南",
         "testingGuide": "测试指南"
       },
@@ -404,15 +405,15 @@
           "features": {
             "architecture": {
               "title": "Clean Architecture",
-              "description": "Domain、Application、Infrastructure 与 Presentation 四层。用例与 API 客户端抽象使业务逻辑独立于 UI 与 HTTP。"
+              "description": "Domain、Application、Infrastructure 与 Presentation 四层，通过 Awilix 实现依赖注入。用例编排业务逻辑，独立于 UI。"
             },
             "modular": {
               "title": "模块化结构",
-              "description": "按功能组织的模块位于 src/modules/，含 domain、application、infrastructure 与 presentation。app/ 下仅用于 App Router 路由。"
+              "description": "功能模块位于 src/modules/，遵循 Clean Architecture 分层。app/ 中的 App Router 仅负责路由；代码均在 src/ 中。"
             },
             "stack": {
               "title": "完整技术栈",
-              "description": "React Hook Form + Zod 处理表单与校验，Zustand 管理状态，shadcn/ui 与 Tailwind 构建 UI，next-intl 实现国际化。"
+              "description": "React Hook Form + Zod 处理表单，Zustand 管理状态，shadcn/ui 与 Tailwind 构建 UI，next-intl 支持 3 种语言的国际化。"
             }
           },
           "techStack": {
@@ -441,19 +442,23 @@
           },
           "docs": {
             "title": "文档",
-            "description": "架构、开发流程与测试说明均在仓库文档中。",
+            "description": "四份全面指南涵盖架构、规范、开发流程与测试。",
             "items": {
               "architecture": {
                 "title": "架构",
-                "description": "Clean Architecture 分层、模块结构、数据流与设计模式。"
+                "description": "层级结构、数据流图、设计模式与 Awilix 依赖注入。"
+              },
+              "codingConventions": {
+                "title": "编码规范",
+                "description": "App Router 模式、文件命名、组件 props、Zod 表单与 next-intl 国际化。"
               },
               "development": {
                 "title": "开发指南",
-                "description": "Git 工作流、添加功能、创建模块与测试规范。"
+                "description": "Git 工作流、7 步功能开发指南、模块创建与常用模式。"
               },
               "testing": {
                 "title": "测试指南",
-                "description": "Vitest、React Testing Library、100% 覆盖率要求与最佳实践。"
+                "description": "Vitest + React Testing Library、100% 覆盖率、测试组织与 AAA 模式。"
               }
             }
           }

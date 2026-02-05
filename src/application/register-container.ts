@@ -9,7 +9,6 @@ import { registerModule as registerAuthModule } from "@/modules/auth/module-conf
 import { registerModule as registerBooksModule } from "@/modules/books/module-configuration";
 import { registerModule as registerDocsModule } from "@/modules/docs/module-configuration";
 import { registerModule as registerLandingPageModule } from "@/modules/landing-page/module-configuration";
-import { registerModule as registerLegalModule } from "@/modules/legal/module-configuration";
 import { registerModule as registerSettingsModule } from "@/modules/settings/module-configuration";
 
 export function registerContainer(container: AwilixContainer<object>): void {
@@ -21,7 +20,6 @@ export function registerContainer(container: AwilixContainer<object>): void {
   registerBooksModule(container);
   registerDocsModule(container);
   registerLandingPageModule(container);
-  registerLegalModule(container);
   registerSettingsModule(container);
 }
 

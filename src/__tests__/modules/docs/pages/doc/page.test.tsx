@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
-import { DocPage } from "@/modules/docs/pages/doc/page";
+import { DocPage } from "@/modules/docs/presentation/pages/doc/page";
 
 const mockGetLocale = vi.fn().mockResolvedValue("vi");
 vi.mock("next-intl/server", () => ({

@@ -1,113 +1,349 @@
 # Development Guide
 
-This guide provides step-by-step instructions for adding new features and creating new modules following the architecture patterns.
+This guide provides step-by-step instructions for adding new features and creating new modules following the Clean Architecture patterns.
 
 ## Table of Contents
 
 1. [Git Workflow](#git-workflow)
+   - [Development Workflow](#development-workflow)
+   - [Branch Naming](#branch-naming)
 2. [Adding a New Feature](#adding-a-new-feature)
+   - [Step 1: Identify the Module](#step-1-identify-the-module)
+   - [Step 2: Create Domain Types](#step-2-create-domain-types-if-needed)
+   - [Step 3: Create Use Case](#step-3-create-use-case)
+   - [Step 4: Register Use Case](#step-4-register-use-case)
+   - [Step 5: Create UI Components](#step-5-create-ui-components)
+   - [Step 6: Add Route](#step-6-add-route)
+   - [Step 7: Write Tests](#step-7-write-tests)
 3. [Creating a New Module](#creating-a-new-module)
+   - [Module Structure](#module-structure)
+   - [Step-by-Step](#step-by-step)
 4. [Common Patterns](#common-patterns)
-5. [Testing Guidelines](#testing-guidelines)
+   - [Use Case Pattern](#use-case-pattern)
+   - [Form with Validation](#form-with-validation)
+   - [Interface Implementation](#interface-implementation)
+5. [Testing](#testing)
 
 ## Git Workflow
 
-This section describes the Git workflow for feature development and releases.
-
 ### Development Workflow
-
-The following flowchart illustrates the complete Git workflow from feature development to release:
 
 ```mermaid
 flowchart TD
-    Start([Start Development]) --> CheckBranch{Check Current Branch}
-    CheckBranch -->|On main or develop| SwitchToDevelop[Switch to develop branch]
-    CheckBranch -->|Already on feature branch| CreateFeatureBranch
-    SwitchToDevelop --> FetchLatest[Fetch latest changes]
-    FetchLatest --> PullDevelop[Pull latest develop branch]
-    PullDevelop --> CreateFeatureBranch[Create feature/bug fix branch from develop]
-    CreateFeatureBranch --> Develop[Develop feature/fix]
-    Develop --> WriteTests[Write/Update Tests]
-    WriteTests --> RunValidation[Run npm run validate]
-    RunValidation --> ValidationPass{Validation Pass?}
-    ValidationPass -->|No| FixIssues[Fix Issues]
-    FixIssues --> RunValidation
-    ValidationPass -->|Yes| Commit[Commit changes to feature branch]
-    Commit --> Push[Push branch to remote]
-    Push --> CreatePR[Create Pull Request to develop]
-    CreatePR --> Review{Code Review & CI Pass?}
-    Review -->|No| AddressFeedback[Address Feedback]
-    AddressFeedback --> Commit
-    Review -->|Yes| SquashMerge[Squash Merge PR into develop]
-    SquashMerge --> ReleaseReady{Ready for Release?}
-    ReleaseReady -->|No| Start
-    ReleaseReady -->|Yes| CreateTag[Create Release Tag]
-    CreateTag --> MergeToMain[Merge develop into main]
-    MergeToMain --> End([Release Complete])
+    Start([Start]) --> CheckBranch{Current branch?}
+    CheckBranch -->|main/develop| SwitchDevelop[git checkout develop]
+    CheckBranch -->|feature branch| Develop
+    SwitchDevelop --> FetchPull[git fetch && git pull]
+    FetchPull --> CreateBranch[Create feature/fix branch]
+    CreateBranch --> Develop[Develop & Write Tests]
+    Develop --> Validate[npm run validate]
+    Validate --> Pass{Pass?}
+    Pass -->|No| Develop
+    Pass -->|Yes| Commit[Commit & Push]
+    Commit --> PRExists{PR exists?}
+    PRExists -->|No| CreatePR[Create PR to develop]
+    PRExists -->|Yes| Review
+    CreatePR --> Review{Approved?}
+    Review -->|No| Develop
+    Review -->|Yes| Merge[Squash Merge]
+    Merge --> Done([Done])
 
     style Start fill:#1565c0,color:#fff
-    style End fill:#2e7d32,color:#fff
-    style CreateFeatureBranch fill:#ef6c00,color:#fff
-    style SquashMerge fill:#00838f,color:#fff
-    style CreateTag fill:#c62828,color:#fff
-    style MergeToMain fill:#1b5e20,color:#fff
+    style Done fill:#2e7d32,color:#fff
+    style CreateBranch fill:#ef6c00,color:#fff
+    style Merge fill:#00838f,color:#fff
 ```
 
 ### Workflow Steps
 
-1. **Create Feature/Bug Fix Branch from Develop**
-   - Ensure you're on the `develop` branch: `git checkout develop`
-   - Fetch latest changes: `git fetch origin`
-   - Pull latest changes: `git pull origin develop`
-   - Create a new branch: `git checkout -b feature/your-feature-name` or `git checkout -b fix/your-bug-fix-name`
-   - Use descriptive branch names in kebab-case (e.g., `feature/add-user-authentication`, `fix/pagination-bug`)
+#### Starting New Work
 
-2. **Push Code and Create Pull Request**
-   - Make your code changes
-   - Write/update tests to maintain 100% coverage
-   - Run validation: `npm run validate` (must pass before committing)
-   - Commit changes: `git add . && git commit -m "Descriptive commit message"`
-   - Push branch to remote: `git push -u origin feature/your-feature-name`
-   - Create a Pull Request targeting the `develop` branch
-   - Wait for code review and CI checks to pass
+1. **Create Feature/Fix Branch**
+   ```bash
+   git checkout develop
+   git fetch origin && git pull origin develop
+   git checkout -b feature/your-feature-name   # or fix/your-bug-fix
+   ```
 
-3. **Merge to Develop (Squash Merge)**
-   - Once code review is approved and all CI checks pass
-   - Merge the PR using **Squash Merge** strategy
-   - This creates a single commit on `develop` with all changes from the feature branch
-   - The feature branch can be deleted after merging
+#### Continuing Existing Work
 
-4. **Create Release Tag and Merge to Main**
-   - When ready for a release:
-     - Create a release tag on `develop`: `git tag -a v1.0.0 -m "Release version 1.0.0"`
-     - Push the tag: `git push origin v1.0.0`
-   - Merge `develop` into `main`:
-     - Switch to main: `git checkout main`
-     - Pull latest: `git pull origin main`
-     - Merge develop: `git merge develop`
-     - Push to remote: `git push origin main`
+1. **If already on feature branch**, continue development directly.
 
-### Branch Naming Conventions
+#### Development Cycle
 
-- **Feature branches**: `feature/description-of-feature` (e.g., `feature/add-user-authentication`)
-- **Bug fix branches**: `fix/description-of-bug` (e.g., `fix/pagination-validation-error`)
-- **Hotfix branches**: `hotfix/description-of-hotfix` (e.g., `hotfix/security-patch`)
+2. **Develop and Validate**
+   ```bash
+   # Make changes, write tests
+   npm run validate  # Must pass before committing
+   ```
 
-### Important Notes
+3. **Commit and Push**
+   ```bash
+   git add . && git commit -m "feat: description"
+   git push -u origin feature/your-feature-name
+   ```
 
-- **Never commit directly to `main` or `develop` branches** - always use feature branches
-- **Always run `npm run validate` before committing** - this ensures code quality, formatting, and test coverage
-- **Use squash merge** when merging PRs to `develop` - this keeps the commit history clean
-- **Create release tags** on `develop` before merging to `main` - this marks specific release points
-- **Merge `develop` into `main`** only when ready for production release
+4. **Create PR** targeting `develop` branch (if not already created), then squash merge after approval.
 
-## File Naming Conventions
+### Branch Naming
 
-- **All files and folders use kebab-case** (lowercase with hyphens).
-- **Next.js reserved route files** (`page.tsx`, `layout.tsx`, `loading.tsx`, etc.) keep their required names.
-- **Page modules live in their own folder** under `src/modules/{module}/pages/{page}/page.tsx`.
+| Type | Pattern | Example |
+|------|---------|---------|
+| New feature | `feature/description` | `feature/add-user-profile` |
+| Bug fix | `fix/description` | `fix/login-validation` |
+| Hotfix | `hotfix/description` | `hotfix/security-patch` |
 
-## Component Props Types
+## Adding a New Feature
 
-- **Components with props must define a props type** and use it in the component signature.
-- **Components without props** should not define a props type or include a props parameter.
+### Step 1: Identify the Module
+
+Determine which module the feature belongs to:
+- `auth` - Authentication features
+- `books` - Book CRUD operations
+- `settings` - User settings
+- `landing-page` - Public pages
+- Or create a new module (see [Creating a New Module](#creating-a-new-module))
+
+### Step 2: Create Domain Types (if needed)
+
+Add types and schemas in `src/modules/{module}/domain/`:
+
+```typescript
+// domain/types.ts
+export type NewFeatureData = {
+  id: string;
+  name: string;
+};
+
+// domain/schemas.ts
+import { z } from "zod";
+
+export const newFeatureSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+});
+
+export type NewFeatureInput = z.infer<typeof newFeatureSchema>;
+```
+
+### Step 3: Create Use Case
+
+Add use case in `src/modules/{module}/application/`:
+
+```typescript
+// application/create-feature-use-case.ts
+import { BaseUseCase } from "@/common/utils/base-use-case";
+import type { FeatureRepository } from "@/modules/{module}/domain/interfaces";
+
+type Input = { userId: string; data: NewFeatureInput };
+type Output = { success: boolean };
+
+export class CreateFeatureUseCase extends BaseUseCase<Input, Output> {
+  constructor(private readonly repository: FeatureRepository) {
+    super();
+  }
+
+  async execute(input: Input): Promise<Output> {
+    await this.repository.create(input.userId, input.data);
+    return { success: true };
+  }
+}
+```
+
+### Step 4: Register Use Case
+
+Update `src/modules/{module}/module-configuration.ts`:
+
+```typescript
+import { asFunction } from "awilix";
+import { CreateFeatureUseCase } from "./application/create-feature-use-case";
+
+export function registerModule(container: AwilixContainer<object>): void {
+  container.register({
+    createFeatureUseCase: asFunction(
+      (cradle) => new CreateFeatureUseCase(cradle.featureRepository)
+    ).singleton(),
+  });
+}
+```
+
+### Step 5: Create UI Components
+
+Add page in `src/modules/{module}/presentation/pages/{page}/`:
+
+```typescript
+// presentation/pages/new-feature/page.tsx
+"use client";
+
+import { useContainer } from "@/common/hooks/use-container";
+
+export function NewFeaturePage() {
+  const { createFeatureUseCase } = useContainer();
+  // ... component logic
+}
+```
+
+### Step 6: Add Route
+
+Create route in `app/[locale]/`:
+
+```typescript
+// app/[locale]/(main)/new-feature/page.tsx
+import { NewFeaturePage } from "@/modules/{module}/presentation/pages/new-feature/page";
+
+export default function Page() {
+  return <NewFeaturePage />;
+}
+```
+
+### Step 7: Write Tests
+
+Add tests in `src/__tests__/modules/{module}/`:
+
+```typescript
+// __tests__/modules/{module}/application/create-feature-use-case.test.ts
+describe("CreateFeatureUseCase", () => {
+  it("creates feature successfully", async () => {
+    // ... test implementation
+  });
+});
+```
+
+## Creating a New Module
+
+### Module Structure
+
+```text
+src/modules/{module-name}/
+├── domain/
+│   ├── types.ts              # Domain types
+│   ├── schemas.ts            # Zod validation schemas
+│   └── interfaces.ts         # Service/Repository interfaces
+├── application/
+│   └── {use-case}-use-case.ts
+├── infrastructure/
+│   ├── services/             # External service implementations
+│   └── repositories/         # Data access implementations
+├── presentation/
+│   ├── components/           # Module-shared components
+│   ├── hooks/                # Module hooks (Zustand stores, etc.)
+│   └── pages/
+│       └── {page}/
+│           ├── page.tsx
+│           └── components/   # Page-specific components
+├── utils/                    # Module utilities
+└── module-configuration.ts   # DI registration
+```
+
+### Step-by-Step
+
+1. **Create folder structure** following the template above
+
+2. **Define domain** (`domain/types.ts`, `domain/schemas.ts`, `domain/interfaces.ts`)
+
+3. **Implement infrastructure** (services/repositories that implement interfaces)
+
+4. **Create use cases** in `application/`
+
+5. **Register in DI container** (`module-configuration.ts`):
+   ```typescript
+   export function registerModule(container: AwilixContainer<object>): void {
+     container.register({
+       // Register services/repositories
+       featureRepository: asFunction(
+         (cradle) => new FirestoreFeatureRepository(cradle.getFirestoreInstance)
+       ).singleton(),
+       // Register use cases
+       createFeatureUseCase: asFunction(
+         (cradle) => new CreateFeatureUseCase(cradle.featureRepository)
+       ).singleton(),
+     });
+   }
+   ```
+
+6. **Register module** in `src/application/register-container.ts`:
+   ```typescript
+   import { registerModule as registerFeatureModule } from "@/modules/feature/module-configuration";
+   
+   export function registerContainer(container: AwilixContainer<object>): void {
+     // ... existing registrations
+     registerFeatureModule(container);
+   }
+   ```
+
+7. **Create presentation layer** (pages, components, hooks)
+
+8. **Add routes** in `app/[locale]/`
+
+9. **Write tests** mirroring the module structure in `src/__tests__/`
+
+## Common Patterns
+
+### Use Case Pattern
+
+```typescript
+export class MyUseCase extends BaseUseCase<Input, Output> {
+  constructor(private readonly service: ServiceInterface) {
+    super();
+  }
+
+  async execute(input: Input): Promise<Output> {
+    // Orchestrate the flow
+    return this.service.doSomething(input);
+  }
+}
+```
+
+### Form with Validation
+
+```typescript
+const form = useForm<FormData>({
+  resolver: zodResolver(formSchema),
+  defaultValues: { name: "" },
+});
+
+const onSubmit = async (data: FormData) => {
+  await useCase.execute(data);
+};
+```
+
+### Resolving Use Cases
+
+```typescript
+// In components
+const { myUseCase } = useContainer();
+await myUseCase.execute(input);
+```
+
+### Interface Implementation
+
+```typescript
+// domain/interfaces.ts
+export interface FeatureRepository {
+  create(userId: string, data: FeatureData): Promise<void>;
+  get(userId: string, id: string): Promise<Feature | null>;
+}
+
+// infrastructure/repositories/firestore-feature-repository.ts
+export class FirestoreFeatureRepository implements FeatureRepository {
+  // Implementation
+}
+```
+
+## Testing
+
+### Quick Reference
+
+| Command | Purpose |
+|---------|---------|
+| `npm test` | Run all tests |
+| `npm run test:coverage` | Run with coverage report |
+| `npm run validate` | Full validation (includes tests) |
+
+### Key Points
+
+- **100% code coverage** required
+- Tests mirror source structure in `src/__tests__/`
+- Mock services/repositories at the boundary
+
+For detailed testing patterns, examples, and best practices, see **[Testing Guide](./testing-guide.md)**.
+

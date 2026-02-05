@@ -1,6 +1,8 @@
 import createNextIntlPlugin from "next-intl/plugin";
 
-const withNextIntl = createNextIntlPlugin("./src/application/i18n/request.ts");
+const withNextIntl = createNextIntlPlugin(
+  "./src/application/localization/request.ts",
+);
 
 const nextConfig = {};
 

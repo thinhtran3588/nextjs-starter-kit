@@ -16,6 +16,7 @@
       "documents": "Tài liệu",
       "docs": {
         "architecture": "Kiến trúc",
+        "codingConventions": "Quy ước coding",
         "developmentGuide": "Hướng dẫn phát triển",
         "testingGuide": "Hướng dẫn kiểm thử"
       },
@@ -406,15 +407,15 @@
           "features": {
             "architecture": {
               "title": "Clean Architecture",
-              "description": "Các lớp domain, application, infrastructure và presentation. Use case và API client abstraction tách logic nghiệp vụ khỏi UI và HTTP."
+              "description": "Các lớp domain, application, infrastructure và presentation với dependency injection qua Awilix. Use case điều phối logic nghiệp vụ độc lập với UI."
             },
             "modular": {
               "title": "Cấu trúc module",
-              "description": "Module theo tính năng dưới src/modules/ với domain, application, infrastructure và presentation. App Router dưới app/ chỉ dùng cho routing."
+              "description": "Module tính năng dưới src/modules/ với các lớp Clean Architecture. App Router trong app/ chỉ xử lý routing; toàn bộ code nằm trong src/."
             },
             "stack": {
               "title": "Stack đầy đủ",
-              "description": "React Hook Form + Zod cho form và validation, Zustand cho state, shadcn/ui và Tailwind cho UI. next-intl cho quốc tế hóa."
+              "description": "React Hook Form + Zod cho form, Zustand cho state, shadcn/ui với Tailwind cho UI, next-intl cho i18n với 3 ngôn ngữ sẵn có."
             }
           },
           "techStack": {
@@ -443,19 +444,23 @@
           },
           "docs": {
             "title": "Tài liệu",
-            "description": "Kiến trúc, quy trình phát triển và testing được mô tả trong repository.",
+            "description": "Bốn hướng dẫn toàn diện về kiến trúc, quy ước, quy trình phát triển và testing.",
             "items": {
               "architecture": {
                 "title": "Kiến trúc",
-                "description": "Các lớp Clean Architecture, cấu trúc module, luồng dữ liệu và design patterns."
+                "description": "Cấu trúc layer, sơ đồ luồng dữ liệu, design patterns và dependency injection với Awilix."
+              },
+              "codingConventions": {
+                "title": "Quy ước coding",
+                "description": "Patterns App Router, đặt tên file, component props, forms với Zod và next-intl i18n."
               },
               "development": {
                 "title": "Hướng dẫn phát triển",
-                "description": "Git workflow, thêm tính năng, tạo module và hướng dẫn testing."
+                "description": "Git workflow, hướng dẫn 7 bước thêm tính năng, tạo module và common patterns."
               },
               "testing": {
                 "title": "Hướng dẫn testing",
-                "description": "Vitest, React Testing Library, yêu cầu 100% coverage và best practices."
+                "description": "Vitest + React Testing Library, 100% coverage, tổ chức test và pattern AAA."
               }
             }
           }

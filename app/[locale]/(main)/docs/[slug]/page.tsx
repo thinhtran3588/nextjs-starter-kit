@@ -1,4 +1,4 @@
-import { DocPage } from "@/modules/docs/pages/doc/page";
+import { DocPage } from "@/modules/docs/presentation/pages/doc/page";
 
 type PageProps = {
   params: Promise<{ slug: string }>;

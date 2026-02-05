@@ -1,4 +1,4 @@
-import type { MenuItem, ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import type { MenuItem, ResolvedMenuItem } from "@/common/interfaces";
 
 export function resolveMenuItems(
   items: MenuItem[],

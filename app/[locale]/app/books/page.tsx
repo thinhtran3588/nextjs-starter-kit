@@ -1,4 +1,4 @@
-import { BooksListPage } from "@/modules/books/pages/list/page";
+import { BooksListPage } from "@/modules/books/presentation/pages/list/page";
 
 export default function Page() {
   return <BooksListPage />;

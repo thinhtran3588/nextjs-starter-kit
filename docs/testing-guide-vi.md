@@ -1,233 +1,299 @@
 # Testing Guide
 
-Tài liệu này mô tả cách tiếp cận testing frontend. Cách làm căn cứ theo Clean Architecture trong `docs/architecture.md` và yêu cầu chặt chẽ tương đương hướng dẫn testing backend.
+Tài liệu này mô tả cách tiếp cận testing phù hợp với Clean Architecture patterns định nghĩa trong [Architecture](./architecture-vi.md).
 
 ## Mục lục
 
-1. [Overview](#overview)
-2. [Test Configuration](#test-configuration)
-3. [Test Types](#test-types)
-4. [Test Organization](#test-organization)
-5. [Test Coverage Requirements](#test-coverage-requirements)
-6. [Writing Tests](#writing-tests)
-7. [Test Utilities and Helpers](#test-utilities-and-helpers)
-8. [Running Tests](#running-tests)
+1. [Tổng quan](#tổng-quan)
+2. [Cấu hình Test](#cấu-hình-test)
+3. [Tổ chức Test](#tổ-chức-test)
+4. [Loại Test](#loại-test)
+5. [Viết Tests](#viết-tests)
+   - [Use Case Tests](#use-case-tests)
+   - [Component Tests](#component-tests)
+   - [Schema Tests](#schema-tests)
+6. [Test Utilities](#test-utilities)
+7. [Yêu cầu Coverage](#yêu-cầu-coverage)
+8. [Chạy Tests](#chạy-tests)
 9. [Best Practices](#best-practices)
 
-## Overview
+## Tổng quan
 
-Frontend dùng **Vitest** cho testing, **React Testing Library** cho UI tests. Chiến lược theo hướng layered, modular:
+Dự án dùng **Vitest** cho testing với **React Testing Library** cho UI tests.
 
-- **Unit Tests**: Kiểm tra logic domain, application và infrastructure trong cô lập.
-- **Component Tests**: Kiểm tra component presentation khi người dùng tương tác với UI.
-- **Integration Tests**: Kiểm tra luồng module kết hợp application logic, API client và UI.
-- **E2E Tests (nếu cấu hình)**: Kiểm tra hành trình người dùng đầy đủ trong môi trường browser.
+### Nguyên tắc chính
 
-### Key Testing Principles
+1. **100% Coverage bắt buộc** - Mọi lines, functions, branches và statements phải được cover
+2. **Test Behavior, không phải Implementation** - Tập trung vào kết quả thay vì chi tiết nội bộ
+3. **Isolation First** - Mock external services và dependencies
+4. **Phản chiếu cấu trúc Source** - Tests theo cùng cấu trúc folder với source code
 
-1. **100% Coverage Mandatory**: Mọi lines, functions, branches và statements phải được cover.
-2. **Test Close to the User**: Ưu tiên kiểm tra hành vi và kết quả thay vì chi tiết implementation.
-3. **Isolation First**: Mock dịch vụ bên ngoài và API trong unit/component tests.
-4. **Readable Tests**: Tên test rõ, cấu trúc nhất quán và kỳ vọng rõ ràng.
+## Cấu hình Test
 
-## Test Configuration
-
-Cấu hình test nên đặt trong `vitest.config.ts`. Cài đặt frontend thường gồm:
+Cấu hình trong `vitest.config.ts`:
 
 - **Environment**: `jsdom` cho DOM APIs
-- **Setup file**: `src/__tests__/test-utils/setup.ts` để đăng ký `@testing-library/jest-dom`, mock browser APIs và biến môi trường
-- **Coverage thresholds**: 100% cho mọi metric
-- **Path aliases**: Khớp với alias của app (vd. `@/` → `src/`)
+- **Setup file**: `src/__tests__/test-utils/setup.ts`
+- **Coverage thresholds**: 100% cho mọi metrics
+- **Path aliases**: Khớp với `@/` → `src/`
 
-Khi không chắc, tham chiếu cấu hình trong `vitest.config.ts` và script trong `package.json`.
+## Tổ chức Test
 
-## Test Types
+Tests phản chiếu cấu trúc source dưới `src/__tests__/`:
+
+```text
+src/__tests__/
+├── application/              # Tests cấp app
+│   ├── components/           # AppInitializer tests
+│   └── register-container.test.ts
+├── common/
+│   ├── components/           # Tests shared component
+│   ├── hooks/                # Tests shared hook
+│   └── utils/                # Tests utility
+├── modules/
+│   └── {module}/
+│       ├── domain/           # Tests schema
+│       ├── application/      # Tests use case
+│       └── presentation/
+│           ├── components/   # Tests component
+│           ├── hooks/        # Tests hook
+│           └── pages/        # Tests page
+└── test-utils/
+    ├── setup.ts              # Setup toàn cục
+    └── ...                   # Test helpers
+```
+
+### Quy ước đặt tên File
+
+- Tests kết thúc bằng `.test.ts` hoặc `.test.tsx`
+- Khớp tên file source: `sign-in-form.tsx` → `sign-in-form.test.tsx`
+
+## Loại Test
 
 ### Unit Tests
 
-**Purpose**: Test logic thuần và hàm không cần render React.
+**Mục đích**: Test logic thuần không cần render React.
 
 **Targets**:
-
-- Domain types và Zod schemas
-- Application use cases và stores
-- Infrastructure API client helpers và utilities
-
-**Tools**: `vitest`, `vi.fn()`, `vi.mock()`
+- Domain schemas (`domain/schemas.ts`)
+- Use cases (`application/*-use-case.ts`)
+- Utilities (`utils/`)
 
 ### Component Tests
 
-**Purpose**: Kiểm tra hành vi UI và tương tác người dùng.
+**Mục đích**: Validate UI behavior và user interactions.
 
 **Targets**:
-
-- Page-level components trong `src/modules/{module}/pages/`
-- Shared components trong `src/common/components/`
-- Form flows dùng React Hook Form và Zod
-
-**Tools**: React Testing Library, `user-event`, `@testing-library/jest-dom`
+- Page components (`presentation/pages/`)
+- Shared components (`presentation/components/`, `common/components/`)
+- Forms với validation
 
 ### Integration Tests
 
-**Purpose**: Kiểm tra luồng module qua nhiều layer.
+**Mục đích**: Validate flows qua nhiều layers.
 
 **Targets**:
+- Phối hợp Component + use case
+- Error handling flows
+- Flows riêng module (auth, books, settings)
 
-- Phối hợp component + application use case + API client
-- Error handling và validation surfaces
-- Luồng theo module (auth, settings, dashboard)
+## Viết Tests
 
-**Tools**: React Testing Library + mocked API (nên dùng MSW)
+### Use Case Tests
 
-### E2E Tests (Optional)
+```typescript
+// src/__tests__/modules/auth/application/sign-in-with-email-use-case.test.ts
+import { SignInWithEmailUseCase } from "@/modules/auth/application/sign-in-with-email-use-case";
+import type { AuthenticationService } from "@/modules/auth/domain/interfaces";
 
-Nếu cấu hình, E2E test kiểm tra hành trình người dùng đầy đủ trên browser thật với công cụ như Playwright hoặc Cypress. Cần cover:
+describe("SignInWithEmailUseCase", () => {
+  let useCase: SignInWithEmailUseCase;
+  let mockAuthService: AuthenticationService;
 
-- Authentication flows
-- Đường điều hướng quan trọng
-- Form submission end-to-end
+  beforeEach(() => {
+    mockAuthService = {
+      signInWithEmail: vi.fn(),
+      signInWithGoogle: vi.fn(),
+      signUpWithEmail: vi.fn(),
+      signOut: vi.fn(),
+      sendPasswordReset: vi.fn(),
+      subscribeToAuthState: vi.fn(),
+      updateDisplayName: vi.fn(),
+      updatePassword: vi.fn(),
+    };
+    useCase = new SignInWithEmailUseCase(mockAuthService);
+  });
 
-## Test Organization
-
-Tổ chức test phản chiếu cấu trúc production:
-
-```
-src/__tests__/
-├── unit/
-│   ├── common/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   └── infrastructure/
-│   └── modules/
-│       └── {module-name}/
-│           ├── domain/
-│           ├── application/
-│           ├── infrastructure/
-│           └── presentation/
-├── integration/
-│   └── modules/{module-name}/
-├── e2e/                       # If configured
-└── test-utils/
-    ├── setup.ts
-    ├── render.tsx
-    └── fixtures.ts
-```
-
-### File Naming Convention
-
-- Test kết thúc bằng `.test.ts` hoặc `.spec.ts`
-- Khớp tên và vị trí file nguồn khi có thể
-- Ví dụ: `login-form.tsx` → `login-form.test.tsx`
-
-## Test Coverage Requirements
-
-**100% coverage là bắt buộc** cho:
-
-- **Lines**
-- **Functions**
-- **Branches**
-- **Statements**
-
-### Branch Coverage Notes
-
-Mọi nhánh điều kiện phải được test, gồm:
-
-- Nullish coalescing (`??`)
-- Ternary (`? :`)
-- Optional chaining (`?.`)
-- Logical operators (`&&`, `||`)
-
-### Coverage Exclusions
-
-Chỉ bỏ qua test cho:
-
-- Pure type definitions và enums
-- Configuration files
-- Test utilities
-
-## Writing Tests
-
-### Structure Pattern
-
-Dùng mẫu Arrange-Act-Assert (AAA):
-
-1. **Arrange**: Chuẩn bị input, mocks và môi trường
-2. **Act**: Thực hiện hành vi
-3. **Assert**: Kiểm tra kết quả và side effects
-
-### Example: Component Test
-
-```tsx
-import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { LoginForm } from '@/modules/auth/pages/login/components/login-form';
-
-describe('LoginForm', () => {
-  it('submits valid credentials', async () => {
-    const user = userEvent.setup();
-    render(<LoginForm />);
-
-    await user.type(screen.getByLabelText(/email/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/password/i), 'ValidPass123!');
-    await user.click(screen.getByRole('button', { name: /sign in/i }));
-
-    expect(
-      screen.getByText(/signing in/i)
-    ).toBeInTheDocument();
+  it("gọi auth service với credentials", async () => {
+    await useCase.execute({ email: "test@example.com", password: "password123" });
+    
+    expect(mockAuthService.signInWithEmail).toHaveBeenCalledWith(
+      "test@example.com",
+      "password123"
+    );
   });
 });
 ```
 
-### Testing Server vs Client Components
+### Component Tests
 
-- Mặc định **Server Components**; chỉ Client Components dùng hooks.
-- Trong test, tập trung vào **output** và **hành vi** của component.
-- Giữ boundary `use client` nhỏ và test phần client tối thiểu.
+```typescript
+// src/__tests__/modules/auth/presentation/pages/sign-in/components/sign-in-form.test.tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { SignInForm } from "@/modules/auth/presentation/pages/sign-in/components/sign-in-form";
 
-## Test Utilities and Helpers
+describe("SignInForm", () => {
+  it("submit valid credentials", async () => {
+    const user = userEvent.setup();
+    render(<SignInForm />);
 
-Tạo helper dùng chung trong `src/__tests__/test-utils/`:
+    await user.type(screen.getByLabelText(/email/i), "user@example.com");
+    await user.type(screen.getByLabelText(/password/i), "ValidPass123!");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
 
-- `render.tsx`: Bọc component với providers (i18n, theme, store)
-- `fixtures.ts`: Dữ liệu test dùng chung
-- `setup.ts`: Setup toàn cục (jest-dom, mocks)
+    expect(screen.getByText(/signing in/i)).toBeInTheDocument();
+  });
 
-Các helper giảm boilerplate và giữ test nhất quán.
+  it("hiển thị validation error cho invalid email", async () => {
+    const user = userEvent.setup();
+    render(<SignInForm />);
 
-## Running Tests
+    await user.type(screen.getByLabelText(/email/i), "invalid");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
 
-Script thường dùng (xem `package.json` để biết tên chính xác):
+    expect(screen.getByText(/invalid email/i)).toBeInTheDocument();
+  });
+});
+```
+
+### Schema Tests
+
+```typescript
+// src/__tests__/modules/auth/domain/schemas.test.ts
+import { loginSchema } from "@/modules/auth/domain/schemas";
+
+describe("loginSchema", () => {
+  it("validates đúng input", () => {
+    const result = loginSchema.safeParse({
+      email: "test@example.com",
+      password: "password123",
+    });
+    
+    expect(result.success).toBe(true);
+  });
+
+  it("reject invalid email", () => {
+    const result = loginSchema.safeParse({
+      email: "invalid",
+      password: "password123",
+    });
+    
+    expect(result.success).toBe(false);
+  });
+});
+```
+
+## Test Utilities
+
+Shared helpers trong `src/__tests__/test-utils/`:
+
+| File | Mục đích |
+|------|----------|
+| `setup.ts` | Setup toàn cục (jest-dom, mocks, environment) |
+| `render.tsx` | Custom render với providers (nếu cần) |
+| `fixtures.ts` | Shared test data |
+
+### Ví dụ Setup
+
+```typescript
+// src/__tests__/test-utils/setup.ts
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
+
+// Mock browser APIs
+Object.defineProperty(window, "matchMedia", {
+  value: vi.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  })),
+});
+```
+
+## Yêu cầu Coverage
+
+**100% coverage là bắt buộc** cho:
+
+| Metric | Threshold |
+|--------|-----------|
+| Lines | 100% |
+| Functions | 100% |
+| Branches | 100% |
+| Statements | 100% |
+
+### Branch Coverage
+
+Mọi conditional phải được test:
+- Ternary operators (`? :`)
+- Logical operators (`&&`, `||`)
+- Optional chaining (`?.`)
+- Nullish coalescing (`??`)
+
+### Coverage Exclusions
+
+Chỉ bỏ qua test cho:
+- Pure type definitions
+- Configuration files
+- Test utilities
+
+## Chạy Tests
 
 ```bash
-npm test
-npm run test:watch
-npm run test:coverage
-npm run test:ui
-npm run validate
+npm test              # Chạy tất cả tests
+npm run test:watch    # Watch mode
+npm run test:coverage # Với coverage report
+npm run validate      # Full validation (bao gồm tests)
 ```
 
 ## Best Practices
 
-1. **Test behavior, not implementation**
-2. **Ưu tiên query theo role/label** thay vì `data-testid`
-3. **Mock external APIs** với MSW để test ổn định
-4. **Tránh snapshot dễ vỡ** trừ khi mang lại giá trị rõ
-5. **Giữ test nhanh**; dành E2E cho luồng quan trọng
-6. **Cover edge cases** (null, giá trị rỗng, input không hợp lệ)
-7. **Duy trì 100% coverage** cho mọi metric
+1. **Dùng pattern Arrange-Act-Assert (AAA)**
+   ```typescript
+   it("làm gì đó", () => {
+     // Arrange
+     const input = { ... };
+     
+     // Act
+     const result = doSomething(input);
+     
+     // Assert
+     expect(result).toBe(expected);
+   });
+   ```
 
-## Summary
+2. **Ưu tiên queries theo role/label** thay vì `data-testid`
+   ```typescript
+   // Tốt
+   screen.getByRole("button", { name: /submit/i });
+   screen.getByLabelText(/email/i);
+   
+   // Tránh
+   screen.getByTestId("submit-button");
+   ```
 
-Hướng dẫn này thiết lập chuẩn testing frontend phù hợp Clean Architecture của dự án:
+3. **Mock tại boundary** - Mock services/repositories, không mock use cases
+   ```typescript
+   // Tốt - mock service interface
+   const mockService: AuthenticationService = { ... };
+   
+   // Tránh - mock internal implementation
+   vi.mock("firebase/auth");
+   ```
 
-1. **100% coverage** là bắt buộc
-2. **Tổ chức test** phản chiếu cấu trúc module
-3. **Unit, component, integration và E2E (tùy chọn)** mỗi loại có vai trò riêng
-4. **Utilities nhất quán** giúp viết và bảo trì test dễ hơn
+4. **Test error cases** - Cover validation errors, API failures, edge cases
 
-Chi tiết thêm:
+5. **Giữ tests nhanh** - Mock external calls, tránh render không cần thiết
 
-- [Architecture Guide](./architecture.md)
-- [Development Guide](./development-guide.md)
-- [README](../README.md)
+6. **Một assertion focus mỗi test** - Nhiều assertions được nếu test một behavior

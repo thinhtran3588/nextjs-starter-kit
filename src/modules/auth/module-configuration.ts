@@ -1,17 +1,17 @@
 import { asFunction, type AwilixContainer } from "awilix";
 
+import { GetAuthStateSubscriptionUseCase } from "@/modules/auth/application/get-auth-state-subscription-use-case";
+import { SendPasswordResetUseCase } from "@/modules/auth/application/send-password-reset-use-case";
+import { SignInWithEmailUseCase } from "@/modules/auth/application/sign-in-with-email-use-case";
+import { SignInWithGoogleUseCase } from "@/modules/auth/application/sign-in-with-google-use-case";
+import { SignOutUseCase } from "@/modules/auth/application/sign-out-use-case";
+import { SignUpWithEmailUseCase } from "@/modules/auth/application/sign-up-with-email-use-case";
+import { UpdatePasswordUseCase } from "@/modules/auth/application/update-password-use-case";
+import { UpdateProfileUseCase } from "@/modules/auth/application/update-profile-use-case";
 import {
   FirebaseAuthenticationService,
   type GetAuthInstance,
-} from "@/modules/auth/services/firebase-auth-service";
-import { GetAuthStateSubscriptionUseCase } from "@/modules/auth/use-cases/get-auth-state-subscription-use-case";
-import { SendPasswordResetUseCase } from "@/modules/auth/use-cases/send-password-reset-use-case";
-import { SignInWithEmailUseCase } from "@/modules/auth/use-cases/sign-in-with-email-use-case";
-import { SignInWithGoogleUseCase } from "@/modules/auth/use-cases/sign-in-with-google-use-case";
-import { SignOutUseCase } from "@/modules/auth/use-cases/sign-out-use-case";
-import { SignUpWithEmailUseCase } from "@/modules/auth/use-cases/sign-up-with-email-use-case";
-import { UpdatePasswordUseCase } from "@/modules/auth/use-cases/update-password-use-case";
-import { UpdateProfileUseCase } from "@/modules/auth/use-cases/update-profile-use-case";
+} from "@/modules/auth/infrastructure/services/firebase-auth-service";
 
 type AuthCradle = {
   authService: InstanceType<typeof FirebaseAuthenticationService>;

@@ -1,11 +1,11 @@
 import { asFunction, type AwilixContainer } from "awilix";
 
-import { FirestoreBookRepository } from "@/modules/books/repositories/firestore-book-repository";
-import { CreateBookUseCase } from "@/modules/books/use-cases/create-book-use-case";
-import { DeleteBookUseCase } from "@/modules/books/use-cases/delete-book-use-case";
-import { FindBooksUseCase } from "@/modules/books/use-cases/find-books-use-case";
-import { GetBookUseCase } from "@/modules/books/use-cases/get-book-use-case";
-import { UpdateBookUseCase } from "@/modules/books/use-cases/update-book-use-case";
+import { CreateBookUseCase } from "@/modules/books/application/create-book-use-case";
+import { DeleteBookUseCase } from "@/modules/books/application/delete-book-use-case";
+import { FindBooksUseCase } from "@/modules/books/application/find-books-use-case";
+import { GetBookUseCase } from "@/modules/books/application/get-book-use-case";
+import { UpdateBookUseCase } from "@/modules/books/application/update-book-use-case";
+import { FirestoreBookRepository } from "@/modules/books/infrastructure/repositories/firestore-book-repository";
 
 type GetFirestoreInstance = () => import("firebase/firestore").Firestore | null;
 

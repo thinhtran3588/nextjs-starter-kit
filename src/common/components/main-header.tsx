@@ -7,7 +7,7 @@ import { Button } from "@/common/components/button";
 import { DocumentsDropdown } from "@/common/components/documents-dropdown";
 import { MenuIcon } from "@/common/components/icons";
 import { MobileMenuProvider } from "@/common/contexts/mobile-menu-context";
-import type { ResolvedMenuItem } from "@/common/interfaces/menu-item";
+import type { ResolvedMenuItem } from "@/common/interfaces";
 import { Link, usePathname } from "@/common/routing/navigation";
 import { cn } from "@/common/utils/cn";
 

@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { ThemeProvider } from "@/common/components/theme-provider";
-import { useUserSettingsStore } from "@/modules/settings/hooks/use-user-settings-store";
+import { useUserSettingsStore } from "@/modules/settings/presentation/hooks/use-user-settings-store";
 
 describe("ThemeProvider", () => {
   it("renders children", () => {
