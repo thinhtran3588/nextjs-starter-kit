@@ -16,6 +16,8 @@
 
 [English](README.md) | **Tiếng Việt** | [中文](README-zh.md)
 
+**[Xem Demo](https://nextjs-starter-kit.gemsignal.com/en)**
+
 Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và cấu trúc module cho phát triển frontend mở rộng.
 
 ## Tính năng
