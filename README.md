@@ -59,7 +59,17 @@ The app runs at `http://localhost:3000`.
 
 ## AI Agent Integration
 
-This project includes [Cursor](https://cursor.com/) configuration for AI-assisted development:
+This project includes configuration for AI-assisted development, supporting both [Antigravity](https://github.com/google-deepmind/antigravity) and [Cursor](https://cursor.com/).
+
+### Antigravity
+
+| Path                                   | Purpose                                       |
+| -------------------------------------- | --------------------------------------------- |
+| `.agent/workflows/branch-and-pr.md`    | Mandatory Git workflow and validation process |
+| `.agent/skills/project-rules/SKILL.md` | Project conventions and code style            |
+| `.agent/skills/`                       | Specialized skills (reviewer, frontend, arch) |
+
+### Cursor
 
 | Path                                       | Purpose                                          |
 | ------------------------------------------ | ------------------------------------------------ |

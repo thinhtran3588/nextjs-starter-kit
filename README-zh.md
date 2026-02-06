@@ -59,27 +59,23 @@ npm run dev
 
 ## AI Agent 集成
 
-本项目包含 AI 编码助手的配置以协助开发。目前配置为 [Cursor](https://cursor.com/)，但可以适配其他 AI agent。
+本项目包含 AI 编码助手的配置以协助开发，支持 [Antigravity](https://github.com/google-deepmind/antigravity) 和 [Cursor](https://cursor.com/)。
 
-### 结构
+### Antigravity
 
-```
-.cursor/
-├── rules/
-│   └── general.mdc          # 项目规则、约定和工作流
-└── skills/
-    ├── code-reviewer/       # 代码审查和质量检查
-    ├── nextjs-frontend-developer/  # 前端实现指导
-    ├── senior-architect/    # 架构和设计决策
-    └── ui-ux-pro-max/       # UI/UX 设计与组件库
-```
+| 路径                                   | 用途                                |
+| -------------------------------------- | ----------------------------------- |
+| `.agent/workflows/branch-and-pr.md`    | 强制性 Git 工作流和验证流程         |
+| `.agent/skills/project-rules/SKILL.md` | 项目约定和代码风格                  |
+| `.agent/skills/`                       | 专业技能 (reviewer, frontend, arch) |
 
-### 包含内容
+### Cursor
 
-| 组件       | 用途                                              |
-| ---------- | ------------------------------------------------- |
-| **Rules**  | 项目约定、git 工作流、代码风格、验证要求          |
-| **Skills** | 用于代码审查、前端开发、架构和 UI/UX 的专业 agent |
+| 路径                                       | 用途                                     |
+| ------------------------------------------ | ---------------------------------------- |
+| `.cursor/rules/general.mdc`                | 项目约定和代码风格                       |
+| `.cursor/rules/branch-and-pr-workflow.mdc` | Git 工作流、验证和 PR 创建               |
+| `.cursor/skills/`                          | 专业 agent (code review, frontend, arch) |
 
 ### 与其他 AI Agent 配合使用
 
