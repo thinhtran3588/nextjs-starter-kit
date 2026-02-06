@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/common/components/button";
-import { ButtonGroup } from "@/common/components/button-group";
+import { ConfirmationModal } from "@/common/components/confirmation-modal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -180,24 +180,20 @@ export function BooksListPage() {
         />
       </Modal>
 
-      <Modal
+      <ConfirmationModal
         open={deleteTarget !== null}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
         title={t("delete")}
         description={
           deleteTarget ? t("confirmDelete", { title: deleteTarget.title }) : ""
         }
-      >
-        <ButtonGroup>
-          <Button variant="outline" onClick={() => setDeleteTarget(null)}>
-            {t("cancel")}
-          </Button>
-          <Button variant="destructive" onClick={handleDeleteConfirm}>
-            <TrashIcon className="size-4" />
-            {t("delete")}
-          </Button>
-        </ButtonGroup>
-      </Modal>
+        confirmText={t("delete")}
+        cancelText={t("cancel")}
+        variant="destructive"
+        icon={<TrashIcon className="size-4" />}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center gap-4">

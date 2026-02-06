@@ -6,13 +6,13 @@ import { toast } from "sonner";
 
 import { Button } from "@/common/components/button";
 import { ButtonGroup } from "@/common/components/button-group";
+import { ConfirmationModal } from "@/common/components/confirmation-modal";
 import {
   BackArrowIcon,
   LoaderIcon,
   PencilIcon,
   TrashIcon,
 } from "@/common/components/icons";
-import { Modal } from "@/common/components/modal";
 import { useContainer } from "@/common/hooks/use-container";
 import { Link, useRouter } from "@/common/routing/navigation";
 import { useAuthUserStore } from "@/modules/auth/presentation/hooks/use-auth-user-store";
@@ -196,22 +196,18 @@ export function BookDetailPage({ bookId }: BookDetailPageProps) {
           </Link>
         </Button>
       </ButtonGroup>
-      <Modal
+      <ConfirmationModal
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
         title={t("delete")}
         description={t("confirmDelete")}
-      >
-        <ButtonGroup>
-          <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-            {t("cancel")}
-          </Button>
-          <Button variant="destructive" onClick={handleDeleteConfirm}>
-            <TrashIcon className="size-4" />
-            {t("delete")}
-          </Button>
-        </ButtonGroup>
-      </Modal>
+        confirmText={t("delete")}
+        cancelText={t("cancel")}
+        variant="destructive"
+        icon={<TrashIcon className="size-4" />}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteModalOpen(false)}
+      />
     </div>
   );
 }
