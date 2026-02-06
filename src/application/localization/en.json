@@ -29,7 +29,7 @@
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",
-        "description": "A production-ready Next.js starter kit with Clean Architecture and modular structure for scalable frontend development."
+        "description": "Build scalable Next.js apps with Clean Architecture, TypeScript, and 100% test coverage out of the box."
       }
     },
     "errors": {
@@ -270,6 +270,9 @@
       "pages": {
         "privacy-policy": {
           "title": "Privacy Policy",
+          "metadata": {
+            "description": "Learn how Next.js Starter Kit collects, uses, and protects your data."
+          },
           "lastUpdated": "Last updated: January 31, 2026",
           "sections": {
             "overview": {
@@ -327,6 +330,9 @@
         },
         "terms-of-service": {
           "title": "Terms of Service",
+          "metadata": {
+            "description": "Review the terms and conditions for using Next.js Starter Kit."
+          },
           "lastUpdated": "Last updated: January 31, 2026",
           "sections": {
             "overview": {
@@ -385,6 +391,7 @@
     "landing": {
       "pages": {
         "home": {
+          "badge": "Starter Kit",
           "hero": {
             "eyebrow": "Production-ready foundation",
             "title": "Next.js Starter Kit",
