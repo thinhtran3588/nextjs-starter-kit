@@ -1,5 +1,6 @@
 import { cn } from "@/common/utils/cn";
 import ReactMarkdown from "react-markdown";
+import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { MermaidDiagram } from "./mermaid-diagram";
 
@@ -37,15 +38,22 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
     >
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeSlug]}
         components={{
-          h1: ({ children }) => (
-            <h1 className={proseClasses.h1}>{children}</h1>
+          h1: ({ id, children }) => (
+            <h1 id={id} className={proseClasses.h1}>
+              {children}
+            </h1>
           ),
-          h2: ({ children }) => (
-            <h2 className={proseClasses.h2}>{children}</h2>
+          h2: ({ id, children }) => (
+            <h2 id={id} className={proseClasses.h2}>
+              {children}
+            </h2>
           ),
-          h3: ({ children }) => (
-            <h3 className={proseClasses.h3}>{children}</h3>
+          h3: ({ id, children }) => (
+            <h3 id={id} className={proseClasses.h3}>
+              {children}
+            </h3>
           ),
           p: ({ children }) => <p className={proseClasses.p}>{children}</p>,
           ul: ({ children }) => (

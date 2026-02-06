@@ -453,7 +453,3 @@ export class Auth0AuthenticationService implements AuthenticationService {
 | **DI** | Awilix |
 | **Auth** | Firebase（可选） |
 | **Testing** | Vitest、React Testing Library |
-
----
-
-关于编码约定、文件组织与框架相关 patterns，参见 [Coding Conventions](./coding-conventions-zh.md)。

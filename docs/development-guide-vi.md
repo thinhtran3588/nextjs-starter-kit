@@ -344,5 +344,3 @@ export class FirestoreFeatureRepository implements FeatureRepository {
 - **100% code coverage** là bắt buộc
 - Tests phản chiếu cấu trúc source trong `src/__tests__/`
 - Mock services/repositories tại boundary
-
-Để biết chi tiết về testing patterns, ví dụ và best practices, xem **[Testing Guide](./testing-guide-vi.md)**.

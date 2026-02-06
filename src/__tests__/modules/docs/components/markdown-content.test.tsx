@@ -118,4 +118,50 @@ describe("MarkdownContent", () => {
     );
     expect(container.querySelector("[data-testid=markdown-content]")).toBeInTheDocument();
   });
+
+  it("generates anchor ids for headers using rehype-slug", () => {
+    render(
+      <MarkdownContent
+        content={
+          "# Architecture Overview\n\n## Getting Started\n\n### Step 1: Install"
+        }
+      />,
+    );
+
+    const h1 = screen.getByRole("heading", {
+      level: 1,
+      name: /Architecture Overview/,
+    });
+    const h2 = screen.getByRole("heading", {
+      level: 2,
+      name: /Getting Started/,
+    });
+    const h3 = screen.getByRole("heading", {
+      level: 3,
+      name: /Step 1: Install/,
+    });
+
+    expect(h1).toHaveAttribute("id", "architecture-overview");
+    expect(h2).toHaveAttribute("id", "getting-started");
+    expect(h3).toHaveAttribute("id", "step-1-install");
+  });
+
+  it("allows anchor links in table of contents to navigate to headers", () => {
+    render(
+      <MarkdownContent
+        content={
+          "## Table of Contents\n\n- [Overview](#overview)\n\n## Overview\n\nContent here."
+        }
+      />,
+    );
+
+    const tocLink = screen.getByRole("link", { name: "Overview" });
+    expect(tocLink).toHaveAttribute("href", "#overview");
+
+    const overviewHeading = screen.getByRole("heading", {
+      level: 2,
+      name: "Overview",
+    });
+    expect(overviewHeading).toHaveAttribute("id", "overview");
+  });
 });
