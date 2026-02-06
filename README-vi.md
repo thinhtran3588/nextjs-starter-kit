@@ -59,27 +59,23 @@ npm run dev
 
 ## Tích hợp AI Agent
 
-Dự án này bao gồm cấu hình cho các trợ lý AI coding để hỗ trợ phát triển. Hiện tại được cấu hình cho [Cursor](https://cursor.com/), nhưng có thể điều chỉnh cho các AI agent khác.
+Dự án này bao gồm cấu hình cho các trợ lý AI coding để hỗ trợ phát triển, hỗ trợ cả [Antigravity](https://github.com/google-deepmind/antigravity) và [Cursor](https://cursor.com/).
 
-### Cấu trúc
+### Antigravity
 
-```
-.cursor/
-├── rules/
-│   └── general.mdc          # Quy tắc dự án, conventions và workflow
-└── skills/
-    ├── code-reviewer/       # Review code và kiểm tra chất lượng
-    ├── nextjs-frontend-developer/  # Hướng dẫn triển khai frontend
-    ├── senior-architect/    # Quyết định kiến trúc và thiết kế
-    └── ui-ux-pro-max/       # Thiết kế UI/UX với component libraries
-```
+| Đường dẫn                              | Mục đích                                          |
+| -------------------------------------- | ------------------------------------------------- |
+| `.agent/workflows/branch-and-pr.md`    | Quy trình Git bắt buộc và validation              |
+| `.agent/skills/project-rules/SKILL.md` | Quy ước dự án và code style                       |
+| `.agent/skills/`                       | Các kỹ năng chuyên biệt (reviewer, frontend, ...) |
 
-### Nội dung bao gồm
+### Cursor
 
-| Thành phần | Mục đích                                                                |
-| ---------- | ----------------------------------------------------------------------- |
-| **Rules**  | Conventions dự án, git workflow, code style, yêu cầu validation         |
-| **Skills** | Các agent chuyên biệt cho code review, frontend dev, kiến trúc và UI/UX |
+| Đường dẫn                                  | Mục đích                                           |
+| ------------------------------------------ | -------------------------------------------------- |
+| `.cursor/rules/general.mdc`                | Quy tắc dự án và conventions                       |
+| `.cursor/rules/branch-and-pr-workflow.mdc` | Git workflow, validation, và tạo PR                |
+| `.cursor/skills/`                          | Các agent chuyên biệt (code review, frontend, ...) |
 
 ### Sử dụng với AI Agent khác
 
