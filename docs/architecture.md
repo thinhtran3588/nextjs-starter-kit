@@ -453,7 +453,3 @@ For detailed Firebase setup and configuration, see [Firebase Integration](./fire
 | **DI** | Awilix |
 | **Auth** | Firebase (optional) |
 | **Testing** | Vitest, React Testing Library |
-
----
-
-For coding conventions, file organization, and framework-specific patterns, see [Coding Conventions](./coding-conventions.md).

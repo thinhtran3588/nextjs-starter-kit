@@ -344,5 +344,3 @@ export class FirestoreFeatureRepository implements FeatureRepository {
 - **100% code coverage** 为必需
 - Tests 在 `src/__tests__/` 中镜像源码结构
 - 在边界处 mock services/repositories
-
-详细的 testing patterns、示例与最佳实践，参见 **[Testing Guide](./testing-guide-zh.md)**。

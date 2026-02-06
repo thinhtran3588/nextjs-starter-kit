@@ -61,11 +61,11 @@ The app runs at `http://localhost:3000`.
 
 This project includes [Cursor](https://cursor.com/) configuration for AI-assisted development:
 
-| Path                                        | Purpose                                          |
-| ------------------------------------------- | ------------------------------------------------ |
-| `.cursor/rules/general.mdc`                 | Project conventions and code style               |
-| `.cursor/rules/branch-and-pr-workflow.mdc`  | Git workflow, validation, and PR creation        |
-| `.cursor/skills/`                           | Specialized agents (code review, frontend, arch) |
+| Path                                       | Purpose                                          |
+| ------------------------------------------ | ------------------------------------------------ |
+| `.cursor/rules/general.mdc`                | Project conventions and code style               |
+| `.cursor/rules/branch-and-pr-workflow.mdc` | Git workflow, validation, and PR creation        |
+| `.cursor/skills/`                          | Specialized agents (code review, frontend, arch) |
 
 For other AI tools, copy rules to the agent's config location and adapt as needed.
 

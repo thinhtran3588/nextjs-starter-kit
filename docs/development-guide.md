@@ -345,5 +345,3 @@ export class FirestoreFeatureRepository implements FeatureRepository {
 - Tests mirror source structure in `src/__tests__/`
 - Mock services/repositories at the boundary
 
-For detailed testing patterns, examples, and best practices, see **[Testing Guide](./testing-guide.md)**.
-

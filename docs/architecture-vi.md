@@ -453,7 +453,3 @@ Cách trừu tượng hóa này giúp codebase **thân thiện với MVP** (phá
 | **DI** | Awilix |
 | **Auth** | Firebase (tùy chọn) |
 | **Testing** | Vitest, React Testing Library |
-
----
-
-Về coding conventions, tổ chức file và patterns theo framework, xem [Coding Conventions](./coding-conventions-vi.md).
