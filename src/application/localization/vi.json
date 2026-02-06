@@ -29,7 +29,7 @@
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",
-        "description": "Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và cấu trúc module cho phát triển frontend mở rộng."
+        "description": "Xây dựng ứng dụng Next.js có khả năng mở rộng với Clean Architecture, TypeScript và 100% test coverage."
       }
     },
     "errors": {
@@ -270,6 +270,9 @@
       "pages": {
         "privacy-policy": {
           "title": "Chính sách quyền riêng tư",
+          "metadata": {
+            "description": "Tìm hiểu cách Next.js Starter Kit thu thập, sử dụng và bảo vệ dữ liệu của bạn."
+          },
           "lastUpdated": "Cập nhật lần cuối: 31 tháng 1, 2026",
           "sections": {
             "overview": {
@@ -327,6 +330,9 @@
         },
         "terms-of-service": {
           "title": "Điều khoản dịch vụ",
+          "metadata": {
+            "description": "Xem các điều khoản và điều kiện khi sử dụng Next.js Starter Kit."
+          },
           "lastUpdated": "Cập nhật lần cuối: 31 tháng 1, 2026",
           "sections": {
             "overview": {
@@ -385,6 +391,7 @@
     "landing": {
       "pages": {
         "home": {
+          "badge": "Starter Kit",
           "hero": {
             "eyebrow": "Nền tảng sẵn sàng production",
             "title": "Next.js Starter Kit",

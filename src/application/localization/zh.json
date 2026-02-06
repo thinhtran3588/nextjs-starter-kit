@@ -29,7 +29,7 @@
     "app": {
       "metadata": {
         "title": "Next.js Starter Kit",
-        "description": "生产就绪的 Next.js 入门套件，采用 Clean Architecture 与模块化结构，支持可扩展的前端开发。"
+        "description": "使用 Clean Architecture、TypeScript 和 100% 测试覆盖率构建可扩展的 Next.js 应用。"
       }
     },
     "errors": {
@@ -268,6 +268,9 @@
       "pages": {
         "privacy-policy": {
           "title": "隐私政策",
+          "metadata": {
+            "description": "了解 Next.js Starter Kit 如何收集、使用和保护您的数据。"
+          },
           "lastUpdated": "最后更新：2026年1月31日",
           "sections": {
             "overview": {
@@ -325,6 +328,9 @@
         },
         "terms-of-service": {
           "title": "服务条款",
+          "metadata": {
+            "description": "查看使用 Next.js Starter Kit 的条款和条件。"
+          },
           "lastUpdated": "最后更新：2026年1月31日",
           "sections": {
             "overview": {
@@ -383,6 +389,7 @@
     "landing": {
       "pages": {
         "home": {
+          "badge": "Starter Kit",
           "hero": {
             "eyebrow": "生产就绪的基础",
             "title": "Next.js Starter Kit",
