@@ -16,9 +16,41 @@ export async function LandingPage() {
   const tCommon = await getTranslations("common");
   const tHome = await getTranslations("modules.landing.pages.home");
 
+  const featureKeys = [
+    "cleanArchitecture",
+    "modularStructure",
+    "testCoverage",
+    "i18nReady",
+    "typeSafeForms",
+    "firebaseIntegration",
+  ] as const;
+
+  const architectureLayerKeys = [
+    "domain",
+    "application",
+    "infrastructure",
+    "presentation",
+  ] as const;
+
+  const techStackKeys = [
+    "nextjs",
+    "react",
+    "typescript",
+    "tailwind",
+    "radix",
+    "rhf",
+    "zod",
+    "zustand",
+    "nextIntl",
+    "firebase",
+    "awilix",
+    "vitest",
+  ] as const;
+
   return (
     <>
       <div className="flex flex-col gap-28 sm:gap-32">
+        {/* Hero Section */}
         <section className="hero-shine glass-panel-strong liquid-border rounded-2xl px-8 py-14 sm:rounded-3xl sm:px-12 sm:py-20">
           <div className="relative z-10 flex flex-col items-center gap-12 text-center lg:gap-16">
             <div className="max-w-2xl space-y-6">
@@ -42,81 +74,79 @@ export async function LandingPage() {
                 </Button>
               </div>
             </div>
-            <div className="grid w-full gap-4 sm:grid-cols-3">
-              {[
-                {
-                  label: tHome("highlights.architecture.label"),
-                  description: tHome("highlights.architecture.description"),
-                },
-                {
-                  label: tHome("highlights.coverage.label"),
-                  description: tHome("highlights.coverage.description"),
-                },
-                {
-                  label: tHome("highlights.i18n.label"),
-                  description: tHome("highlights.i18n.description"),
-                },
-              ].map((item, index) => (
-                <Card
-                  key={item.label}
-                  className={cn(
-                    "bento-card hero-entrance px-5 py-5 sm:rounded-2xl sm:px-6 sm:py-6",
-                    index === 0 && "hero-entrance-delay-4",
-                    index === 1 && "hero-entrance-delay-5",
-                    index === 2 && "hero-entrance-delay-6",
-                  )}
-                >
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <ScrollReveal>
+          <section className="space-y-8">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl">
+                {tHome("features.title")}
+              </h2>
+              <p className="max-w-2xl text-sm text-[var(--text-muted)] sm:text-base">
+                {tHome("features.description")}
+              </p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+              {featureKeys.map((key) => (
+                <Card key={key} className="bento-card px-6 py-6 sm:rounded-2xl">
                   <CardHeader className="space-y-0 pb-0">
-                    <CardTitle className="text-sm font-medium">
-                      {item.label}
+                    <CardTitle>
+                      {tHome(`features.items.${key}.title`)}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="pt-2">
-                    <CardDescription className="text-xs leading-relaxed">
-                      {item.description}
+                  <CardContent className="pt-3">
+                    <CardDescription>
+                      {tHome(`features.items.${key}.description`)}
                     </CardDescription>
                   </CardContent>
                 </Card>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
+        </ScrollReveal>
 
+        {/* Clean Architecture Section */}
         <ScrollReveal>
           <section className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl">
-                {tHome("features.architecture.title")}
+                {tHome("architecture.title")}
               </h2>
               <p className="max-w-2xl text-sm text-[var(--text-muted)] sm:text-base">
-                {tHome("features.architecture.description")}
+                {tHome("architecture.description")}
               </p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-5">
-              <Card className="bento-card col-span-1 px-6 py-6 sm:rounded-2xl lg:col-span-7">
-                <CardHeader className="space-y-0 pb-0">
-                  <CardTitle>{tHome("features.modular.title")}</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-3">
-                  <CardDescription>
-                    {tHome("features.modular.description")}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              <Card className="bento-card col-span-1 px-6 py-6 sm:rounded-2xl lg:col-span-5">
-                <CardHeader className="space-y-0 pb-0">
-                  <CardTitle>{tHome("features.stack.title")}</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-3">
-                  <CardDescription>
-                    {tHome("features.stack.description")}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+              {architectureLayerKeys.map((key, index) => (
+                <Card
+                  key={key}
+                  className={cn(
+                    "bento-card px-6 py-6 sm:rounded-2xl",
+                    index === 0 && "border-l-2 border-l-green-500",
+                    index === 1 && "border-l-2 border-l-orange-500",
+                    index === 2 && "border-l-2 border-l-pink-500",
+                    index === 3 && "border-l-2 border-l-blue-500",
+                  )}
+                >
+                  <CardHeader className="space-y-0 pb-0">
+                    <CardTitle className="text-base">
+                      {tHome(`architecture.layers.${key}.title`)}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-3">
+                    <CardDescription className="text-xs leading-relaxed">
+                      {tHome(`architecture.layers.${key}.description`)}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </section>
         </ScrollReveal>
 
+        {/* Tech Stack Section */}
         <ScrollReveal>
           <Card
             variant="strong"
@@ -125,36 +155,36 @@ export async function LandingPage() {
             <h2 className="text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl">
               {tHome("techStack.title")}
             </h2>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                "nextjs",
-                "react",
-                "typescript",
-                "tailwind",
-                "shadcn",
-                "zustand",
-                "rhf",
-                "zod",
-                "nextIntl",
-                "vitest",
-              ].map((key) => (
-                <li
+            <p className="mt-2 max-w-2xl text-sm text-[var(--text-muted)] sm:text-base">
+              {tHome("techStack.description")}
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {techStackKeys.map((key) => (
+                <div
                   key={key}
-                  className="flex items-center gap-3 text-sm text-[var(--text-muted)]"
+                  className="flex items-start gap-3 rounded-xl border border-[var(--glass-border)] bg-[var(--glass-highlight)] p-4"
                 >
                   <span
-                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[var(--glass-border)] bg-[var(--glass-highlight)] text-xs text-[var(--text-primary)]"
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[var(--glass-border)] bg-[var(--surface)] text-xs text-[var(--text-primary)]"
                     aria-hidden
                   >
                     ✓
                   </span>
-                  {tHome(`techStack.tags.${key}`)}
-                </li>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-[var(--text-primary)]">
+                      {tHome(`techStack.items.${key}.name`)}
+                    </p>
+                    <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+                      {tHome(`techStack.items.${key}.description`)}
+                    </p>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </Card>
         </ScrollReveal>
 
+        {/* Getting Started Section */}
         <ScrollReveal>
           <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
             <div className="space-y-4 lg:col-span-5">
@@ -179,6 +209,7 @@ export async function LandingPage() {
           </div>
         </ScrollReveal>
 
+        {/* Documentation Section */}
         <ScrollReveal>
           <section className="space-y-8">
             <div className="space-y-2">
@@ -207,13 +238,19 @@ export async function LandingPage() {
                   key: "development",
                   titleKey: "docs.items.development.title",
                   descKey: "docs.items.development.description",
-                  span: "lg:col-span-6",
+                  span: "lg:col-span-4",
                 },
                 {
                   key: "testing",
                   titleKey: "docs.items.testing.title",
                   descKey: "docs.items.testing.description",
-                  span: "lg:col-span-6",
+                  span: "lg:col-span-4",
+                },
+                {
+                  key: "firebase",
+                  titleKey: "docs.items.firebase.title",
+                  descKey: "docs.items.firebase.description",
+                  span: "lg:col-span-4",
                 },
               ].map(({ key: itemKey, titleKey, descKey, span }) => (
                 <Card

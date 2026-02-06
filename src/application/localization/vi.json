@@ -385,53 +385,115 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Next.js Starter Kit",
           "hero": {
             "eyebrow": "Nền tảng sẵn sàng production",
             "title": "Next.js Starter Kit",
             "subtitle": "Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và cấu trúc module cho phát triển frontend mở rộng. Xây trên App Router, TypeScript và 100% test coverage."
           },
-          "highlights": {
-            "architecture": {
-              "label": "Clean Architecture",
-              "description": "Các lớp rõ ràng và ranh giới phụ thuộc cho mã dễ bảo trì, dễ kiểm thử."
-            },
-            "coverage": {
-              "label": "100% test coverage",
-              "description": "Vitest và React Testing Library với ngưỡng coverage bắt buộc."
-            },
-            "i18n": {
-              "label": "Sẵn sàng i18n",
-              "description": "next-intl với locale routing. Đã có tiếng Anh, Việt và Trung."
+          "features": {
+            "title": "Tính năng chính",
+            "description": "Mọi thứ bạn cần để xây dựng ứng dụng frontend có khả năng mở rộng, dễ bảo trì với các best practices tích hợp sẵn.",
+            "items": {
+              "cleanArchitecture": {
+                "title": "Clean Architecture",
+                "description": "Bốn lớp riêng biệt (Domain, Application, Infrastructure, Presentation) với quy tắc phụ thuộc rõ ràng và Awilix DI."
+              },
+              "modularStructure": {
+                "title": "Cấu trúc Module",
+                "description": "Module tính năng dưới src/modules/ với ranh giới cô lập. App Router chỉ xử lý routing; toàn bộ code trong src/."
+              },
+              "testCoverage": {
+                "title": "100% Test Coverage",
+                "description": "Ngưỡng coverage bắt buộc với Vitest và React Testing Library. Pattern AAA và testing tập trung vào hành vi."
+              },
+              "i18nReady": {
+                "title": "Sẵn sàng i18n",
+                "description": "next-intl với locale-based routing. Đã có bản dịch tiếng Anh, Việt và Trung sẵn dùng."
+              },
+              "typeSafeForms": {
+                "title": "Form Type-Safe",
+                "description": "React Hook Form với Zod validation. Nguồn duy nhất cho schemas với tự động suy luận TypeScript."
+              },
+              "firebaseIntegration": {
+                "title": "Tích hợp Firebase",
+                "description": "Auth và Firestore với interfaces trừu tượng. Dễ thay đổi provider mà không sửa code ứng dụng."
+              }
             }
           },
-          "features": {
-            "architecture": {
-              "title": "Clean Architecture",
-              "description": "Các lớp domain, application, infrastructure và presentation với dependency injection qua Awilix. Use case điều phối logic nghiệp vụ độc lập với UI."
-            },
-            "modular": {
-              "title": "Cấu trúc module",
-              "description": "Module tính năng dưới src/modules/ với các lớp Clean Architecture. App Router trong app/ chỉ xử lý routing; toàn bộ code nằm trong src/."
-            },
-            "stack": {
-              "title": "Stack đầy đủ",
-              "description": "React Hook Form + Zod cho form, Zustand cho state, shadcn/ui với Tailwind cho UI, next-intl cho i18n với 3 ngôn ngữ sẵn có."
+          "architecture": {
+            "title": "Clean Architecture",
+            "description": "Tách biệt mối quan tâm với đảo ngược phụ thuộc. Các lớp trong không biết về các lớp ngoài, cho phép kiểm thử và linh hoạt.",
+            "layers": {
+              "domain": {
+                "title": "Domain",
+                "description": "Types cốt lõi, Zod schemas và interfaces. Không phụ thuộc bên ngoài—chỉ quy tắc nghiệp vụ và hình dạng dữ liệu."
+              },
+              "application": {
+                "title": "Application",
+                "description": "Use cases điều phối logic nghiệp vụ. Chỉ phụ thuộc Domain; không có UI hay framework cụ thể."
+              },
+              "infrastructure": {
+                "title": "Infrastructure",
+                "description": "Services và repositories triển khai domain interfaces. Mọi I/O bên ngoài và SDK usage nằm ở đây."
+              },
+              "presentation": {
+                "title": "Presentation",
+                "description": "Pages, components và hooks. Chi tiết React và Next.js; dùng Application layer qua DI container."
+              }
             }
           },
           "techStack": {
-            "title": "Tech stack",
-            "tags": {
-              "nextjs": "Next.js",
-              "react": "React",
-              "typescript": "TypeScript",
-              "tailwind": "Tailwind CSS",
-              "shadcn": "shadcn/ui",
-              "zustand": "Zustand",
-              "rhf": "React Hook Form",
-              "zod": "Zod",
-              "nextIntl": "next-intl",
-              "vitest": "Vitest"
+            "title": "Tech Stack",
+            "description": "Công nghệ hiện đại, sẵn sàng production được chọn lọc kỹ cho trải nghiệm developer và hiệu năng.",
+            "items": {
+              "nextjs": {
+                "name": "Next.js 16",
+                "description": "App Router, React Server Components và SSR/SSG tối ưu."
+              },
+              "react": {
+                "name": "React 19",
+                "description": "React mới nhất với concurrent features và hiệu năng cải thiện."
+              },
+              "typescript": {
+                "name": "TypeScript 5",
+                "description": "Strict mode bật để đảm bảo type safety tối đa trong codebase."
+              },
+              "tailwind": {
+                "name": "Tailwind CSS 4",
+                "description": "Styling utility-first với tự động sắp xếp và tối ưu class."
+              },
+              "radix": {
+                "name": "Radix UI",
+                "description": "Primitives accessible, unstyled qua bộ component shadcn/ui."
+              },
+              "rhf": {
+                "name": "React Hook Form",
+                "description": "Quản lý form hiệu năng với ít re-renders nhất."
+              },
+              "zod": {
+                "name": "Zod",
+                "description": "Validation schema với suy luận type TypeScript."
+              },
+              "zustand": {
+                "name": "Zustand",
+                "description": "Quản lý client state nhẹ với API đơn giản."
+              },
+              "nextIntl": {
+                "name": "next-intl",
+                "description": "Quốc tế hóa với locale routing và message formatting."
+              },
+              "firebase": {
+                "name": "Firebase",
+                "description": "Authentication và Firestore database với interfaces trừu tượng."
+              },
+              "awilix": {
+                "name": "Awilix",
+                "description": "Container dependency injection cho code tách rời, dễ test."
+              },
+              "vitest": {
+                "name": "Vitest",
+                "description": "Unit testing nhanh với tích hợp React Testing Library."
+              }
             }
           },
           "gettingStarted": {
@@ -445,7 +507,7 @@
           },
           "docs": {
             "title": "Tài liệu",
-            "description": "Bốn hướng dẫn toàn diện về kiến trúc, quy ước, quy trình phát triển và testing.",
+            "description": "Năm hướng dẫn toàn diện về kiến trúc, quy ước, quy trình phát triển, testing và tích hợp Firebase.",
             "items": {
               "architecture": {
                 "title": "Kiến trúc",
@@ -462,6 +524,10 @@
               "testing": {
                 "title": "Hướng dẫn testing",
                 "description": "Vitest + React Testing Library, 100% coverage, tổ chức test và pattern AAA."
+              },
+              "firebase": {
+                "title": "Tích hợp Firebase",
+                "description": "Thiết lập Auth và Firestore, interfaces trừu tượng, security rules và thay đổi providers."
               }
             }
           }
