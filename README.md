@@ -59,35 +59,15 @@ The app runs at `http://localhost:3000`.
 
 ## AI Agent Integration
 
-This project includes configuration for AI coding assistants to help with development. Currently configured for [Cursor](https://cursor.com/), but can be adapted for other AI agents.
+This project includes [Cursor](https://cursor.com/) configuration for AI-assisted development:
 
-### Structure
+| Path                                        | Purpose                                          |
+| ------------------------------------------- | ------------------------------------------------ |
+| `.cursor/rules/general.mdc`                 | Project conventions and code style               |
+| `.cursor/rules/branch-and-pr-workflow.mdc`  | Git workflow, validation, and PR creation        |
+| `.cursor/skills/`                           | Specialized agents (code review, frontend, arch) |
 
-```
-.cursor/
-├── rules/
-│   └── general.mdc          # Project rules, conventions, and workflow
-└── skills/
-    ├── code-reviewer/       # Code review and quality checks
-    ├── nextjs-frontend-developer/  # Frontend implementation guidance
-    ├── senior-architect/    # Architecture and design decisions
-    └── ui-ux-pro-max/       # UI/UX design with component libraries
-```
-
-### What's Included
-
-| Component  | Purpose                                                                   |
-| ---------- | ------------------------------------------------------------------------- |
-| **Rules**  | Project conventions, git workflow, code style, validation requirements    |
-| **Skills** | Specialized agents for code review, frontend dev, architecture, and UI/UX |
-
-### Using with Other AI Agents
-
-To use with other AI tools (GitHub Copilot, Windsurf, etc.):
-
-1. Copy `.cursor/rules/` content to the agent's rules location (e.g., `.github/copilot-instructions.md`)
-2. Reference skill files in prompts or convert to the agent's skill format
-3. Adapt file paths and syntax as needed for your chosen tool
+For other AI tools, copy rules to the agent's config location and adapt as needed.
 
 ## Contributing
 
