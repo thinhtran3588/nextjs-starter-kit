@@ -385,53 +385,115 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Next.js Starter Kit",
           "hero": {
             "eyebrow": "Production-ready foundation",
             "title": "Next.js Starter Kit",
             "subtitle": "A production-ready Next.js starter with Clean Architecture and a modular structure for scalable frontend development. Built with the App Router, TypeScript, and 100% test coverage."
           },
-          "highlights": {
-            "architecture": {
-              "label": "Clean Architecture",
-              "description": "Explicit layers and dependency boundaries for maintainable, testable code."
-            },
-            "coverage": {
-              "label": "100% test coverage",
-              "description": "Vitest and React Testing Library with mandatory coverage thresholds."
-            },
-            "i18n": {
-              "label": "i18n ready",
-              "description": "next-intl with locale routing. English, Vietnamese, and Chinese included."
+          "features": {
+            "title": "Key Features",
+            "description": "Everything you need to build scalable, maintainable frontend applications with best practices built-in.",
+            "items": {
+              "cleanArchitecture": {
+                "title": "Clean Architecture",
+                "description": "Four distinct layers (Domain, Application, Infrastructure, Presentation) with clear dependency rules and Awilix DI."
+              },
+              "modularStructure": {
+                "title": "Modular Structure",
+                "description": "Feature modules under src/modules/ with isolated boundaries. App Router handles routing only; all code lives in src/."
+              },
+              "testCoverage": {
+                "title": "100% Test Coverage",
+                "description": "Mandatory coverage thresholds with Vitest and React Testing Library. AAA pattern and behavior-focused testing."
+              },
+              "i18nReady": {
+                "title": "i18n Ready",
+                "description": "next-intl with locale-based routing. English, Vietnamese, and Chinese translations included out of the box."
+              },
+              "typeSafeForms": {
+                "title": "Type-Safe Forms",
+                "description": "React Hook Form with Zod validation. Single source of truth for schemas with automatic TypeScript inference."
+              },
+              "firebaseIntegration": {
+                "title": "Firebase Integration",
+                "description": "Auth and Firestore with abstracted interfaces. Easy to swap providers without changing application code."
+              }
             }
           },
-          "features": {
-            "architecture": {
-              "title": "Clean Architecture",
-              "description": "Domain, application, infrastructure, and presentation layers with dependency injection via Awilix. Use cases orchestrate business logic independent of UI."
-            },
-            "modular": {
-              "title": "Modular structure",
-              "description": "Feature modules under src/modules/ with Clean Architecture layers. App Router in app/ handles routing only; all code lives in src/."
-            },
-            "stack": {
-              "title": "Complete stack",
-              "description": "React Hook Form + Zod for forms, Zustand for state, shadcn/ui with Tailwind for UI, next-intl for i18n with 3 languages included."
+          "architecture": {
+            "title": "Clean Architecture",
+            "description": "Separation of concerns with dependency inversion. Inner layers have no knowledge of outer layers, enabling testability and flexibility.",
+            "layers": {
+              "domain": {
+                "title": "Domain",
+                "description": "Core types, Zod schemas, and interfaces. No external dependencies—pure business rules and data shapes."
+              },
+              "application": {
+                "title": "Application",
+                "description": "Use cases orchestrating business logic. Depends only on Domain; no UI or framework specifics."
+              },
+              "infrastructure": {
+                "title": "Infrastructure",
+                "description": "Services and repositories implementing domain interfaces. All external I/O and SDK usage lives here."
+              },
+              "presentation": {
+                "title": "Presentation",
+                "description": "Pages, components, and hooks. React and Next.js specifics; uses Application layer via DI container."
+              }
             }
           },
           "techStack": {
-            "title": "Tech stack",
-            "tags": {
-              "nextjs": "Next.js",
-              "react": "React",
-              "typescript": "TypeScript",
-              "tailwind": "Tailwind CSS",
-              "shadcn": "shadcn/ui",
-              "zustand": "Zustand",
-              "rhf": "React Hook Form",
-              "zod": "Zod",
-              "nextIntl": "next-intl",
-              "vitest": "Vitest"
+            "title": "Tech Stack",
+            "description": "Modern, production-ready technologies carefully selected for developer experience and performance.",
+            "items": {
+              "nextjs": {
+                "name": "Next.js 16",
+                "description": "App Router, React Server Components, and optimized SSR/SSG."
+              },
+              "react": {
+                "name": "React 19",
+                "description": "Latest React with concurrent features and improved performance."
+              },
+              "typescript": {
+                "name": "TypeScript 5",
+                "description": "Strict mode enabled for maximum type safety across the codebase."
+              },
+              "tailwind": {
+                "name": "Tailwind CSS 4",
+                "description": "Utility-first styling with automatic class sorting and optimization."
+              },
+              "radix": {
+                "name": "Radix UI",
+                "description": "Accessible, unstyled primitives via shadcn/ui component collection."
+              },
+              "rhf": {
+                "name": "React Hook Form",
+                "description": "Performant form management with minimal re-renders."
+              },
+              "zod": {
+                "name": "Zod",
+                "description": "Schema validation with TypeScript type inference."
+              },
+              "zustand": {
+                "name": "Zustand",
+                "description": "Lightweight client state management with simple API."
+              },
+              "nextIntl": {
+                "name": "next-intl",
+                "description": "Internationalization with locale routing and message formatting."
+              },
+              "firebase": {
+                "name": "Firebase",
+                "description": "Authentication and Firestore database with abstracted interfaces."
+              },
+              "awilix": {
+                "name": "Awilix",
+                "description": "Dependency injection container for decoupled, testable code."
+              },
+              "vitest": {
+                "name": "Vitest",
+                "description": "Fast unit testing with React Testing Library integration."
+              }
             }
           },
           "gettingStarted": {
@@ -445,7 +507,7 @@
           },
           "docs": {
             "title": "Documentation",
-            "description": "Four comprehensive guides cover architecture, conventions, development workflow, and testing.",
+            "description": "Five comprehensive guides cover architecture, conventions, development workflow, testing, and Firebase integration.",
             "items": {
               "architecture": {
                 "title": "Architecture",
@@ -462,6 +524,10 @@
               "testing": {
                 "title": "Testing guide",
                 "description": "Vitest + React Testing Library, 100% coverage, test organization, and AAA pattern."
+              },
+              "firebase": {
+                "title": "Firebase integration",
+                "description": "Auth and Firestore setup, abstracted interfaces, security rules, and swapping providers."
               }
             }
           }
