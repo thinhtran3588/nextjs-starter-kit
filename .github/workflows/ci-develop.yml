@@ -48,4 +48,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy out --project-name=nextjs-starter-kit --branch=develop
+          command: pages deploy out --project-name=nextjs-starter-kit-dev --branch=develop
