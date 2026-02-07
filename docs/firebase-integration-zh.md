@@ -1,23 +1,25 @@
 # Firebase 集成
 
-本项目使用 Firebase 进行身份验证和数据持久化。选择 Firebase 是为了**快速 MVP 开发**，同时架构设计确保在需要时可轻松迁移到其他 provider。
+本项目使用 Firebase 进行身份验证、数据持久化和分析。选择 Firebase 是为了**快速 MVP 开发**，同时架构设计确保在需要时可轻松迁移到其他 provider。
 
 ## 目录
 
 1. [概览](#概览)
 2. [配置](#配置)
 3. [身份验证](#身份验证)
-4. [Firestore Database](#firestore-database)
-5. [Security Rules](#security-rules)
-6. [更换 Provider](#更换-provider)
+4. [分析](#分析)
+5. [Firestore Database](#firestore-database)
+6. [Security Rules](#security-rules)
+7. [更换 Provider](#更换-provider)
 
 ## 概览
 
-Firebase 在本项目中提供两项核心服务：
+Firebase 在本项目中提供三项核心服务：
 
 | 服务 | 用途 | 抽象化 |
 |------|------|--------|
 | **Firebase Auth** | 用户身份验证（邮箱/密码、Google） | `AuthenticationService` interface |
+| **Firebase Analytics** | 事件追踪、页面浏览、用户识别 | `AnalyticsService` interface |
 | **Firestore** | NoSQL document database | 每模块的 Repository interface |
 
 ### 为什么 MVP 选择 Firebase？
@@ -61,6 +63,11 @@ export function getFirestoreInstance(): Firestore | null {
   if (typeof window === "undefined") return null;
   // 返回缓存的 Firestore 实例或初始化新实例
 }
+
+export function getAnalyticsInstance(): Analytics | null {
+  if (typeof window === "undefined") return null;
+  // 返回缓存的 Analytics 实例（随 Firebase app 提前初始化）
+}
 ```
 
 **关键特性：**
@@ -75,6 +82,7 @@ export function getFirestoreInstance(): Firestore | null {
 
 ```typescript
 container.register({
+  getAnalyticsInstance: asValue(getAnalyticsInstance),
   getAuthInstance: asValue(getAuthInstance),
   getFirestoreInstance: asValue(getFirestoreInstance),
 });
@@ -184,11 +192,11 @@ interface AuthUserStore {
 **初始化**：`src/application/components/app-initializer.tsx`
 
 ```typescript
-export function AppInitializer({ children }: Props) {
-  useSyncAuthState(); // 启动 auth state 同步
-  useSyncUserSettings(); // 同步用户偏好设置
-
-  return children;
+export function AppInitializer() {
+  useSyncAuthState();      // 启动 auth state 同步
+  useSyncUserSettings();   // 同步用户偏好设置
+  useSyncAnalyticsUser();  // 同步 analytics 用户 ID
+  return null;
 }
 ```
 
@@ -213,6 +221,149 @@ sequenceDiagram
     Firebase->>AuthService: onAuthStateChanged
     AuthService->>Store: 更新 user state
     Store->>Page: 使用 user 重新渲染
+```
+
+## 分析
+
+分析模块通过 Firebase Analytics 追踪用户行为，遵循与其他模块相同的 Clean Architecture 模式。
+
+### Domain Interface
+
+**位置**：`src/modules/analytics/domain/interfaces.ts`
+
+```typescript
+export interface AnalyticsService {
+  logEvent(eventName: string, params?: Record<string, unknown>): void;
+  setUserId(userId: string | null): void;
+}
+```
+
+### Firebase 实现
+
+**位置**：`src/modules/analytics/infrastructure/services/firebase-analytics-service.ts`
+
+`FirebaseAnalyticsService` 类：
+
+1. **实现** `AnalyticsService` interface
+2. **通过** dependency injection **接收** `GetAnalyticsInstance` 函数
+3. **委托** 给 Firebase SDK 的 `logEvent` 和 `setUserId`
+4. **优雅处理** analytics 实例不存在的情况（静默返回）
+
+```typescript
+export class FirebaseAnalyticsService implements AnalyticsService {
+  constructor(private readonly getAnalyticsInstance: GetAnalyticsInstance) {}
+
+  logEvent(eventName: string, params?: Record<string, unknown>): void {
+    const analytics = this.getAnalyticsInstance();
+    if (!analytics) return;
+    firebaseLogEvent(analytics, eventName, params);
+  }
+
+  setUserId(userId: string | null): void {
+    const analytics = this.getAnalyticsInstance();
+    if (!analytics) return;
+    firebaseSetUserId(analytics, userId);
+  }
+}
+```
+
+### Use Cases
+
+**位置**：`src/modules/analytics/application/`
+
+| Use Case | 用途 |
+|----------|------|
+| `LogEventUseCase` | 记录自定义 analytics 事件及可选参数 |
+| `SetAnalyticsUserUseCase` | 设置或清除 analytics 用户 ID |
+
+```typescript
+// 记录自定义事件
+await logEventUseCase.execute({
+  eventName: "button_click",
+  params: { button_id: "cta_signup" },
+});
+
+// 为已认证用户设置 user ID
+await setAnalyticsUserUseCase.execute({ userId: "uid-123" });
+
+// 登出时清除 user ID
+await setAnalyticsUserUseCase.execute({ userId: null });
+```
+
+### 自动页面浏览追踪
+
+页面浏览由 GA4 Enhanced Measurement 自动追踪。当 GA4 属性启用了"基于浏览器历史事件的页面变化"（默认启用），每次 Next.js 通过 History API（`pushState`/`replaceState`）执行客户端导航时，`page_view` 事件会自动触发。无需自定义 hook。
+
+### 用户 ID 同步 Hook
+
+**位置**：`src/modules/analytics/presentation/hooks/use-sync-analytics-user.ts`
+
+在 `AppInitializer` 中初始化，此 hook：
+
+- 观察 `useAuthUserStore` 中的 auth 用户
+- 用户登录时设置 Firebase Analytics 用户 ID
+- 用户登出时清除用户 ID
+
+### Analytics 流程
+
+```mermaid
+sequenceDiagram
+    participant App as AppInitializer
+    participant Hook as useSyncAnalyticsUser
+    participant UseCase as SetAnalyticsUserUseCase
+    participant Service as AnalyticsService
+    participant Firebase as Firebase Analytics
+
+    App->>Hook: 挂载时初始化
+    Hook->>Hook: 观察 auth user store
+    Hook->>UseCase: execute({ userId })
+    UseCase->>Service: setUserId(userId)
+    Service->>Firebase: setUserId(analytics, userId)
+```
+
+### Module Configuration
+
+**位置**：`src/modules/analytics/module-configuration.ts`
+
+```typescript
+export function registerModule(container: AwilixContainer<object>): void {
+  container.register({
+    analyticsService: asFunction(
+      (c) => new FirebaseAnalyticsService(c.getAnalyticsInstance),
+    ).singleton(),
+    logEventUseCase: asFunction(
+      (c) => new LogEventUseCase(c.analyticsService),
+    ).singleton(),
+    setAnalyticsUserUseCase: asFunction(
+      (c) => new SetAnalyticsUserUseCase(c.analyticsService),
+    ).singleton(),
+  });
+}
+```
+
+### 记录自定义事件
+
+从任何 client component 记录自定义事件：
+
+```typescript
+"use client";
+
+import { useContainer } from "@/common/hooks/use-container";
+import type { LogEventUseCase } from "@/modules/analytics/application/log-event-use-case";
+
+export function MyComponent() {
+  const container = useContainer();
+
+  const handleClick = () => {
+    const logEventUseCase = container.resolve("logEventUseCase") as LogEventUseCase;
+    logEventUseCase.execute({
+      eventName: "feature_used",
+      params: { feature: "export_pdf" },
+    });
+  };
+
+  return <button onClick={handleClick}>Export</button>;
+}
 ```
 
 ## Firestore Database
@@ -373,13 +524,43 @@ container.register({
 });
 ```
 
+### 更换 Analytics
+
+1. **创建新 service** 实现 `AnalyticsService`：
+
+```typescript
+// src/modules/analytics/infrastructure/services/mixpanel-analytics-service.ts
+export class MixpanelAnalyticsService implements AnalyticsService {
+  logEvent(eventName: string, params?: Record<string, unknown>): void {
+    // Mixpanel 实现
+  }
+  setUserId(userId: string | null): void {
+    // Mixpanel 实现
+  }
+}
+```
+
+2. **更新 module configuration**：
+
+```typescript
+// src/modules/analytics/module-configuration.ts
+container.register({
+  analyticsService: asFunction(
+    (cradle) => new MixpanelAnalyticsService(cradle.mixpanelClient)
+  ).singleton(),
+});
+```
+
+3. **无需更改** use cases、hooks 或 components
+
 ### 迁移策略
 
 分阶段迁移：
 
 1. **阶段 1**：保留 Firebase Auth，用你的后端 API 替换 Firestore
 2. **阶段 2**：用企业级方案（Auth0、Okta 等）替换 Firebase Auth
-3. **阶段 3**：完全移除 Firebase SDK
+3. **阶段 3**：用你偏好的 provider（Mixpanel、Amplitude 等）替换 Firebase Analytics
+4. **阶段 4**：完全移除 Firebase SDK
 
 每个阶段只需更改：
 - Infrastructure layer（新的 service/repository 实现）

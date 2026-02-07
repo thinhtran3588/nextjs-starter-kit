@@ -212,7 +212,7 @@
         "firebase-integration": {
           "metadata": {
             "title": "Tích hợp Firebase",
-            "description": "Thiết lập Auth và Firestore, interfaces trừu tượng, security rules và thay đổi providers."
+            "description": "Thiết lập Auth, Firestore và Analytics, interfaces trừu tượng, security rules và thay đổi providers."
           }
         },
         "testing-guide": {
@@ -466,7 +466,7 @@
               },
               "firebaseIntegration": {
                 "title": "Tích hợp Firebase",
-                "description": "Auth và Firestore với interfaces trừu tượng. Dễ thay đổi provider mà không sửa code ứng dụng."
+                "description": "Auth, Firestore và Analytics với interfaces trừu tượng. Dễ thay đổi provider mà không sửa code ứng dụng."
               }
             }
           },
@@ -534,7 +534,7 @@
               },
               "firebase": {
                 "name": "Firebase",
-                "description": "Authentication và Firestore database với interfaces trừu tượng."
+                "description": "Authentication, Firestore database và Analytics với interfaces trừu tượng."
               },
               "awilix": {
                 "name": "Awilix",
@@ -577,7 +577,7 @@
               },
               "firebase": {
                 "title": "Tích hợp Firebase",
-                "description": "Thiết lập Auth và Firestore, interfaces trừu tượng, security rules và thay đổi providers."
+                "description": "Thiết lập Auth, Firestore và Analytics, interfaces trừu tượng, security rules và thay đổi providers."
               }
             }
           }

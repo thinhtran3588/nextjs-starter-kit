@@ -5,13 +5,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ChangePasswordModal } from "@/modules/auth/presentation/pages/profile/components/change-password-modal";
 
 const mockUpdatePasswordExecute = vi.fn();
+const mockLogEventExecute = vi.fn();
 
 vi.mock("@/common/hooks/use-container", () => ({
   useContainer: () => ({
     resolve: (name: string) =>
       name === "updatePasswordUseCase"
         ? { execute: mockUpdatePasswordExecute }
-        : {},
+        : name === "logEventUseCase"
+          ? { execute: mockLogEventExecute }
+          : {},
   }),
 }));
 
@@ -21,6 +24,7 @@ describe("ChangePasswordModal", () => {
 
   beforeEach(() => {
     mockUpdatePasswordExecute.mockClear();
+    mockLogEventExecute.mockClear();
     mockOnOpenChange.mockClear();
     mockOnSuccess.mockClear();
   });

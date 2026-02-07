@@ -5,7 +5,7 @@ vi.mock("firebase/app", () => ({
   initializeApp: vi.fn(() => ({})),
 }));
 vi.mock("firebase/analytics", () => ({
-  getAnalytics: vi.fn(),
+  getAnalytics: vi.fn(() => ({})),
 }));
 vi.mock("firebase/firestore", () => ({
   getFirestore: vi.fn(),
@@ -137,5 +137,60 @@ describe("firebase-config", () => {
     const { getFirestoreInstance } =
       await import("@/application/config/firebase-config");
     expect(getFirestoreInstance()).toBeNull();
+  });
+
+  it("getAnalyticsInstance returns null when window is undefined", async () => {
+    vi.stubGlobal("window", undefined);
+    const { getAnalyticsInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getAnalyticsInstance()).toBeNull();
+    vi.stubGlobal("window", originalWindow);
+  });
+
+  it("getAnalyticsInstance returns analytics instance when window is defined", async () => {
+    vi.stubGlobal("window", originalWindow);
+    const mockAnalytics = { app: {} };
+    const analyticsModule = await import("firebase/analytics");
+    vi.mocked(analyticsModule.getAnalytics).mockReturnValue(
+      mockAnalytics as never,
+    );
+    vi.resetModules();
+    const { getAnalyticsInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getAnalyticsInstance()).toBe(mockAnalytics);
+  });
+
+  it("getAnalyticsInstance returns same instance on subsequent calls", async () => {
+    vi.stubGlobal("window", originalWindow);
+    const mockAnalytics = { app: {} };
+    const analyticsModule = await import("firebase/analytics");
+    vi.mocked(analyticsModule.getAnalytics).mockReturnValue(
+      mockAnalytics as never,
+    );
+    vi.resetModules();
+    const { getAnalyticsInstance } =
+      await import("@/application/config/firebase-config");
+    const first = getAnalyticsInstance();
+    const second = getAnalyticsInstance();
+    expect(first).toBe(second);
+    expect(first).toBe(mockAnalytics);
+  });
+
+  it("getAnalyticsInstance returns null when NEXT_PUBLIC_FIREBASE_CONFIG is missing", async () => {
+    vi.stubGlobal("window", originalWindow);
+    delete process.env.NEXT_PUBLIC_FIREBASE_CONFIG;
+    vi.resetModules();
+    const { getAnalyticsInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getAnalyticsInstance()).toBeNull();
+  });
+
+  it("getAnalyticsInstance returns null when NEXT_PUBLIC_FIREBASE_CONFIG is invalid JSON", async () => {
+    vi.stubGlobal("window", originalWindow);
+    process.env.NEXT_PUBLIC_FIREBASE_CONFIG = "invalid-json";
+    vi.resetModules();
+    const { getAnalyticsInstance } =
+      await import("@/application/config/firebase-config");
+    expect(getAnalyticsInstance()).toBeNull();
   });
 });

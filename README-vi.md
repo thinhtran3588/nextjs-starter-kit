@@ -28,7 +28,7 @@ Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và c�
 - **Forms & Validation** — React Hook Form + Zod với schemas type-safe
 - **State & i18n** — Zustand cho state client, next-intl với 3 ngôn ngữ (EN, VI, ZH)
 - **Testing** — Vitest + React Testing Library với yêu cầu 100% coverage
-- **Firebase** — Auth & Firestore với interfaces trừu tượng hóa, dễ thay đổi provider
+- **Firebase** — Auth, Firestore & Analytics với interfaces trừu tượng hóa, dễ thay đổi provider
 
 ## Bắt đầu nhanh
 
@@ -55,7 +55,7 @@ npm run dev
 | [Quy ước Coding](docs/coding-conventions-vi.md)      | Đặt tên file, patterns App Router, forms, i18n           |
 | [Hướng dẫn Phát triển](docs/development-guide-vi.md) | Git workflow, thêm tính năng, tạo modules                |
 | [Hướng dẫn Testing](docs/testing-guide-vi.md)        | Tổ chức test, coverage, best practices                   |
-| [Tích hợp Firebase](docs/firebase-integration-vi.md) | Cài đặt Auth & Firestore, thay đổi providers             |
+| [Tích hợp Firebase](docs/firebase-integration-vi.md) | Cài đặt Auth, Firestore & Analytics, thay đổi providers  |
 
 ## Tích hợp AI Agent
 
