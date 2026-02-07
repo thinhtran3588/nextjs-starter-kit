@@ -1,17 +1,20 @@
 {
   "name": "nextjs-starter-kit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A production-ready Next.js starter kit with Clean Architecture and modular structure for scalable frontend development.",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:static": "next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "preview": "npm run build:static && wrangler pages dev out",
+    "deploy": "npm run build:static && wrangler pages deploy out",
     "validate": "npx tsc --noEmit && npm run lint && npm run format:check && npm run test:coverage"
   },
   "dependencies": {
@@ -53,9 +56,11 @@
     "jsdom": "^27.0.0",
     "prettier": "^3.6.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
+    "raw-loader": "^4.0.2",
     "shadcn": "^3.7.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wrangler": "^4.63.0"
   }
 }

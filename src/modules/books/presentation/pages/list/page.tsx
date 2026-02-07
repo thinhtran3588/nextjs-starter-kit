@@ -273,7 +273,7 @@ export function BooksListPage() {
                         <div className="flex justify-end gap-1">
                           <Button asChild variant="outline" size="icon-sm">
                             <Link
-                              href={`/app/books/${book.id}`}
+                              href={`/app/books/detail?id=${book.id}`}
                               aria-label={t("viewDetail")}
                             >
                               <ExternalLinkIcon className="size-4" />
@@ -303,7 +303,7 @@ export function BooksListPage() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <Link
-                      href={`/app/books/${book.id}`}
+                      href={`/app/books/detail?id=${book.id}`}
                       className="min-w-0 flex-1 font-medium text-[var(--text-primary)] hover:underline"
                     >
                       <span className="line-clamp-2">{book.title}</span>
@@ -311,7 +311,7 @@ export function BooksListPage() {
                     <div className="flex shrink-0 gap-1">
                       <Button asChild variant="ghost" size="icon-sm">
                         <Link
-                          href={`/app/books/${book.id}`}
+                          href={`/app/books/detail?id=${book.id}`}
                           aria-label={t("viewDetail")}
                         >
                           <ExternalLinkIcon className="size-4" />
