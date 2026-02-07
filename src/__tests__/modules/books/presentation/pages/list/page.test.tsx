@@ -507,7 +507,7 @@ describe("BooksListPage", () => {
       name: listMessages.viewDetail,
     });
     expect(viewLinks.length).toBeGreaterThanOrEqual(1);
-    expect(viewLinks[0]).toHaveAttribute("href", "/app/books/book-1");
+    expect(viewLinks[0]).toHaveAttribute("href", "/app/books/detail?id=book-1");
     const deleteButtons = screen.getAllByRole("button", {
       name: listMessages.delete,
     });

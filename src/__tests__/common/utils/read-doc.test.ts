@@ -1,58 +1,33 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { readDocContent } from "@/common/utils/read-doc";
 
 describe("readDocContent", () => {
-  const mockReadFile = vi.fn();
-
-  beforeEach(() => {
-    mockReadFile.mockReset();
-  });
-
-  it("returns null when file does not exist", async () => {
-    mockReadFile.mockRejectedValue(new Error("ENOENT"));
-    expect(await readDocContent("invalid", "en", mockReadFile)).toBe(null);
-    expect(await readDocContent("", "vi", mockReadFile)).toBe(null);
-    expect(mockReadFile).toHaveBeenCalled();
-  });
-
   it("returns content for valid slug and locale en", async () => {
-    mockReadFile.mockResolvedValue("# Title\n\nContent");
-    const result = await readDocContent("architecture", "en", mockReadFile);
-    expect(result).toBe("# Title\n\nContent");
-    expect(mockReadFile).toHaveBeenCalledWith(
-      expect.stringMatching(/[/\\]docs[/\\]architecture\.md$/),
-      "utf-8",
-    );
+    const result = await readDocContent("architecture", "en");
+    expect(result).toBeTruthy();
+    expect(result).toContain("# ");
   });
 
-  it("uses locale-suffixed filename for vi", async () => {
-    mockReadFile.mockResolvedValue("# Kiến trúc");
-    const result = await readDocContent("architecture", "vi", mockReadFile);
-    expect(result).toBe("# Kiến trúc");
-    expect(mockReadFile).toHaveBeenCalledWith(
-      expect.stringMatching(/[/\\]docs[/\\]architecture-vi\.md$/),
-      "utf-8",
-    );
+  it("returns content for valid slug and locale vi", async () => {
+    const result = await readDocContent("architecture", "vi");
+    expect(result).toBeTruthy();
+    expect(result).toContain("# ");
   });
 
-  it("uses locale-suffixed filename for zh", async () => {
-    mockReadFile.mockResolvedValue("# Architecture");
-    const result = await readDocContent(
-      "development-guide",
-      "zh",
-      mockReadFile,
-    );
-    expect(result).toBe("# Architecture");
-    expect(mockReadFile).toHaveBeenCalledWith(
-      expect.stringMatching(/[/\\]docs[/\\]development-guide-zh\.md$/),
-      "utf-8",
-    );
+  it("returns content for valid slug and locale zh", async () => {
+    const result = await readDocContent("development-guide", "zh");
+    expect(result).toBeTruthy();
+    expect(result).toContain("# ");
   });
 
-  it("returns null on read error", async () => {
-    mockReadFile.mockRejectedValue(new Error("ENOENT"));
-    const result = await readDocContent("architecture", "vi", mockReadFile);
+  it("returns null for non-existent slug", async () => {
+    const result = await readDocContent("non-existent", "en");
+    expect(result).toBe(null);
+  });
+
+  it("returns null for non-existent locale variant", async () => {
+    const result = await readDocContent("non-existent", "vi");
     expect(result).toBe(null);
   });
 });

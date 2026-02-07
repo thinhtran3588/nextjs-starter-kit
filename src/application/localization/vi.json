@@ -149,6 +149,9 @@
         },
         "profile": {
           "title": "Hồ sơ",
+          "metadata": {
+            "description": "Xem và cập nhật thông tin hồ sơ cá nhân và mật khẩu."
+          },
           "emailLabel": "Email",
           "fullNameLabel": "Họ và tên",
           "signInTypeLabel": "Loại đăng nhập",
@@ -186,6 +189,40 @@
         }
       }
     },
+    "docs": {
+      "pages": {
+        "architecture": {
+          "metadata": {
+            "title": "Kiến trúc",
+            "description": "Cấu trúc layer, sơ đồ luồng dữ liệu, design patterns và dependency injection với Awilix."
+          }
+        },
+        "coding-conventions": {
+          "metadata": {
+            "title": "Quy ước coding",
+            "description": "Patterns App Router, đặt tên file, component props, forms với Zod và next-intl i18n."
+          }
+        },
+        "development-guide": {
+          "metadata": {
+            "title": "Hướng dẫn phát triển",
+            "description": "Git workflow, hướng dẫn 7 bước thêm tính năng, tạo module và common patterns."
+          }
+        },
+        "firebase-integration": {
+          "metadata": {
+            "title": "Tích hợp Firebase",
+            "description": "Thiết lập Auth và Firestore, interfaces trừu tượng, security rules và thay đổi providers."
+          }
+        },
+        "testing-guide": {
+          "metadata": {
+            "title": "Hướng dẫn testing",
+            "description": "Vitest + React Testing Library, 100% coverage, tổ chức test và pattern AAA."
+          }
+        }
+      }
+    },
     "books": {
       "form": {
         "title": "Tên sách",
@@ -208,6 +245,9 @@
       "pages": {
         "list": {
           "title": "Sách",
+          "metadata": {
+            "description": "Duyệt và quản lý bộ sưu tập sách cá nhân của bạn."
+          },
           "titleColumn": "Tên sách",
           "create": "Tạo sách",
           "searchPlaceholder": "Tìm theo tên…",
@@ -242,6 +282,9 @@
         },
         "detail": {
           "title": "Chi tiết sách",
+          "metadata": {
+            "description": "Xem và chỉnh sửa chi tiết sách bao gồm tác giả, thể loại và liên kết."
+          },
           "notFound": "Không tìm thấy sách.",
           "signInRequired": "Đăng nhập để xem sách này.",
           "loading": "Đang tải…",

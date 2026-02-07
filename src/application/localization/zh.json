@@ -107,6 +107,7 @@
         },
         "sign-up": {
           "title": "注册",
+          "or": "或",
           "googleButton": "使用 Google 继续",
           "emailLabel": "邮箱",
           "passwordLabel": "密码",
@@ -148,6 +149,9 @@
         },
         "profile": {
           "title": "个人资料",
+          "metadata": {
+            "description": "查看和更新您的个人资料和密码。"
+          },
           "emailLabel": "邮箱",
           "fullNameLabel": "姓名",
           "signInTypeLabel": "登录方式",
@@ -185,6 +189,40 @@
         }
       }
     },
+    "docs": {
+      "pages": {
+        "architecture": {
+          "metadata": {
+            "title": "架构",
+            "description": "层级结构、数据流图、设计模式与 Awilix 依赖注入。"
+          }
+        },
+        "coding-conventions": {
+          "metadata": {
+            "title": "编码规范",
+            "description": "App Router 模式、文件命名、组件 props、Zod 表单与 next-intl 国际化。"
+          }
+        },
+        "development-guide": {
+          "metadata": {
+            "title": "开发指南",
+            "description": "Git 工作流、7 步功能开发指南、模块创建与常用模式。"
+          }
+        },
+        "firebase-integration": {
+          "metadata": {
+            "title": "Firebase 集成",
+            "description": "Auth 与 Firestore 设置、抽象接口、安全规则与更换提供商。"
+          }
+        },
+        "testing-guide": {
+          "metadata": {
+            "title": "测试指南",
+            "description": "Vitest + React Testing Library、100% 覆盖率、测试组织与 AAA 模式。"
+          }
+        }
+      }
+    },
     "books": {
       "form": {
         "title": "标题",
@@ -207,6 +245,9 @@
       "pages": {
         "list": {
           "title": "图书",
+          "metadata": {
+            "description": "浏览和管理您的个人图书收藏。"
+          },
           "titleColumn": "标题",
           "create": "创建图书",
           "searchPlaceholder": "按标题搜索…",
@@ -222,6 +263,7 @@
           "genresLabel": "体裁",
           "actionsLabel": "操作",
           "confirmDelete": "删除「{title}」？",
+          "cancel": "取消",
           "deleted": "已删除图书。",
           "errors": {
             "loadFailed": "加载图书失败。",
@@ -240,6 +282,9 @@
         },
         "detail": {
           "title": "图书详情",
+          "metadata": {
+            "description": "查看和编辑图书详情，包括作者、分类和链接。"
+          },
           "notFound": "未找到图书。",
           "signInRequired": "请登录以查看此书。",
           "loading": "加载中…",

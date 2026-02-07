@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 
-import { PrivacyPolicyPage } from "@/modules/landing-page/presentation/pages/privacy-policy/page";
+import { BookDetailClient } from "./book-detail-client";
 
 export async function generateMetadata({
   params,
@@ -9,7 +10,7 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("modules.legal.pages.privacy-policy");
+  const t = await getTranslations("modules.books.pages.detail");
 
   return {
     title: t("title"),
@@ -24,5 +25,9 @@ export default async function Page({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <PrivacyPolicyPage />;
+  return (
+    <Suspense>
+      <BookDetailClient />
+    </Suspense>
+  );
 }

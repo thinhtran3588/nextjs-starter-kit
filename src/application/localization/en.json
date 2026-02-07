@@ -149,6 +149,9 @@
         },
         "profile": {
           "title": "Profile",
+          "metadata": {
+            "description": "View and update your profile information and password."
+          },
           "emailLabel": "Email",
           "fullNameLabel": "Full name",
           "signInTypeLabel": "Sign-in type",
@@ -186,6 +189,40 @@
         }
       }
     },
+    "docs": {
+      "pages": {
+        "architecture": {
+          "metadata": {
+            "title": "Architecture",
+            "description": "Layer structure, data flow diagrams, design patterns, and Awilix dependency injection."
+          }
+        },
+        "coding-conventions": {
+          "metadata": {
+            "title": "Coding Conventions",
+            "description": "App Router patterns, file naming, component props, forms with Zod, and next-intl i18n."
+          }
+        },
+        "development-guide": {
+          "metadata": {
+            "title": "Development Guide",
+            "description": "Git workflow, 7-step feature guide, module creation, and common patterns."
+          }
+        },
+        "firebase-integration": {
+          "metadata": {
+            "title": "Firebase Integration",
+            "description": "Auth and Firestore setup, abstracted interfaces, security rules, and swapping providers."
+          }
+        },
+        "testing-guide": {
+          "metadata": {
+            "title": "Testing Guide",
+            "description": "Vitest + React Testing Library, 100% coverage, test organization, and AAA pattern."
+          }
+        }
+      }
+    },
     "books": {
       "form": {
         "title": "Title",
@@ -208,6 +245,9 @@
       "pages": {
         "list": {
           "title": "Books",
+          "metadata": {
+            "description": "Browse and manage your personal book collection."
+          },
           "titleColumn": "Title",
           "create": "Create book",
           "searchPlaceholder": "Search by title…",
@@ -242,6 +282,9 @@
         },
         "detail": {
           "title": "Book Detail",
+          "metadata": {
+            "description": "View and edit book details including authors, genres, and links."
+          },
           "notFound": "Book not found.",
           "signInRequired": "Sign in to view this book.",
           "loading": "Loading…",
