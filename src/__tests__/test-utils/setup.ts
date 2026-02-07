@@ -7,8 +7,15 @@ import { initializeContainer } from "@/application/register-container";
 import { getContainerOrNull } from "@/common/utils/container";
 
 vi.mock("@/application/config/firebase-config", () => ({
+  getAnalyticsInstance: vi.fn(() => null),
   getAuthInstance: vi.fn(() => null),
   getFirestoreInstance: vi.fn(() => null),
+}));
+
+vi.mock("firebase/analytics", () => ({
+  getAnalytics: vi.fn(),
+  logEvent: vi.fn(),
+  setUserId: vi.fn(),
 }));
 
 vi.mock("firebase/auth", () => ({
@@ -57,6 +64,16 @@ const lookupMessage = (fullKey: string) => {
 
   return typeof value === "string" ? value : String(value ?? fullKey);
 };
+
+vi.mock("next/navigation", () => ({
+  usePathname: vi.fn(() => "/"),
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+  })),
+  useSearchParams: vi.fn(() => new URLSearchParams()),
+}));
 
 vi.mock("next-intl/server", () => ({
   getTranslations: async (namespace?: string) => (key: string) =>

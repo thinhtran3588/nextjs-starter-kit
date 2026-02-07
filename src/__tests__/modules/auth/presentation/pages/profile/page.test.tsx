@@ -8,6 +8,7 @@ import { ProfilePage } from "@/modules/auth/presentation/pages/profile/page";
 
 const mockUpdateProfileExecute = vi.fn();
 const mockUpdatePasswordExecute = vi.fn();
+const mockLogEventExecute = vi.fn();
 const mockToastSuccess = vi.fn();
 const mockToastError = vi.fn();
 
@@ -29,7 +30,9 @@ vi.mock("@/common/hooks/use-container", () => ({
         ? { execute: mockUpdateProfileExecute }
         : name === "updatePasswordUseCase"
           ? { execute: mockUpdatePasswordExecute }
-          : {},
+          : name === "logEventUseCase"
+            ? { execute: mockLogEventExecute }
+            : {},
   }),
 }));
 
@@ -45,6 +48,7 @@ describe("ProfilePage", () => {
   beforeEach(() => {
     mockUpdateProfileExecute.mockClear();
     mockUpdatePasswordExecute.mockClear();
+    mockLogEventExecute.mockClear();
     mockToastSuccess.mockClear();
     mockToastError.mockClear();
     useAuthUserStore.setState({
@@ -157,6 +161,10 @@ describe("ProfilePage", () => {
         displayName: "Alice Updated",
       });
     });
+    expect(mockLogEventExecute).toHaveBeenCalledWith({
+      eventName: "profile_updated",
+      params: { field: "display_name" },
+    });
     expect(mockToastSuccess).toHaveBeenCalledWith("Profile updated.");
     expect(useAuthUserStore.getState().user?.displayName).toBe("Alice Updated");
     expect(screen.getByRole("button", { name: /^Edit$/i })).toBeInTheDocument();
@@ -183,6 +191,7 @@ describe("ProfilePage", () => {
         "Something went wrong. Please try again.",
       );
     });
+    expect(mockLogEventExecute).not.toHaveBeenCalled();
   });
 
   it("cancels edit and returns to view mode when Cancel is clicked", async () => {
@@ -229,6 +238,9 @@ describe("ProfilePage", () => {
         oldPassword: "OldPass1!",
         newPassword: "NewPass1!",
       });
+    });
+    expect(mockLogEventExecute).toHaveBeenCalledWith({
+      eventName: "password_changed",
     });
     expect(mockToastSuccess).toHaveBeenCalledWith("Password updated.");
   });

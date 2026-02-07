@@ -8,6 +8,7 @@ import { Button } from "@/common/components/button";
 import { ButtonGroup } from "@/common/components/button-group";
 import { PencilIcon } from "@/common/components/icons";
 import { useContainer } from "@/common/hooks/use-container";
+import type { LogEventUseCase } from "@/modules/analytics/application/log-event-use-case";
 import type { UpdateProfileUseCase } from "@/modules/auth/application/update-profile-use-case";
 import type { ProfileInput } from "@/modules/auth/domain/schemas";
 import { AuthType, type AuthErrorCode } from "@/modules/auth/domain/types";
@@ -46,6 +47,13 @@ export function ProfilePage() {
       displayName: values.displayName.trim(),
     });
     if (result.success) {
+      const logEventUseCase = container.resolve(
+        "logEventUseCase",
+      ) as LogEventUseCase;
+      logEventUseCase.execute({
+        eventName: "profile_updated",
+        params: { field: "display_name" },
+      });
       toast.success(t("successMessage"));
       if (user) {
         setAuthState(

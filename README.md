@@ -28,7 +28,7 @@ A production-ready Next.js starter kit with Clean Architecture and modular struc
 - **Forms & Validation** — React Hook Form + Zod with type-safe schemas
 - **State & i18n** — Zustand for client state, next-intl with 3 languages (EN, VI, ZH)
 - **Testing** — Vitest + React Testing Library with 100% coverage requirement
-- **Firebase** — Auth & Firestore with abstracted interfaces for easy provider swapping
+- **Firebase** — Auth, Firestore & Analytics with abstracted interfaces for easy provider swapping
 
 ## Quick Start
 
@@ -49,13 +49,13 @@ The app runs at `http://localhost:3000`.
 
 ## Documentation
 
-| Document                                             | Description                                        |
-| ---------------------------------------------------- | -------------------------------------------------- |
-| [Architecture](docs/architecture.md)                 | Layers, data flow, design patterns, DI with Awilix |
-| [Coding Conventions](docs/coding-conventions.md)     | File naming, App Router patterns, forms, i18n      |
-| [Development Guide](docs/development-guide.md)       | Git workflow, adding features, creating modules    |
-| [Testing Guide](docs/testing-guide.md)               | Test organization, coverage, best practices        |
-| [Firebase Integration](docs/firebase-integration.md) | Auth & Firestore setup, swapping providers         |
+| Document                                             | Description                                           |
+| ---------------------------------------------------- | ----------------------------------------------------- |
+| [Architecture](docs/architecture.md)                 | Layers, data flow, design patterns, DI with Awilix    |
+| [Coding Conventions](docs/coding-conventions.md)     | File naming, App Router patterns, forms, i18n         |
+| [Development Guide](docs/development-guide.md)       | Git workflow, adding features, creating modules       |
+| [Testing Guide](docs/testing-guide.md)               | Test organization, coverage, best practices           |
+| [Firebase Integration](docs/firebase-integration.md) | Auth, Firestore & Analytics setup, swapping providers |
 
 ## AI Agent Integration
 

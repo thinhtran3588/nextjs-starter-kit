@@ -1,23 +1,25 @@
 # Tích hợp Firebase
 
-Dự án này sử dụng Firebase cho xác thực và lưu trữ dữ liệu. Firebase được chọn để **phát triển MVP nhanh chóng** trong khi kiến trúc đảm bảo dễ dàng migrate sang provider khác khi cần.
+Dự án này sử dụng Firebase cho xác thực, lưu trữ dữ liệu và phân tích. Firebase được chọn để **phát triển MVP nhanh chóng** trong khi kiến trúc đảm bảo dễ dàng migrate sang provider khác khi cần.
 
 ## Mục lục
 
 1. [Tổng quan](#tổng-quan)
 2. [Cấu hình](#cấu-hình)
 3. [Xác thực](#xác-thực)
-4. [Firestore Database](#firestore-database)
-5. [Security Rules](#security-rules)
-6. [Thay đổi Provider](#thay-đổi-provider)
+4. [Phân tích](#phân-tích)
+5. [Firestore Database](#firestore-database)
+6. [Security Rules](#security-rules)
+7. [Thay đổi Provider](#thay-đổi-provider)
 
 ## Tổng quan
 
-Firebase cung cấp hai dịch vụ cốt lõi trong dự án này:
+Firebase cung cấp ba dịch vụ cốt lõi trong dự án này:
 
 | Dịch vụ | Mục đích | Trừu tượng hóa |
 |---------|----------|----------------|
 | **Firebase Auth** | Xác thực người dùng (email/password, Google) | Interface `AuthenticationService` |
+| **Firebase Analytics** | Theo dõi sự kiện, page views, nhận diện người dùng | Interface `AnalyticsService` |
 | **Firestore** | NoSQL document database | Các interface Repository theo module |
 
 ### Tại sao Firebase cho MVP?
@@ -61,6 +63,11 @@ export function getFirestoreInstance(): Firestore | null {
   if (typeof window === "undefined") return null;
   // Trả về Firestore instance đã cache hoặc khởi tạo mới
 }
+
+export function getAnalyticsInstance(): Analytics | null {
+  if (typeof window === "undefined") return null;
+  // Trả về Analytics instance đã cache (khởi tạo sớm cùng Firebase app)
+}
 ```
 
 **Đặc điểm chính:**
@@ -75,6 +82,7 @@ export function getFirestoreInstance(): Firestore | null {
 
 ```typescript
 container.register({
+  getAnalyticsInstance: asValue(getAnalyticsInstance),
   getAuthInstance: asValue(getAuthInstance),
   getFirestoreInstance: asValue(getFirestoreInstance),
 });
@@ -184,11 +192,11 @@ interface AuthUserStore {
 **Khởi tạo**: `src/application/components/app-initializer.tsx`
 
 ```typescript
-export function AppInitializer({ children }: Props) {
-  useSyncAuthState(); // Bắt đầu đồng bộ auth state
-  useSyncUserSettings(); // Đồng bộ user preferences
-
-  return children;
+export function AppInitializer() {
+  useSyncAuthState();      // Bắt đầu đồng bộ auth state
+  useSyncUserSettings();   // Đồng bộ user preferences
+  useSyncAnalyticsUser();  // Đồng bộ analytics user ID
+  return null;
 }
 ```
 
@@ -213,6 +221,149 @@ sequenceDiagram
     Firebase->>AuthService: onAuthStateChanged
     AuthService->>Store: Cập nhật user state
     Store->>Page: Re-render với user
+```
+
+## Phân tích
+
+Module analytics theo dõi hành vi người dùng qua Firebase Analytics, tuân theo cùng pattern Clean Architecture như các module khác.
+
+### Domain Interface
+
+**Vị trí**: `src/modules/analytics/domain/interfaces.ts`
+
+```typescript
+export interface AnalyticsService {
+  logEvent(eventName: string, params?: Record<string, unknown>): void;
+  setUserId(userId: string | null): void;
+}
+```
+
+### Firebase Implementation
+
+**Vị trí**: `src/modules/analytics/infrastructure/services/firebase-analytics-service.ts`
+
+Class `FirebaseAnalyticsService`:
+
+1. **Implement** interface `AnalyticsService`
+2. **Nhận** function `GetAnalyticsInstance` qua dependency injection
+3. **Delegate** tới `logEvent` và `setUserId` của Firebase SDK
+4. **Xử lý graceful** khi analytics instance không có (return im lặng)
+
+```typescript
+export class FirebaseAnalyticsService implements AnalyticsService {
+  constructor(private readonly getAnalyticsInstance: GetAnalyticsInstance) {}
+
+  logEvent(eventName: string, params?: Record<string, unknown>): void {
+    const analytics = this.getAnalyticsInstance();
+    if (!analytics) return;
+    firebaseLogEvent(analytics, eventName, params);
+  }
+
+  setUserId(userId: string | null): void {
+    const analytics = this.getAnalyticsInstance();
+    if (!analytics) return;
+    firebaseSetUserId(analytics, userId);
+  }
+}
+```
+
+### Use Cases
+
+**Vị trí**: `src/modules/analytics/application/`
+
+| Use Case | Mục đích |
+|----------|----------|
+| `LogEventUseCase` | Ghi custom analytics events với optional parameters |
+| `SetAnalyticsUserUseCase` | Đặt hoặc xóa analytics user ID |
+
+```typescript
+// Ghi custom event
+await logEventUseCase.execute({
+  eventName: "button_click",
+  params: { button_id: "cta_signup" },
+});
+
+// Đặt user ID cho user đã xác thực
+await setAnalyticsUserUseCase.execute({ userId: "uid-123" });
+
+// Xóa user ID khi đăng xuất
+await setAnalyticsUserUseCase.execute({ userId: null });
+```
+
+### Theo dõi Page View tự động
+
+Page views được theo dõi tự động bởi GA4 Enhanced Measurement. Khi GA4 property bật "Page changes based on browser history events" (mặc định), event `page_view` được gửi tự động mỗi khi Next.js thực hiện navigation client-side qua History API (`pushState`/`replaceState`). Không cần custom hook.
+
+### Hook đồng bộ User ID
+
+**Vị trí**: `src/modules/analytics/presentation/hooks/use-sync-analytics-user.ts`
+
+Được khởi tạo trong `AppInitializer`, hook này:
+
+- Theo dõi auth user từ `useAuthUserStore`
+- Đặt Firebase Analytics user ID khi user đăng nhập
+- Xóa user ID khi user đăng xuất
+
+### Luồng Analytics
+
+```mermaid
+sequenceDiagram
+    participant App as AppInitializer
+    participant Hook as useSyncAnalyticsUser
+    participant UseCase as SetAnalyticsUserUseCase
+    participant Service as AnalyticsService
+    participant Firebase as Firebase Analytics
+
+    App->>Hook: Khởi tạo khi mount
+    Hook->>Hook: Theo dõi auth user store
+    Hook->>UseCase: execute({ userId })
+    UseCase->>Service: setUserId(userId)
+    Service->>Firebase: setUserId(analytics, userId)
+```
+
+### Module Configuration
+
+**Vị trí**: `src/modules/analytics/module-configuration.ts`
+
+```typescript
+export function registerModule(container: AwilixContainer<object>): void {
+  container.register({
+    analyticsService: asFunction(
+      (c) => new FirebaseAnalyticsService(c.getAnalyticsInstance),
+    ).singleton(),
+    logEventUseCase: asFunction(
+      (c) => new LogEventUseCase(c.analyticsService),
+    ).singleton(),
+    setAnalyticsUserUseCase: asFunction(
+      (c) => new SetAnalyticsUserUseCase(c.analyticsService),
+    ).singleton(),
+  });
+}
+```
+
+### Ghi Custom Events
+
+Để ghi custom events từ bất kỳ client component nào:
+
+```typescript
+"use client";
+
+import { useContainer } from "@/common/hooks/use-container";
+import type { LogEventUseCase } from "@/modules/analytics/application/log-event-use-case";
+
+export function MyComponent() {
+  const container = useContainer();
+
+  const handleClick = () => {
+    const logEventUseCase = container.resolve("logEventUseCase") as LogEventUseCase;
+    logEventUseCase.execute({
+      eventName: "feature_used",
+      params: { feature: "export_pdf" },
+    });
+  };
+
+  return <button onClick={handleClick}>Export</button>;
+}
 ```
 
 ## Firestore Database
@@ -373,13 +524,43 @@ container.register({
 });
 ```
 
+### Thay đổi Analytics
+
+1. **Tạo service mới** implement `AnalyticsService`:
+
+```typescript
+// src/modules/analytics/infrastructure/services/mixpanel-analytics-service.ts
+export class MixpanelAnalyticsService implements AnalyticsService {
+  logEvent(eventName: string, params?: Record<string, unknown>): void {
+    // Implementation Mixpanel
+  }
+  setUserId(userId: string | null): void {
+    // Implementation Mixpanel
+  }
+}
+```
+
+2. **Cập nhật module configuration**:
+
+```typescript
+// src/modules/analytics/module-configuration.ts
+container.register({
+  analyticsService: asFunction(
+    (cradle) => new MixpanelAnalyticsService(cradle.mixpanelClient)
+  ).singleton(),
+});
+```
+
+3. **Không cần thay đổi** use cases, hooks hay components
+
 ### Chiến lược Migration
 
 Để migrate từng bước:
 
 1. **Giai đoạn 1**: Giữ Firebase Auth, thay Firestore bằng backend API của bạn
 2. **Giai đoạn 2**: Thay Firebase Auth bằng giải pháp enterprise (Auth0, Okta, v.v.)
-3. **Giai đoạn 3**: Loại bỏ hoàn toàn Firebase SDK
+3. **Giai đoạn 3**: Thay Firebase Analytics bằng provider bạn chọn (Mixpanel, Amplitude, v.v.)
+4. **Giai đoạn 4**: Loại bỏ hoàn toàn Firebase SDK
 
 Mỗi giai đoạn chỉ cần thay đổi:
 - Infrastructure layer (implementation service/repository mới)

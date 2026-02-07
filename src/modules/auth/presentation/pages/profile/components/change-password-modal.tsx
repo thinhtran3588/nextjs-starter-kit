@@ -17,6 +17,7 @@ import {
 import { Input } from "@/common/components/input";
 import { DialogClose, Modal } from "@/common/components/modal";
 import { useContainer } from "@/common/hooks/use-container";
+import type { LogEventUseCase } from "@/modules/analytics/application/log-event-use-case";
 import type { UpdatePasswordUseCase } from "@/modules/auth/application/update-password-use-case";
 import {
   getUpdatePasswordSchema,
@@ -78,6 +79,10 @@ export function ChangePasswordModal({
       newPassword: values.newPassword,
     });
     if (result.success) {
+      const logEventUseCase = container.resolve(
+        "logEventUseCase",
+      ) as LogEventUseCase;
+      logEventUseCase.execute({ eventName: "password_changed" });
       form.reset();
       onOpenChange(false);
       onSuccess?.();

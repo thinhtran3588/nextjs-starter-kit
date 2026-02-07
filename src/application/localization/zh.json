@@ -212,7 +212,7 @@
         "firebase-integration": {
           "metadata": {
             "title": "Firebase 集成",
-            "description": "Auth 与 Firestore 设置、抽象接口、安全规则与更换提供商。"
+            "description": "Auth、Firestore 与 Analytics 设置、抽象接口、安全规则与更换提供商。"
           }
         },
         "testing-guide": {
@@ -466,7 +466,7 @@
               },
               "firebaseIntegration": {
                 "title": "Firebase 集成",
-                "description": "Auth 与 Firestore 使用抽象接口。轻松更换提供商，无需修改应用代码。"
+                "description": "Auth、Firestore 与 Analytics 使用抽象接口。轻松更换提供商，无需修改应用代码。"
               }
             }
           },
@@ -534,7 +534,7 @@
               },
               "firebase": {
                 "name": "Firebase",
-                "description": "认证与 Firestore 数据库，使用抽象接口。"
+                "description": "认证、Firestore 数据库与 Analytics，使用抽象接口。"
               },
               "awilix": {
                 "name": "Awilix",
@@ -577,7 +577,7 @@
               },
               "firebase": {
                 "title": "Firebase 集成",
-                "description": "Auth 与 Firestore 设置、抽象接口、安全规则与更换提供商。"
+                "description": "Auth、Firestore 与 Analytics 设置、抽象接口、安全规则与更换提供商。"
               }
             }
           }

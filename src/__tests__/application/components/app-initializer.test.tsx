@@ -8,7 +8,8 @@ const [
   mockGetContainerOrNull,
   mockUseSyncAuthState,
   mockUseSyncUserSettings,
-] = vi.hoisted(() => [vi.fn(), vi.fn(), vi.fn(), vi.fn()]);
+  mockUseSyncAnalyticsUser,
+] = vi.hoisted(() => [vi.fn(), vi.fn(), vi.fn(), vi.fn(), vi.fn()]);
 
 vi.mock("@/application/register-container", () => ({
   initializeContainer: mockInitializeContainer,
@@ -30,6 +31,14 @@ vi.mock("@/modules/settings/presentation/hooks/use-sync-user-settings", () => ({
   useSyncUserSettings: (...args: unknown[]) => mockUseSyncUserSettings(...args),
 }));
 
+vi.mock(
+  "@/modules/analytics/presentation/hooks/use-sync-analytics-user",
+  () => ({
+    useSyncAnalyticsUser: (...args: unknown[]) =>
+      mockUseSyncAnalyticsUser(...args),
+  }),
+);
+
 describe("AppInitializer", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -43,6 +52,7 @@ describe("AppInitializer", () => {
     expect(mockInitializeContainer).toHaveBeenCalledTimes(1);
     expect(mockUseSyncAuthState).toHaveBeenCalled();
     expect(mockUseSyncUserSettings).toHaveBeenCalled();
+    expect(mockUseSyncAnalyticsUser).toHaveBeenCalled();
   });
 
   it("does not call initializeContainer when container is already set", () => {
@@ -53,5 +63,6 @@ describe("AppInitializer", () => {
     expect(mockInitializeContainer).not.toHaveBeenCalled();
     expect(mockUseSyncAuthState).toHaveBeenCalled();
     expect(mockUseSyncUserSettings).toHaveBeenCalled();
+    expect(mockUseSyncAnalyticsUser).toHaveBeenCalled();
   });
 });

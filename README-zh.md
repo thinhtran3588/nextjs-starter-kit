@@ -28,7 +28,7 @@
 - **表单与验证** — React Hook Form + Zod，类型安全的 schemas
 - **状态与国际化** — Zustand 管理客户端状态，next-intl 支持 3 种语言（EN、VI、ZH）
 - **测试** — Vitest + React Testing Library，要求 100% 覆盖率
-- **Firebase** — Auth 与 Firestore，抽象化接口便于更换 provider
+- **Firebase** — Auth、Firestore 与 Analytics，抽象化接口便于更换 provider
 
 ## 快速开始
 
@@ -49,13 +49,13 @@ npm run dev
 
 ## 文档
 
-| 文档                                             | 说明                                        |
-| ------------------------------------------------ | ------------------------------------------- |
-| [架构](docs/architecture-zh.md)                  | 层级结构、数据流、设计模式、Awilix 依赖注入 |
-| [编码规范](docs/coding-conventions-zh.md)        | 文件命名、App Router 模式、表单、国际化     |
-| [开发指南](docs/development-guide-zh.md)         | Git 工作流、添加功能、创建模块              |
-| [测试指南](docs/testing-guide-zh.md)             | 测试组织、覆盖率、最佳实践                  |
-| [Firebase 集成](docs/firebase-integration-zh.md) | Auth 与 Firestore 设置、更换 provider       |
+| 文档                                             | 说明                                             |
+| ------------------------------------------------ | ------------------------------------------------ |
+| [架构](docs/architecture-zh.md)                  | 层级结构、数据流、设计模式、Awilix 依赖注入      |
+| [编码规范](docs/coding-conventions-zh.md)        | 文件命名、App Router 模式、表单、国际化          |
+| [开发指南](docs/development-guide-zh.md)         | Git 工作流、添加功能、创建模块                   |
+| [测试指南](docs/testing-guide-zh.md)             | 测试组织、覆盖率、最佳实践                       |
+| [Firebase 集成](docs/firebase-integration-zh.md) | Auth、Firestore 与 Analytics 设置、更换 provider |
 
 ## AI Agent 集成
 

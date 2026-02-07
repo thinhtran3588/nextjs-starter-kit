@@ -212,7 +212,7 @@
         "firebase-integration": {
           "metadata": {
             "title": "Firebase Integration",
-            "description": "Auth and Firestore setup, abstracted interfaces, security rules, and swapping providers."
+            "description": "Auth, Firestore and Analytics setup, abstracted interfaces, security rules, and swapping providers."
           }
         },
         "testing-guide": {
@@ -466,7 +466,7 @@
               },
               "firebaseIntegration": {
                 "title": "Firebase Integration",
-                "description": "Auth and Firestore with abstracted interfaces. Easy to swap providers without changing application code."
+                "description": "Auth, Firestore and Analytics with abstracted interfaces. Easy to swap providers without changing application code."
               }
             }
           },
@@ -534,7 +534,7 @@
               },
               "firebase": {
                 "name": "Firebase",
-                "description": "Authentication and Firestore database with abstracted interfaces."
+                "description": "Authentication, Firestore database and Analytics with abstracted interfaces."
               },
               "awilix": {
                 "name": "Awilix",
@@ -577,7 +577,7 @@
               },
               "firebase": {
                 "title": "Firebase integration",
-                "description": "Auth and Firestore setup, abstracted interfaces, security rules, and swapping providers."
+                "description": "Auth, Firestore and Analytics setup, abstracted interfaces, security rules, and swapping providers."
               }
             }
           }

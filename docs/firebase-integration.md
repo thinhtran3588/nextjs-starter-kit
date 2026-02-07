@@ -1,23 +1,25 @@
 # Firebase Integration
 
-This project uses Firebase for authentication and data persistence. Firebase was chosen for **rapid MVP development** while the architecture ensures easy migration to other providers when needed.
+This project uses Firebase for authentication, data persistence, and analytics. Firebase was chosen for **rapid MVP development** while the architecture ensures easy migration to other providers when needed.
 
 ## Table of Contents
 
 1. [Overview](#overview)
 2. [Configuration](#configuration)
 3. [Authentication](#authentication)
-4. [Firestore Database](#firestore-database)
-5. [Security Rules](#security-rules)
-6. [Swapping Providers](#swapping-providers)
+4. [Analytics](#analytics)
+5. [Firestore Database](#firestore-database)
+6. [Security Rules](#security-rules)
+7. [Swapping Providers](#swapping-providers)
 
 ## Overview
 
-Firebase provides two core services in this project:
+Firebase provides three core services in this project:
 
 | Service | Purpose | Abstraction |
 |---------|---------|-------------|
 | **Firebase Auth** | User authentication (email/password, Google) | `AuthenticationService` interface |
+| **Firebase Analytics** | Event tracking, page views, user identification | `AnalyticsService` interface |
 | **Firestore** | NoSQL document database | Repository interfaces per module |
 
 ### Why Firebase for MVP?
@@ -61,6 +63,11 @@ export function getFirestoreInstance(): Firestore | null {
   if (typeof window === "undefined") return null;
   // Returns cached Firestore instance or initializes new one
 }
+
+export function getAnalyticsInstance(): Analytics | null {
+  if (typeof window === "undefined") return null;
+  // Returns cached Analytics instance (initialized eagerly with Firebase app)
+}
 ```
 
 **Key Features:**
@@ -75,6 +82,7 @@ export function getFirestoreInstance(): Firestore | null {
 
 ```typescript
 container.register({
+  getAnalyticsInstance: asValue(getAnalyticsInstance),
   getAuthInstance: asValue(getAuthInstance),
   getFirestoreInstance: asValue(getFirestoreInstance),
 });
@@ -184,11 +192,11 @@ interface AuthUserStore {
 **Initialization**: `src/application/components/app-initializer.tsx`
 
 ```typescript
-export function AppInitializer({ children }: Props) {
-  useSyncAuthState(); // Start auth state sync
-  useSyncUserSettings(); // Sync user preferences
-
-  return children;
+export function AppInitializer() {
+  useSyncAuthState();      // Start auth state sync
+  useSyncUserSettings();   // Sync user preferences
+  useSyncAnalyticsUser();  // Sync analytics user ID
+  return null;
 }
 ```
 
@@ -213,6 +221,149 @@ sequenceDiagram
     Firebase->>AuthService: onAuthStateChanged
     AuthService->>Store: Update user state
     Store->>Page: Re-render with user
+```
+
+## Analytics
+
+The analytics module tracks user behavior through Firebase Analytics, following the same Clean Architecture pattern as other modules.
+
+### Domain Interface
+
+**Location**: `src/modules/analytics/domain/interfaces.ts`
+
+```typescript
+export interface AnalyticsService {
+  logEvent(eventName: string, params?: Record<string, unknown>): void;
+  setUserId(userId: string | null): void;
+}
+```
+
+### Firebase Implementation
+
+**Location**: `src/modules/analytics/infrastructure/services/firebase-analytics-service.ts`
+
+The `FirebaseAnalyticsService` class:
+
+1. **Implements** `AnalyticsService` interface
+2. **Receives** `GetAnalyticsInstance` function via dependency injection
+3. **Delegates** to Firebase SDK's `logEvent` and `setUserId`
+4. **Gracefully handles** missing analytics instance (returns silently)
+
+```typescript
+export class FirebaseAnalyticsService implements AnalyticsService {
+  constructor(private readonly getAnalyticsInstance: GetAnalyticsInstance) {}
+
+  logEvent(eventName: string, params?: Record<string, unknown>): void {
+    const analytics = this.getAnalyticsInstance();
+    if (!analytics) return;
+    firebaseLogEvent(analytics, eventName, params);
+  }
+
+  setUserId(userId: string | null): void {
+    const analytics = this.getAnalyticsInstance();
+    if (!analytics) return;
+    firebaseSetUserId(analytics, userId);
+  }
+}
+```
+
+### Use Cases
+
+**Location**: `src/modules/analytics/application/`
+
+| Use Case | Purpose |
+|----------|---------|
+| `LogEventUseCase` | Log custom analytics events with optional parameters |
+| `SetAnalyticsUserUseCase` | Set or clear the analytics user ID |
+
+```typescript
+// Log a custom event
+await logEventUseCase.execute({
+  eventName: "button_click",
+  params: { button_id: "cta_signup" },
+});
+
+// Set user ID for authenticated user
+await setAnalyticsUserUseCase.execute({ userId: "uid-123" });
+
+// Clear user ID on sign out
+await setAnalyticsUserUseCase.execute({ userId: null });
+```
+
+### Automatic Page View Tracking
+
+Page views are tracked automatically by GA4 Enhanced Measurement. When the GA4 property has "Page changes based on browser history events" enabled (the default), `page_view` events are fired automatically whenever Next.js performs client-side navigation via the History API (`pushState`/`replaceState`). No custom hook is needed.
+
+### User ID Sync Hook
+
+**Location**: `src/modules/analytics/presentation/hooks/use-sync-analytics-user.ts`
+
+Initialized in `AppInitializer`, this hook:
+
+- Observes the auth user from `useAuthUserStore`
+- Sets the Firebase Analytics user ID when a user signs in
+- Clears the user ID when the user signs out
+
+### Analytics Flow
+
+```mermaid
+sequenceDiagram
+    participant App as AppInitializer
+    participant Hook as useSyncAnalyticsUser
+    participant UseCase as SetAnalyticsUserUseCase
+    participant Service as AnalyticsService
+    participant Firebase as Firebase Analytics
+
+    App->>Hook: Initialize on mount
+    Hook->>Hook: Observe auth user store
+    Hook->>UseCase: execute({ userId })
+    UseCase->>Service: setUserId(userId)
+    Service->>Firebase: setUserId(analytics, userId)
+```
+
+### Module Configuration
+
+**Location**: `src/modules/analytics/module-configuration.ts`
+
+```typescript
+export function registerModule(container: AwilixContainer<object>): void {
+  container.register({
+    analyticsService: asFunction(
+      (c) => new FirebaseAnalyticsService(c.getAnalyticsInstance),
+    ).singleton(),
+    logEventUseCase: asFunction(
+      (c) => new LogEventUseCase(c.analyticsService),
+    ).singleton(),
+    setAnalyticsUserUseCase: asFunction(
+      (c) => new SetAnalyticsUserUseCase(c.analyticsService),
+    ).singleton(),
+  });
+}
+```
+
+### Logging Custom Events
+
+To log custom events from any client component:
+
+```typescript
+"use client";
+
+import { useContainer } from "@/common/hooks/use-container";
+import type { LogEventUseCase } from "@/modules/analytics/application/log-event-use-case";
+
+export function MyComponent() {
+  const container = useContainer();
+
+  const handleClick = () => {
+    const logEventUseCase = container.resolve("logEventUseCase") as LogEventUseCase;
+    logEventUseCase.execute({
+      eventName: "feature_used",
+      params: { feature: "export_pdf" },
+    });
+  };
+
+  return <button onClick={handleClick}>Export</button>;
+}
 ```
 
 ## Firestore Database
@@ -373,13 +524,43 @@ container.register({
 });
 ```
 
+### Swapping Analytics
+
+1. **Create new service** implementing `AnalyticsService`:
+
+```typescript
+// src/modules/analytics/infrastructure/services/mixpanel-analytics-service.ts
+export class MixpanelAnalyticsService implements AnalyticsService {
+  logEvent(eventName: string, params?: Record<string, unknown>): void {
+    // Mixpanel implementation
+  }
+  setUserId(userId: string | null): void {
+    // Mixpanel implementation
+  }
+}
+```
+
+2. **Update module configuration**:
+
+```typescript
+// src/modules/analytics/module-configuration.ts
+container.register({
+  analyticsService: asFunction(
+    (cradle) => new MixpanelAnalyticsService(cradle.mixpanelClient)
+  ).singleton(),
+});
+```
+
+3. **No changes needed** in use cases, hooks, or components
+
 ### Migration Strategy
 
 For gradual migration:
 
 1. **Phase 1**: Keep Firebase Auth, replace Firestore with your backend API
 2. **Phase 2**: Replace Firebase Auth with enterprise solution (Auth0, Okta, etc.)
-3. **Phase 3**: Remove Firebase SDK entirely
+3. **Phase 3**: Replace Firebase Analytics with your preferred provider (Mixpanel, Amplitude, etc.)
+4. **Phase 4**: Remove Firebase SDK entirely
 
 Each phase only requires changes in:
 - Infrastructure layer (new service/repository implementations)

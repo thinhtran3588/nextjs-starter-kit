@@ -97,4 +97,25 @@ describe("register-container", () => {
     expect(typeof repo.get).toBe("function");
     expect(typeof findUseCase.execute).toBe("function");
   });
+
+  it("returns a container that resolves analytics service and use cases", () => {
+    const container = getContainer();
+    const service = container.resolve("analyticsService") as {
+      logEvent: (eventName: string, params?: Record<string, unknown>) => void;
+      setUserId: (userId: string | null) => void;
+    };
+    const logEventUseCase = container.resolve("logEventUseCase") as {
+      execute: (input: unknown) => Promise<unknown>;
+    };
+    const setAnalyticsUserUseCase = container.resolve(
+      "setAnalyticsUserUseCase",
+    ) as {
+      execute: (input: unknown) => Promise<unknown>;
+    };
+    expect(service).toBeDefined();
+    expect(typeof service.logEvent).toBe("function");
+    expect(typeof service.setUserId).toBe("function");
+    expect(typeof logEventUseCase.execute).toBe("function");
+    expect(typeof setAnalyticsUserUseCase.execute).toBe("function");
+  });
 });
