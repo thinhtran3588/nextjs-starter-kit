@@ -33,6 +33,17 @@ jobs:
             nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
             nextjs-${{ runner.os }}-
 
+      - name: Verify Firebase config is set
+        run: |
+          if [ -z "$NEXT_PUBLIC_FIREBASE_CONFIG" ]; then
+            echo "::error::NEXT_PUBLIC_FIREBASE_CONFIG is not set"
+            exit 1
+          else
+            echo "NEXT_PUBLIC_FIREBASE_CONFIG is set (length: ${#NEXT_PUBLIC_FIREBASE_CONFIG} chars)"
+          fi
+        env:
+          NEXT_PUBLIC_FIREBASE_CONFIG: ${{ secrets.NEXT_PUBLIC_FIREBASE_CONFIG }}
+
       - name: Run validation
         run: npm run validate
         env:
