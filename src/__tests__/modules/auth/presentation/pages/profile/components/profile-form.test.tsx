@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -6,29 +6,10 @@ import { AuthType } from "@/modules/auth/domain/types";
 import { useAuthUserStore } from "@/modules/auth/presentation/hooks/use-auth-user-store";
 import { ProfileForm } from "@/modules/auth/presentation/pages/profile/components/profile-form";
 
-const mockUpdateProfileExecute = vi.fn();
-const mockUpdatePasswordExecute = vi.fn();
-const mockToastSuccess = vi.fn();
-
-vi.mock("sonner", () => ({
-  toast: {
-    success: (message: string) => mockToastSuccess(message),
-  },
-}));
 vi.mock("@/common/routing/navigation", () => ({
   Link: ({ href, children }: { href: string; children: React.ReactNode }) => (
     <a href={href}>{children}</a>
   ),
-}));
-vi.mock("@/common/hooks/use-container", () => ({
-  useContainer: () => ({
-    resolve: (name: string) =>
-      name === "updateProfileUseCase"
-        ? { execute: mockUpdateProfileExecute }
-        : name === "updatePasswordUseCase"
-          ? { execute: mockUpdatePasswordExecute }
-          : {},
-  }),
 }));
 
 const mockUser = {
@@ -41,19 +22,16 @@ const mockUser = {
 
 describe("ProfileForm", () => {
   beforeEach(() => {
-    mockUpdateProfileExecute.mockClear();
-    mockUpdatePasswordExecute.mockClear();
-    mockToastSuccess.mockClear();
     useAuthUserStore.setState({
       user: { ...mockUser },
       loading: false,
     });
   });
 
-  it("renders loading when loading", () => {
+  it("renders loading skeleton when loading", () => {
     useAuthUserStore.setState({ user: mockUser, loading: true });
 
-    render(<ProfileForm />);
+    render(<ProfileForm readonly />);
 
     expect(screen.getByTestId("profile-loading")).toBeInTheDocument();
   });
@@ -61,217 +39,105 @@ describe("ProfileForm", () => {
   it("returns null when user is null", () => {
     useAuthUserStore.setState({ user: null, loading: false });
 
-    const { container } = render(<ProfileForm />);
+    const { container } = render(<ProfileForm readonly />);
 
     expect(container.firstChild).toBeNull();
   });
 
-  it("renders email, full name in view mode with Edit button when user is set", () => {
-    render(<ProfileForm />);
+  it("renders email label, readonly displayName input, and hides buttons in readonly mode", () => {
+    const { container } = render(<ProfileForm readonly />);
 
     expect(screen.getByText("a@b.com")).toBeInTheDocument();
     expect(screen.getByTestId("profile-email-auth-icon")).toBeInTheDocument();
     expect(screen.getByText("Full name")).toBeInTheDocument();
-    expect(screen.getByText("Alice")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^Edit$/i })).toBeInTheDocument();
-    expect(screen.getAllByText("Email").length).toBeGreaterThanOrEqual(1);
+    const fullNameInput = screen.getByRole("textbox", { name: /full name/i });
+    expect(fullNameInput).toHaveDisplayValue("Alice");
+    expect(fullNameInput).toHaveAttribute("readonly");
+    expect(
+      screen.queryByRole("button", { name: /^Save$/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /^Cancel$/i }),
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('button[type="submit"]')).toBeNull();
   });
 
-  it("shows textbox and Save/Cancel buttons when Edit is clicked", async () => {
-    const user = userEvent.setup();
-    render(<ProfileForm />);
+  it("renders editable displayName input when not readonly", () => {
+    render(<ProfileForm onSubmit={vi.fn()} onCancel={vi.fn()} />);
 
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
+    const fullNameInput = screen.getByRole("textbox", { name: /full name/i });
+    expect(fullNameInput).toHaveDisplayValue("Alice");
+    expect(fullNameInput).not.toHaveAttribute("readonly");
+  });
 
-    expect(
-      screen.getByRole("textbox", { name: /full name/i }),
-    ).toHaveDisplayValue("Alice");
+  it("shows Save and Cancel buttons when not readonly and handlers provided", () => {
+    render(<ProfileForm onSubmit={vi.fn()} onCancel={vi.fn()} />);
+
     expect(screen.getByRole("button", { name: /^Save$/i })).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /^Cancel$/i }),
     ).toBeInTheDocument();
   });
 
-  it("shows Change password button and opens modal with password form when authType is email", async () => {
-    const user = userEvent.setup();
-    render(<ProfileForm />);
+  it("shows only Save button when onCancel is not provided", () => {
+    render(<ProfileForm onSubmit={vi.fn()} />);
 
-    const changePasswordButton = screen.getByRole("button", {
-      name: /change password/i,
-    });
-    expect(changePasswordButton).toBeInTheDocument();
-    await user.click(changePasswordButton);
-
+    expect(screen.getByRole("button", { name: /^Save$/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Update password" }),
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText("Current password")).toBeInTheDocument();
-    expect(screen.getByLabelText("New password")).toBeInTheDocument();
-    expect(screen.getByLabelText("Confirm new password")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /^Update password$/i }),
-    ).toBeInTheDocument();
-  });
-
-  it("hides Change password button when authType is not email", () => {
-    useAuthUserStore.setState({
-      user: { ...mockUser, authType: AuthType.Google },
-      loading: false,
-    });
-
-    render(<ProfileForm />);
-
-    expect(
-      screen.queryByRole("button", { name: /change password/i }),
+      screen.queryByRole("button", { name: /^Cancel$/i }),
     ).not.toBeInTheDocument();
   });
 
-  it("does not call updateProfileUseCase and returns to view mode when displayName is unchanged", async () => {
-    const user = userEvent.setup();
+  it("shows only Cancel button when onSubmit is not provided", () => {
+    const { container } = render(<ProfileForm onCancel={vi.fn()} />);
 
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
-    await user.click(screen.getByRole("button", { name: /^Save$/i }));
-
-    expect(mockUpdateProfileExecute).not.toHaveBeenCalled();
-    expect(screen.getByRole("button", { name: /^Edit$/i })).toBeInTheDocument();
-  });
-
-  it("updates auth store with new displayName and returns to view mode when profile update succeeds", async () => {
-    const user = userEvent.setup();
-    mockUpdateProfileExecute.mockResolvedValue({ success: true });
-
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
-    await user.clear(screen.getByRole("textbox", { name: /full name/i }));
-    await user.type(
-      screen.getByRole("textbox", { name: /full name/i }),
-      "Alice Updated",
-    );
-    await user.click(screen.getByRole("button", { name: /^Save$/i }));
-
-    await waitFor(() => {
-      expect(mockUpdateProfileExecute).toHaveBeenCalledWith({
-        displayName: "Alice Updated",
-      });
-    });
-    expect(mockToastSuccess).toHaveBeenCalledWith("Profile updated.");
-    expect(useAuthUserStore.getState().user?.displayName).toBe("Alice Updated");
-    expect(screen.getByRole("button", { name: /^Edit$/i })).toBeInTheDocument();
-  });
-
-  it("shows error when profile update fails", async () => {
-    const user = userEvent.setup();
-    mockUpdateProfileExecute.mockResolvedValue({
-      success: false,
-      error: "generic",
-    });
-
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
-    await user.clear(screen.getByRole("textbox", { name: /full name/i }));
-    await user.type(
-      screen.getByRole("textbox", { name: /full name/i }),
-      "New Name",
-    );
-    await user.click(screen.getByRole("button", { name: /^Save$/i }));
-
-    await waitFor(() => {
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-    });
-  });
-
-  it("cancels edit and returns to view mode when Cancel is clicked", async () => {
-    const user = userEvent.setup();
-
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
-    await user.clear(screen.getByRole("textbox", { name: /full name/i }));
-    await user.type(
-      screen.getByRole("textbox", { name: /full name/i }),
-      "Changed Name",
-    );
-    await user.click(screen.getByRole("button", { name: /^Cancel$/i }));
-
-    expect(screen.getByRole("button", { name: /^Edit$/i })).toBeInTheDocument();
-    expect(screen.getByText("Alice")).toBeInTheDocument();
-  });
-
-  it("cancels edit and resets form when displayName is null", async () => {
-    const user = userEvent.setup();
-    useAuthUserStore.setState({
-      user: { ...mockUser, displayName: null },
-      loading: false,
-    });
-
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
-    await user.type(
-      screen.getByRole("textbox", { name: /full name/i }),
-      "New Name",
-    );
-    await user.click(screen.getByRole("button", { name: /^Cancel$/i }));
-
-    expect(screen.getByRole("button", { name: /^Edit$/i })).toBeInTheDocument();
-    const fullNameSection = screen.getByText("Full name").closest("div");
-    expect(fullNameSection).toHaveTextContent("—");
-  });
-
-  it("shows success message when password update succeeds", async () => {
-    const user = userEvent.setup();
-    mockUpdatePasswordExecute.mockResolvedValue({ success: true });
-
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /change password/i }));
-    await user.type(screen.getByLabelText("Current password"), "OldPass1!");
-    await user.type(screen.getByLabelText("New password"), "NewPass1!");
-    await user.type(screen.getByLabelText("Confirm new password"), "NewPass1!");
-    await user.click(
-      screen.getByRole("button", { name: /^Update password$/i }),
-    );
-
-    await waitFor(() => {
-      expect(mockUpdatePasswordExecute).toHaveBeenCalledWith({
-        oldPassword: "OldPass1!",
-        newPassword: "NewPass1!",
-      });
-    });
-    expect(mockToastSuccess).toHaveBeenCalledWith("Password updated.");
-  });
-
-  it("resets password state when change password modal is closed", async () => {
-    const user = userEvent.setup();
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /change password/i }));
     expect(
-      screen.getByRole("heading", { name: "Update password" }),
+      screen.getByRole("button", { name: /^Cancel$/i }),
     ).toBeInTheDocument();
-    await user.click(screen.getByTestId("dialog-overlay"));
-    expect(
-      screen.queryByRole("heading", { name: "Update password" }),
-    ).not.toBeInTheDocument();
+    expect(container.querySelector('button[type="submit"]')).toBeNull();
   });
 
-  it("shows error when password update fails", async () => {
+  it("calls onSubmit with form data when submitted", async () => {
     const user = userEvent.setup();
-    mockUpdatePasswordExecute.mockResolvedValue({
-      success: false,
-      error: "invalid-credentials",
-    });
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+    render(<ProfileForm onSubmit={onSubmit} onCancel={vi.fn()} />);
 
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /change password/i }));
-    await user.type(screen.getByLabelText("Current password"), "WrongPass1!");
-    await user.type(screen.getByLabelText("New password"), "NewPass1!");
-    await user.type(screen.getByLabelText("Confirm new password"), "NewPass1!");
-    await user.click(
-      screen.getByRole("button", { name: /^Update password$/i }),
-    );
+    await user.clear(screen.getByRole("textbox", { name: /full name/i }));
+    await user.type(screen.getByRole("textbox", { name: /full name/i }), "Bob");
+    await user.click(screen.getByRole("button", { name: /^Save$/i }));
 
     await waitFor(() => {
-      const alerts = screen.getAllByRole("alert");
-      expect(alerts.length).toBeGreaterThan(0);
+      expect(onSubmit).toHaveBeenCalledWith({ displayName: "Bob" });
     });
+  });
+
+  it("does not call onSubmit when form is submitted in readonly mode", () => {
+    const onSubmit = vi.fn();
+    const { container } = render(<ProfileForm readonly onSubmit={onSubmit} />);
+    const form = container.querySelector("form");
+    expect(form).toBeInTheDocument();
+    act(() => {
+      form?.requestSubmit();
+    });
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("resets form and calls onCancel when Cancel is clicked", async () => {
+    const user = userEvent.setup();
+    const onCancel = vi.fn();
+    render(<ProfileForm onSubmit={vi.fn()} onCancel={onCancel} />);
+
+    await user.clear(screen.getByRole("textbox", { name: /full name/i }));
+    await user.type(
+      screen.getByRole("textbox", { name: /full name/i }),
+      "Changed",
+    );
+    await user.click(screen.getByRole("button", { name: /^Cancel$/i }));
+
+    expect(onCancel).toHaveBeenCalled();
+    expect(
+      screen.getByRole("textbox", { name: /full name/i }),
+    ).toHaveDisplayValue("Alice");
   });
 
   it("renders em dash when user has no email", () => {
@@ -280,7 +146,7 @@ describe("ProfileForm", () => {
       loading: false,
     });
 
-    render(<ProfileForm />);
+    render(<ProfileForm readonly />);
 
     expect(screen.getByText("—")).toBeInTheDocument();
   });
@@ -291,7 +157,7 @@ describe("ProfileForm", () => {
       loading: false,
     });
 
-    render(<ProfileForm />);
+    render(<ProfileForm readonly />);
 
     expect(screen.getByTestId("profile-email-auth-icon")).toBeInTheDocument();
   });
@@ -305,12 +171,12 @@ describe("ProfileForm", () => {
       loading: false,
     });
 
-    render(<ProfileForm />);
+    render(<ProfileForm readonly />);
 
     expect(screen.getByTestId("profile-email-auth-icon")).toBeInTheDocument();
   });
 
-  it("shows em dash for displayName in view mode when displayName is undefined", () => {
+  it("shows empty readonly input for displayName when displayName is undefined", () => {
     useAuthUserStore.setState({
       user: {
         ...mockUser,
@@ -319,41 +185,40 @@ describe("ProfileForm", () => {
       loading: false,
     });
 
-    render(<ProfileForm />);
+    render(<ProfileForm readonly />);
 
-    const fullNameSection = screen.getByText("Full name").closest("div");
-    expect(fullNameSection).toHaveTextContent("—");
+    const fullNameInput = screen.getByRole("textbox", { name: /full name/i });
+    expect(fullNameInput).toHaveDisplayValue("");
+    expect(fullNameInput).toHaveAttribute("readonly");
   });
 
-  it("shows em dash for displayName in view mode when displayName is null", () => {
+  it("shows empty readonly input for displayName when displayName is null", () => {
     useAuthUserStore.setState({
       user: { ...mockUser, displayName: null },
       loading: false,
     });
 
-    render(<ProfileForm />);
+    render(<ProfileForm readonly />);
 
-    const fullNameSection = screen.getByText("Full name").closest("div");
-    expect(fullNameSection).toHaveTextContent("—");
+    const fullNameInput = screen.getByRole("textbox", { name: /full name/i });
+    expect(fullNameInput).toHaveDisplayValue("");
+    expect(fullNameInput).toHaveAttribute("readonly");
   });
 
-  it("shows empty textbox in edit mode when displayName is null", async () => {
-    const user = userEvent.setup();
+  it("shows empty textbox when not readonly and displayName is null", () => {
     useAuthUserStore.setState({
       user: { ...mockUser, displayName: null },
       loading: false,
     });
 
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
+    render(<ProfileForm onSubmit={vi.fn()} />);
 
     expect(
       screen.getByRole("textbox", { name: /full name/i }),
     ).toHaveDisplayValue("");
   });
 
-  it("shows empty textbox in edit mode when displayName is undefined", async () => {
-    const user = userEvent.setup();
+  it("shows empty textbox when not readonly and displayName is undefined", () => {
     useAuthUserStore.setState({
       user: {
         ...mockUser,
@@ -362,23 +227,22 @@ describe("ProfileForm", () => {
       loading: false,
     });
 
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
+    render(<ProfileForm onSubmit={vi.fn()} />);
 
     expect(
       screen.getByRole("textbox", { name: /full name/i }),
     ).toHaveDisplayValue("");
   });
 
-  it("shows generic error when profile update returns unknown error code", async () => {
-    const user = userEvent.setup();
-    mockUpdateProfileExecute.mockResolvedValue({
-      success: false,
-      error: "generic",
+  it("disables Save button while submitting", async () => {
+    let resolveSubmit: () => void;
+    const submitPromise = new Promise<void>((r) => {
+      resolveSubmit = r;
     });
+    const onSubmit = vi.fn().mockReturnValue(submitPromise);
+    const user = userEvent.setup();
+    render(<ProfileForm onSubmit={onSubmit} />);
 
-    render(<ProfileForm />);
-    await user.click(screen.getByRole("button", { name: /^Edit$/i }));
     await user.clear(screen.getByRole("textbox", { name: /full name/i }));
     await user.type(
       screen.getByRole("textbox", { name: /full name/i }),
@@ -386,10 +250,29 @@ describe("ProfileForm", () => {
     );
     await user.click(screen.getByRole("button", { name: /^Save$/i }));
 
+    expect(screen.getByRole("button", { name: /^Save$/i })).toBeDisabled();
+    resolveSubmit!();
     await waitFor(() => {
-      expect(screen.getByRole("alert")).toHaveTextContent(
-        "Something went wrong. Please try again.",
-      );
+      expect(onSubmit).toHaveBeenCalled();
     });
+  });
+
+  it("resets form when cancel is clicked and displayName is null", async () => {
+    const user = userEvent.setup();
+    useAuthUserStore.setState({
+      user: { ...mockUser, displayName: null },
+      loading: false,
+    });
+
+    render(<ProfileForm onSubmit={vi.fn()} onCancel={vi.fn()} />);
+    await user.type(
+      screen.getByRole("textbox", { name: /full name/i }),
+      "New Name",
+    );
+    await user.click(screen.getByRole("button", { name: /^Cancel$/i }));
+
+    expect(
+      screen.getByRole("textbox", { name: /full name/i }),
+    ).toHaveDisplayValue("");
   });
 });
