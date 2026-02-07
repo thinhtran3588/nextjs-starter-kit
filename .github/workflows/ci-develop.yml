@@ -6,22 +6,19 @@ on:
       - develop
 
 jobs:
-  validate:
-    name: Validate Code
+  validate-and-deploy:
+    name: Validate & Deploy (Preview)
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [24.x]
+    environment: Preview
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js 24.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 24.x
           cache: "npm"
 
       - name: Install dependencies
@@ -34,3 +31,15 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Build static site
+        run: npm run build:static
+        env:
+          NEXT_PUBLIC_FIREBASE_CONFIG: ${{ secrets.NEXT_PUBLIC_FIREBASE_CONFIG }}
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=nextjs-starter-kit --branch=develop
