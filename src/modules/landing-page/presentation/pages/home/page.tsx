@@ -224,46 +224,50 @@ export async function LandingPage() {
               {[
                 {
                   key: "architecture",
+                  href: "/docs/architecture",
                   titleKey: "docs.items.architecture.title",
                   descKey: "docs.items.architecture.description",
                   span: "lg:col-span-6",
                 },
                 {
                   key: "codingConventions",
+                  href: "/docs/coding-conventions",
                   titleKey: "docs.items.codingConventions.title",
                   descKey: "docs.items.codingConventions.description",
                   span: "lg:col-span-6",
                 },
                 {
                   key: "development",
+                  href: "/docs/development-guide",
                   titleKey: "docs.items.development.title",
                   descKey: "docs.items.development.description",
                   span: "lg:col-span-4",
                 },
                 {
                   key: "testing",
+                  href: "/docs/testing-guide",
                   titleKey: "docs.items.testing.title",
                   descKey: "docs.items.testing.description",
                   span: "lg:col-span-4",
                 },
                 {
                   key: "firebase",
+                  href: "/docs/firebase-integration",
                   titleKey: "docs.items.firebase.title",
                   descKey: "docs.items.firebase.description",
                   span: "lg:col-span-4",
                 },
-              ].map(({ key: itemKey, titleKey, descKey, span }) => (
-                <Card
-                  key={itemKey}
-                  className={cn("bento-card px-6 py-6 sm:rounded-2xl", span)}
-                >
-                  <CardHeader className="space-y-0 pb-0">
-                    <CardTitle>{tHome(titleKey)}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-3">
-                    <CardDescription>{tHome(descKey)}</CardDescription>
-                  </CardContent>
-                </Card>
+              ].map(({ key: itemKey, href, titleKey, descKey, span }) => (
+                <Link key={itemKey} href={href} className={span}>
+                  <Card className="bento-card h-full px-6 py-6 transition-colors hover:bg-[var(--glass-highlight)] sm:rounded-2xl">
+                    <CardHeader className="space-y-0 pb-0">
+                      <CardTitle>{tHome(titleKey)}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-3">
+                      <CardDescription>{tHome(descKey)}</CardDescription>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
           </section>
