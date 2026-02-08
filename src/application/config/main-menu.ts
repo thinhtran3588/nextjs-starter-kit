@@ -42,5 +42,10 @@ export function getMainMenuConfig(): MenuItem[] {
         href: `/docs/${slug}`,
       })),
     },
+    {
+      id: "contact",
+      translationKey: "navigation.contact",
+      href: "/contact",
+    },
   ];
 }

@@ -22,6 +22,7 @@
         "firebaseIntegration": "Firebase integration",
         "deployment": "Deployment"
       },
+      "contact": "Contact",
       "menu": "Menu"
     },
     "footer": {
@@ -458,6 +459,39 @@
               "body": "For questions about these terms, contact the team that operates the application built from this starter kit."
             }
           }
+        }
+      }
+    },
+    "contact": {
+      "pages": {
+        "contact": {
+          "title": "Contact Us",
+          "metadata": {
+            "description": "Get in touch with us. Send us a message or email us directly."
+          },
+          "subtitle": "Have a question or need help? Fill out the form below or email us directly at",
+          "form": {
+            "nameLabel": "Name",
+            "namePlaceholder": "Your name",
+            "emailLabel": "Email",
+            "emailPlaceholder": "your.email@example.com",
+            "subjectLabel": "Subject",
+            "subjectPlaceholder": "What is this about?",
+            "messageLabel": "Message",
+            "messagePlaceholder": "Tell us more about your inquiry...",
+            "submitButton": "Send message",
+            "validation": {
+              "nameRequired": "Name is required",
+              "nameMaxLength": "Name must be at most 200 characters",
+              "invalidEmail": "Invalid email",
+              "subjectRequired": "Subject is required",
+              "subjectMaxLength": "Subject must be at most 200 characters",
+              "messageRequired": "Message is required",
+              "messageMaxLength": "Message must be at most 2000 characters"
+            }
+          },
+          "emailNote": "You can also reach us directly at",
+          "successMessage": "Your email client should open shortly. If it doesn't, please email us directly."
         }
       }
     },
