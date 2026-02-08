@@ -185,7 +185,30 @@
           },
           "errors": {
             "generic": "Something went wrong. Please try again.",
-            "invalidCredentials": "Current password is incorrect."
+            "invalidCredentials": "Current password is incorrect.",
+            "requiresRecentLogin": "For security, please sign out and sign back in before trying again."
+          },
+          "deleteAccount": {
+            "button": "Delete account",
+            "title": "Delete account",
+            "description": "This action is permanent and cannot be undone. All your data will be permanently deleted.",
+            "warning": "To confirm, type DELETE below:",
+            "inputPlaceholder": "Type DELETE to confirm",
+            "passwordLabel": "Enter your password to confirm:",
+            "passwordPlaceholder": "Your current password",
+            "confirmButton": "Delete my account",
+            "cancelButton": "Cancel",
+            "successMessage": "Your account has been deleted.",
+            "validation": {
+              "confirmationRequired": "Please type DELETE to confirm",
+              "confirmationMismatch": "You must type DELETE exactly",
+              "passwordRequired": "Password is required"
+            },
+            "errors": {
+              "generic": "Failed to delete account. Please try again.",
+              "invalidCredentials": "Incorrect password. Please try again.",
+              "requiresRecentLogin": "For security, please sign out and sign back in before deleting your account."
+            }
           }
         }
       }

@@ -9,6 +9,7 @@ import {
   startAfter,
   updateDoc,
   where,
+  writeBatch,
 } from "firebase/firestore";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -29,6 +30,7 @@ describe("FirestoreBookRepository", () => {
     vi.mocked(query).mockReset();
     vi.mocked(where).mockReset();
     vi.mocked(startAfter).mockReset();
+    vi.mocked(writeBatch).mockReset();
     getFirestoreInstance = vi.fn();
     repository = new FirestoreBookRepository(getFirestoreInstance);
   });
@@ -745,5 +747,82 @@ describe("FirestoreBookRepository", () => {
       "book-1",
     );
     expect(deleteDoc).toHaveBeenCalledWith(mockRef);
+  });
+
+  it("deleteAll does nothing when Firestore is not available", async () => {
+    getFirestoreInstance.mockReturnValue(null);
+    await repository.deleteAll("user-1");
+    expect(getDocs).not.toHaveBeenCalled();
+    expect(writeBatch).not.toHaveBeenCalled();
+  });
+
+  it("deleteAll batch-deletes all documents in the user's books collection", async () => {
+    const mockDb = {};
+    const mockColl = {};
+    const mockQuery = {};
+    const mockRef1 = { id: "ref1" };
+    const mockRef2 = { id: "ref2" };
+    const mockBatchDelete = vi.fn();
+    const mockBatchCommit = vi.fn().mockResolvedValue(undefined);
+    getFirestoreInstance.mockReturnValue(mockDb as never);
+    vi.mocked(collection).mockReturnValue(mockColl as never);
+    vi.mocked(query).mockReturnValue(mockQuery as never);
+    vi.mocked(getDocs).mockResolvedValue({
+      docs: [{ ref: mockRef1 }, { ref: mockRef2 }],
+    } as never);
+    vi.mocked(writeBatch).mockReturnValue({
+      delete: mockBatchDelete,
+      commit: mockBatchCommit,
+    } as never);
+    await repository.deleteAll("user-1");
+    expect(collection).toHaveBeenCalledWith(mockDb, "users", "user-1", "books");
+    expect(writeBatch).toHaveBeenCalledWith(mockDb);
+    expect(mockBatchDelete).toHaveBeenCalledWith(mockRef1);
+    expect(mockBatchDelete).toHaveBeenCalledWith(mockRef2);
+    expect(mockBatchCommit).toHaveBeenCalledOnce();
+  });
+
+  it("deleteAll handles empty collection without errors", async () => {
+    const mockDb = {};
+    const mockColl = {};
+    const mockQuery = {};
+    getFirestoreInstance.mockReturnValue(mockDb as never);
+    vi.mocked(collection).mockReturnValue(mockColl as never);
+    vi.mocked(query).mockReturnValue(mockQuery as never);
+    vi.mocked(getDocs).mockResolvedValue({ docs: [] } as never);
+    await repository.deleteAll("user-1");
+    expect(writeBatch).not.toHaveBeenCalled();
+  });
+
+  it("deleteAll chunks documents into batches of 500", async () => {
+    const mockDb = {};
+    const mockColl = {};
+    const mockQuery = {};
+    const docs = Array.from({ length: 501 }, (_, i) => ({
+      ref: { id: `ref-${i}` },
+    }));
+    const mockBatchDelete1 = vi.fn();
+    const mockBatchCommit1 = vi.fn().mockResolvedValue(undefined);
+    const mockBatchDelete2 = vi.fn();
+    const mockBatchCommit2 = vi.fn().mockResolvedValue(undefined);
+    getFirestoreInstance.mockReturnValue(mockDb as never);
+    vi.mocked(collection).mockReturnValue(mockColl as never);
+    vi.mocked(query).mockReturnValue(mockQuery as never);
+    vi.mocked(getDocs).mockResolvedValue({ docs } as never);
+    vi.mocked(writeBatch)
+      .mockReturnValueOnce({
+        delete: mockBatchDelete1,
+        commit: mockBatchCommit1,
+      } as never)
+      .mockReturnValueOnce({
+        delete: mockBatchDelete2,
+        commit: mockBatchCommit2,
+      } as never);
+    await repository.deleteAll("user-1");
+    expect(writeBatch).toHaveBeenCalledTimes(2);
+    expect(mockBatchDelete1).toHaveBeenCalledTimes(500);
+    expect(mockBatchCommit1).toHaveBeenCalledOnce();
+    expect(mockBatchDelete2).toHaveBeenCalledTimes(1);
+    expect(mockBatchCommit2).toHaveBeenCalledOnce();
   });
 });

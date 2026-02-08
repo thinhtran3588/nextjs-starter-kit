@@ -19,6 +19,7 @@ export type AuthErrorCode =
   | "invalid-credentials"
   | "too-many-requests"
   | "email-already-in-use"
+  | "requires-recent-login"
   | "generic";
 
 export type AuthResult =

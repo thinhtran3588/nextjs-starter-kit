@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { DeleteAccountUseCase } from "@/modules/auth/application/delete-account-use-case";
 import { GetAuthStateSubscriptionUseCase } from "@/modules/auth/application/get-auth-state-subscription-use-case";
 import { SendPasswordResetUseCase } from "@/modules/auth/application/send-password-reset-use-case";
 import { SignInWithEmailUseCase } from "@/modules/auth/application/sign-in-with-email-use-case";
@@ -9,6 +10,7 @@ import { SignUpWithEmailUseCase } from "@/modules/auth/application/sign-up-with-
 import { UpdatePasswordUseCase } from "@/modules/auth/application/update-password-use-case";
 import { UpdateProfileUseCase } from "@/modules/auth/application/update-profile-use-case";
 import type { AuthenticationService } from "@/modules/auth/domain/interfaces";
+import type { BookRepository } from "@/modules/books/domain/interfaces";
 
 function createMockAuthService(): AuthenticationService {
   return {
@@ -20,6 +22,20 @@ function createMockAuthService(): AuthenticationService {
     subscribeToAuthState: vi.fn(() => () => {}),
     updateDisplayName: vi.fn().mockResolvedValue({ success: true }),
     updatePassword: vi.fn().mockResolvedValue({ success: true }),
+    reauthenticateWithPassword: vi.fn().mockResolvedValue({ success: true }),
+    reauthenticateWithGoogle: vi.fn().mockResolvedValue({ success: true }),
+    deleteAccount: vi.fn().mockResolvedValue({ success: true }),
+  };
+}
+
+function createMockBookRepository(): BookRepository {
+  return {
+    find: vi.fn(),
+    get: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    deleteAll: vi.fn(),
   };
 }
 
@@ -196,6 +212,85 @@ describe("auth use case classes", () => {
       });
       expect(result).toEqual({ success: true });
       expect(mock.updatePassword).toHaveBeenCalledWith("old", "new");
+    });
+  });
+
+  describe("DeleteAccountUseCase", () => {
+    it("reauthenticates with password, deletes books, then deletes account for email users", async () => {
+      const mockAuth = createMockAuthService();
+      const mockBooks = createMockBookRepository();
+      const useCase = new DeleteAccountUseCase(mockAuth, mockBooks);
+      const result = await useCase.execute({
+        userId: "uid-1",
+        password: "my-pass",
+      });
+      expect(result).toEqual({ success: true });
+      expect(mockAuth.reauthenticateWithPassword).toHaveBeenCalledWith(
+        "my-pass",
+      );
+      expect(mockAuth.reauthenticateWithGoogle).not.toHaveBeenCalled();
+      expect(mockBooks.deleteAll).toHaveBeenCalledWith("uid-1");
+      expect(mockAuth.deleteAccount).toHaveBeenCalledOnce();
+    });
+
+    it("reauthenticates with Google when no password is provided", async () => {
+      const mockAuth = createMockAuthService();
+      const mockBooks = createMockBookRepository();
+      const useCase = new DeleteAccountUseCase(mockAuth, mockBooks);
+      const result = await useCase.execute({ userId: "uid-1" });
+      expect(result).toEqual({ success: true });
+      expect(mockAuth.reauthenticateWithGoogle).toHaveBeenCalledOnce();
+      expect(mockAuth.reauthenticateWithPassword).not.toHaveBeenCalled();
+      expect(mockBooks.deleteAll).toHaveBeenCalledWith("uid-1");
+      expect(mockAuth.deleteAccount).toHaveBeenCalledOnce();
+    });
+
+    it("returns error without deleting data when reauthentication fails", async () => {
+      const mockAuth = createMockAuthService();
+      const mockBooks = createMockBookRepository();
+      vi.mocked(mockAuth.reauthenticateWithPassword).mockResolvedValueOnce({
+        success: false,
+        error: "invalid-credentials",
+      });
+      const useCase = new DeleteAccountUseCase(mockAuth, mockBooks);
+      const result = await useCase.execute({
+        userId: "uid-1",
+        password: "wrong",
+      });
+      expect(result).toEqual({ success: false, error: "invalid-credentials" });
+      expect(mockBooks.deleteAll).not.toHaveBeenCalled();
+      expect(mockAuth.deleteAccount).not.toHaveBeenCalled();
+    });
+
+    it("returns generic error when bookRepository.deleteAll throws", async () => {
+      const mockAuth = createMockAuthService();
+      const mockBooks = createMockBookRepository();
+      vi.mocked(mockBooks.deleteAll).mockRejectedValueOnce(
+        new Error("firestore error"),
+      );
+      const useCase = new DeleteAccountUseCase(mockAuth, mockBooks);
+      const result = await useCase.execute({
+        userId: "uid-1",
+        password: "pass",
+      });
+      expect(result).toEqual({ success: false, error: "generic" });
+      expect(mockAuth.deleteAccount).not.toHaveBeenCalled();
+    });
+
+    it("returns error when authService.deleteAccount fails", async () => {
+      const mockAuth = createMockAuthService();
+      const mockBooks = createMockBookRepository();
+      vi.mocked(mockAuth.deleteAccount).mockResolvedValueOnce({
+        success: false,
+        error: "generic",
+      });
+      const useCase = new DeleteAccountUseCase(mockAuth, mockBooks);
+      const result = await useCase.execute({
+        userId: "uid-1",
+        password: "pass",
+      });
+      expect(result).toEqual({ success: false, error: "generic" });
+      expect(mockBooks.deleteAll).toHaveBeenCalledWith("uid-1");
     });
   });
 });

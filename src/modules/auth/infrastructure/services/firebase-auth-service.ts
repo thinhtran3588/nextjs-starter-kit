@@ -2,12 +2,14 @@
 
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   EmailAuthProvider,
   signOut as firebaseSignOut,
   updatePassword as firebaseUpdatePassword,
   GoogleAuthProvider,
   onAuthStateChanged,
   reauthenticateWithCredential,
+  reauthenticateWithPopup,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -137,6 +139,52 @@ export class FirebaseAuthenticationService implements AuthenticationService {
       const credential = EmailAuthProvider.credential(user.email, oldPassword);
       await reauthenticateWithCredential(user, credential);
       await firebaseUpdatePassword(user, newPassword);
+      return { success: true };
+    } catch (err: unknown) {
+      return {
+        success: false,
+        error: mapAuthErrorCode((err as { code?: string })?.code),
+      };
+    }
+  }
+
+  async reauthenticateWithPassword(password: string): Promise<AuthResult> {
+    const auth = getAuthOrThrow(this.getAuthInstance);
+    const user = auth.currentUser;
+    if (!user?.email) return { success: false, error: "generic" };
+    try {
+      const credential = EmailAuthProvider.credential(user.email, password);
+      await reauthenticateWithCredential(user, credential);
+      return { success: true };
+    } catch (err: unknown) {
+      return {
+        success: false,
+        error: mapAuthErrorCode((err as { code?: string })?.code),
+      };
+    }
+  }
+
+  async reauthenticateWithGoogle(): Promise<AuthResult> {
+    const auth = getAuthOrThrow(this.getAuthInstance);
+    const user = auth.currentUser;
+    if (!user) return { success: false, error: "generic" };
+    try {
+      await reauthenticateWithPopup(user, new GoogleAuthProvider());
+      return { success: true };
+    } catch (err: unknown) {
+      return {
+        success: false,
+        error: mapAuthErrorCode((err as { code?: string })?.code),
+      };
+    }
+  }
+
+  async deleteAccount(): Promise<AuthResult> {
+    const auth = getAuthOrThrow(this.getAuthInstance);
+    const user = auth.currentUser;
+    if (!user) return { success: false, error: "generic" };
+    try {
+      await deleteUser(user);
       return { success: true };
     } catch (err: unknown) {
       return {

@@ -36,9 +36,13 @@ describe("register-container", () => {
     const getAuthStateSubscriptionUseCase = container.resolve(
       "getAuthStateSubscriptionUseCase",
     ) as { execute: () => unknown };
+    const deleteAccountUseCase = container.resolve("deleteAccountUseCase") as {
+      execute: () => unknown;
+    };
     expect(typeof signInWithGoogleUseCase.execute).toBe("function");
     expect(typeof signOutUseCase.execute).toBe("function");
     expect(typeof getAuthStateSubscriptionUseCase.execute).toBe("function");
+    expect(typeof deleteAccountUseCase.execute).toBe("function");
   });
 
   it("returns the same container instance on subsequent calls", () => {

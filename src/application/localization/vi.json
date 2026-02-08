@@ -185,7 +185,30 @@
           },
           "errors": {
             "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
-            "invalidCredentials": "Mật khẩu hiện tại không đúng."
+            "invalidCredentials": "Mật khẩu hiện tại không đúng.",
+            "requiresRecentLogin": "Vì lý do bảo mật, vui lòng đăng xuất và đăng nhập lại trước khi thử lại."
+          },
+          "deleteAccount": {
+            "button": "Xóa tài khoản",
+            "title": "Xóa tài khoản",
+            "description": "Hành động này là vĩnh viễn và không thể hoàn tác. Tất cả dữ liệu của bạn sẽ bị xóa vĩnh viễn.",
+            "warning": "Để xác nhận, hãy nhập DELETE bên dưới:",
+            "inputPlaceholder": "Nhập DELETE để xác nhận",
+            "passwordLabel": "Nhập mật khẩu của bạn để xác nhận:",
+            "passwordPlaceholder": "Mật khẩu hiện tại của bạn",
+            "confirmButton": "Xóa tài khoản của tôi",
+            "cancelButton": "Hủy",
+            "successMessage": "Tài khoản của bạn đã bị xóa.",
+            "validation": {
+              "confirmationRequired": "Vui lòng nhập DELETE để xác nhận",
+              "confirmationMismatch": "Bạn phải nhập chính xác DELETE",
+              "passwordRequired": "Mật khẩu là bắt buộc"
+            },
+            "errors": {
+              "generic": "Không thể xóa tài khoản. Vui lòng thử lại.",
+              "invalidCredentials": "Mật khẩu không đúng. Vui lòng thử lại.",
+              "requiresRecentLogin": "Vì lý do bảo mật, vui lòng đăng xuất và đăng nhập lại trước khi xóa tài khoản."
+            }
           }
         }
       }

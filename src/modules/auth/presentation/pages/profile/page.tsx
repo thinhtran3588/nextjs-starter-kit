@@ -14,12 +14,14 @@ import type { ProfileInput } from "@/modules/auth/domain/schemas";
 import { AuthType, type AuthErrorCode } from "@/modules/auth/domain/types";
 import { useAuthUserStore } from "@/modules/auth/presentation/hooks/use-auth-user-store";
 import { ChangePasswordModal } from "./components/change-password-modal";
+import { DeleteAccountModal } from "./components/delete-account-modal";
 import { ProfileForm } from "./components/profile-form";
 
 const ERROR_KEY_MAP: Record<AuthErrorCode, string> = {
   "invalid-credentials": "invalidCredentials",
   "too-many-requests": "tooManyRequests",
   "email-already-in-use": "emailAlreadyInUse",
+  "requires-recent-login": "requiresRecentLogin",
   generic: "generic",
 };
 
@@ -31,6 +33,7 @@ export function ProfilePage() {
   const setAuthState = useAuthUserStore((s) => s.setAuthState);
   const [editing, setEditing] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   async function handleUpdate(values: ProfileInput) {
     if (
@@ -113,6 +116,20 @@ export function ProfilePage() {
               />
             </>
           ) : null}
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => setDeleteModalOpen(true)}
+          >
+            {t("deleteAccount.button")}
+          </Button>
+          <DeleteAccountModal
+            open={deleteModalOpen}
+            onOpenChange={setDeleteModalOpen}
+            userId={user.id}
+            authType={user.authType}
+            onSuccess={() => toast.success(t("deleteAccount.successMessage"))}
+          />
         </ButtonGroup>
       ) : null}
     </div>

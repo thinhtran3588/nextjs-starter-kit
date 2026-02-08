@@ -10,5 +10,6 @@ export function mapAuthErrorCode(code: string | undefined): AuthErrorCode {
   }
   if (code === "auth/too-many-requests") return "too-many-requests";
   if (code === "auth/email-already-in-use") return "email-already-in-use";
+  if (code === "auth/requires-recent-login") return "requires-recent-login";
   return "generic";
 }
