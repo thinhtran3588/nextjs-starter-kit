@@ -19,7 +19,8 @@
         "codingConventions": "Coding conventions",
         "developmentGuide": "Development guide",
         "testingGuide": "Testing guide",
-        "firebaseIntegration": "Firebase integration"
+        "firebaseIntegration": "Firebase integration",
+        "deployment": "Deployment"
       },
       "menu": "Menu"
     },
@@ -219,6 +220,12 @@
           "metadata": {
             "title": "Testing Guide",
             "description": "Vitest + React Testing Library, 100% coverage, test organization, and AAA pattern."
+          }
+        },
+        "deployment": {
+          "metadata": {
+            "title": "Deployment",
+            "description": "Firebase setup, Cloudflare Pages hosting, GitHub Actions CI/CD, and environment variables."
           }
         }
       }
@@ -557,7 +564,7 @@
           },
           "docs": {
             "title": "Documentation",
-            "description": "Five comprehensive guides cover architecture, conventions, development workflow, testing, and Firebase integration.",
+            "description": "Six comprehensive guides cover architecture, conventions, development workflow, testing, Firebase integration, and deployment.",
             "items": {
               "architecture": {
                 "title": "Architecture",
@@ -578,6 +585,10 @@
               "firebase": {
                 "title": "Firebase integration",
                 "description": "Auth, Firestore and Analytics setup, abstracted interfaces, security rules, and swapping providers."
+              },
+              "deployment": {
+                "title": "Deployment",
+                "description": "Firebase setup, Cloudflare Pages hosting, GitHub Actions CI/CD, and environment variables."
               }
             }
           }

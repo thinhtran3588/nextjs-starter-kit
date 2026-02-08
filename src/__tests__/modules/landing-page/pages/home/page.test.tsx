@@ -33,6 +33,7 @@ describe("LandingPage", () => {
       { title: docItems.development.title, href: "/docs/development-guide" },
       { title: docItems.testing.title, href: "/docs/testing-guide" },
       { title: docItems.firebase.title, href: "/docs/firebase-integration" },
+      { title: docItems.deployment.title, href: "/docs/deployment" },
     ];
 
     for (const { title, href } of expectedLinks) {
