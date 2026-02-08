@@ -1,5 +1,6 @@
 import { asFunction, type AwilixContainer } from "awilix";
 
+import { DeleteAccountUseCase } from "@/modules/auth/application/delete-account-use-case";
 import { GetAuthStateSubscriptionUseCase } from "@/modules/auth/application/get-auth-state-subscription-use-case";
 import { SendPasswordResetUseCase } from "@/modules/auth/application/send-password-reset-use-case";
 import { SignInWithEmailUseCase } from "@/modules/auth/application/sign-in-with-email-use-case";
@@ -12,9 +13,11 @@ import {
   FirebaseAuthenticationService,
   type GetAuthInstance,
 } from "@/modules/auth/infrastructure/services/firebase-auth-service";
+import type { BookRepository } from "@/modules/books/domain/interfaces";
 
 type AuthCradle = {
   authService: InstanceType<typeof FirebaseAuthenticationService>;
+  bookRepository: BookRepository;
   getAuthInstance: GetAuthInstance;
 };
 
@@ -46,6 +49,10 @@ export function registerModule(container: AwilixContainer<object>): void {
     ).singleton(),
     updatePasswordUseCase: asFunction(
       (c: AuthCradle) => new UpdatePasswordUseCase(c.authService),
+    ).singleton(),
+    deleteAccountUseCase: asFunction(
+      (c: AuthCradle) =>
+        new DeleteAccountUseCase(c.authService, c.bookRepository),
     ).singleton(),
   });
 }

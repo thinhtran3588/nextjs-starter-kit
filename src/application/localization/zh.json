@@ -185,7 +185,30 @@
           },
           "errors": {
             "generic": "出错了，请重试。",
-            "invalidCredentials": "当前密码不正确。"
+            "invalidCredentials": "当前密码不正确。",
+            "requiresRecentLogin": "出于安全考虑，请先退出登录并重新登录后再试。"
+          },
+          "deleteAccount": {
+            "button": "删除账户",
+            "title": "删除账户",
+            "description": "此操作是永久性的，无法撤销。您的所有数据将被永久删除。",
+            "warning": "请在下方输入 DELETE 以确认：",
+            "inputPlaceholder": "输入 DELETE 确认",
+            "passwordLabel": "输入您的密码以确认：",
+            "passwordPlaceholder": "您当前的密码",
+            "confirmButton": "删除我的账户",
+            "cancelButton": "取消",
+            "successMessage": "您的账户已被删除。",
+            "validation": {
+              "confirmationRequired": "请输入 DELETE 以确认",
+              "confirmationMismatch": "您必须准确输入 DELETE",
+              "passwordRequired": "密码是必填项"
+            },
+            "errors": {
+              "generic": "删除账户失败，请重试。",
+              "invalidCredentials": "密码不正确，请重试。",
+              "requiresRecentLogin": "出于安全考虑，请先退出登录并重新登录后再删除账户。"
+            }
           }
         }
       }

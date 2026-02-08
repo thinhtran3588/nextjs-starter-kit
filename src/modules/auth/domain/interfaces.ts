@@ -16,4 +16,7 @@ export interface AuthenticationService {
   subscribeToAuthState(callback: AuthStateCallback): () => void;
   updateDisplayName(displayName: string): Promise<AuthResult>;
   updatePassword(oldPassword: string, newPassword: string): Promise<AuthResult>;
+  reauthenticateWithPassword(password: string): Promise<AuthResult>;
+  reauthenticateWithGoogle(): Promise<AuthResult>;
+  deleteAccount(): Promise<AuthResult>;
 }

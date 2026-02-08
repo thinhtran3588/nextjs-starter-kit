@@ -29,6 +29,7 @@ const ERROR_KEY_MAP: Record<AuthErrorCode, string> = {
   "invalid-credentials": "invalidCredentials",
   "too-many-requests": "tooManyRequests",
   "email-already-in-use": "emailAlreadyInUse",
+  "requires-recent-login": "generic",
   generic: "generic",
 };
 

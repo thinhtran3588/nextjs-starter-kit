@@ -1,9 +1,11 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   EmailAuthProvider,
   updatePassword as firebaseUpdatePassword,
   onAuthStateChanged,
   reauthenticateWithCredential,
+  reauthenticateWithPopup,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -34,6 +36,8 @@ describe("FirebaseAuthenticationService", () => {
     vi.mocked(onAuthStateChanged).mockReset().mockReturnValue(mockUnsubscribe);
     vi.mocked(reauthenticateWithCredential).mockReset();
     vi.mocked(firebaseUpdatePassword).mockReset();
+    vi.mocked(deleteUser).mockReset();
+    vi.mocked(reauthenticateWithPopup).mockReset();
     service = new FirebaseAuthenticationService(mockGetAuthInstance);
   });
 
@@ -439,5 +443,153 @@ describe("FirebaseAuthenticationService", () => {
     });
     const result = await service.updatePassword("old", "new");
     expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("reauthenticateWithPassword throws when auth is not available", async () => {
+    mockGetAuthInstance.mockReturnValue(null);
+    await expect(service.reauthenticateWithPassword("pass")).rejects.toThrow(
+      "Auth not available",
+    );
+  });
+
+  it("reauthenticateWithPassword returns generic error when currentUser is null", async () => {
+    const mockAuth = {
+      currentUser: null,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    const result = await service.reauthenticateWithPassword("pass");
+    expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("reauthenticateWithPassword returns generic error when user has no email", async () => {
+    const mockUser = { email: null };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    const result = await service.reauthenticateWithPassword("pass");
+    expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("reauthenticateWithPassword reauthenticates and returns success", async () => {
+    const mockCredential = {};
+    const mockUser = { email: "a@b.com" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.spyOn(EmailAuthProvider, "credential").mockReturnValue(
+      mockCredential as never,
+    );
+    vi.mocked(reauthenticateWithCredential).mockResolvedValue(
+      undefined as never,
+    );
+    const result = await service.reauthenticateWithPassword("my-pass");
+    expect(EmailAuthProvider.credential).toHaveBeenCalledWith(
+      "a@b.com",
+      "my-pass",
+    );
+    expect(reauthenticateWithCredential).toHaveBeenCalledWith(
+      mockUser,
+      mockCredential,
+    );
+    expect(result).toEqual({ success: true });
+  });
+
+  it("reauthenticateWithPassword returns mapped error on failure", async () => {
+    const mockUser = { email: "a@b.com" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.spyOn(EmailAuthProvider, "credential").mockReturnValue({} as never);
+    vi.mocked(reauthenticateWithCredential).mockRejectedValue({
+      code: "auth/invalid-credential",
+    });
+    const result = await service.reauthenticateWithPassword("wrong");
+    expect(result).toEqual({ success: false, error: "invalid-credentials" });
+  });
+
+  it("reauthenticateWithGoogle throws when auth is not available", async () => {
+    mockGetAuthInstance.mockReturnValue(null);
+    await expect(service.reauthenticateWithGoogle()).rejects.toThrow(
+      "Auth not available",
+    );
+  });
+
+  it("reauthenticateWithGoogle returns generic error when currentUser is null", async () => {
+    const mockAuth = {
+      currentUser: null,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    const result = await service.reauthenticateWithGoogle();
+    expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("reauthenticateWithGoogle calls reauthenticateWithPopup and returns success", async () => {
+    const mockUser = { uid: "1" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.mocked(reauthenticateWithPopup).mockResolvedValue(undefined as never);
+    const result = await service.reauthenticateWithGoogle();
+    expect(reauthenticateWithPopup).toHaveBeenCalledWith(
+      mockUser,
+      expect.anything(),
+    );
+    expect(result).toEqual({ success: true });
+  });
+
+  it("reauthenticateWithGoogle returns mapped error on failure", async () => {
+    const mockUser = { uid: "1" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.mocked(reauthenticateWithPopup).mockRejectedValue({
+      code: "auth/too-many-requests",
+    });
+    const result = await service.reauthenticateWithGoogle();
+    expect(result).toEqual({ success: false, error: "too-many-requests" });
+  });
+
+  it("deleteAccount throws when auth is not available", async () => {
+    mockGetAuthInstance.mockReturnValue(null);
+    await expect(service.deleteAccount()).rejects.toThrow("Auth not available");
+  });
+
+  it("deleteAccount returns generic error when currentUser is null", async () => {
+    const mockAuth = {
+      currentUser: null,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    const result = await service.deleteAccount();
+    expect(result).toEqual({ success: false, error: "generic" });
+  });
+
+  it("deleteAccount calls deleteUser and returns success", async () => {
+    const mockUser = { uid: "1" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.mocked(deleteUser).mockResolvedValue(undefined as never);
+    const result = await service.deleteAccount();
+    expect(deleteUser).toHaveBeenCalledWith(mockUser);
+    expect(result).toEqual({ success: true });
+  });
+
+  it("deleteAccount returns mapped error when deleteUser throws", async () => {
+    const mockUser = { uid: "1" };
+    const mockAuth = {
+      currentUser: mockUser,
+    } as unknown as import("firebase/auth").Auth;
+    mockGetAuthInstance.mockReturnValue(mockAuth);
+    vi.mocked(deleteUser).mockRejectedValue({
+      code: "auth/too-many-requests",
+    });
+    const result = await service.deleteAccount();
+    expect(result).toEqual({ success: false, error: "too-many-requests" });
   });
 });

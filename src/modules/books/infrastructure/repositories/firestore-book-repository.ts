@@ -14,6 +14,7 @@ import {
   startAfter,
   updateDoc,
   where,
+  writeBatch,
   type Firestore,
   type QueryConstraint,
 } from "firebase/firestore";
@@ -31,6 +32,7 @@ import {
 
 const USERS_COLLECTION = "users";
 const BOOKS_COLLECTION = "books";
+const BATCH_LIMIT = 500;
 
 export type GetFirestoreInstance = () => Firestore | null;
 
@@ -193,5 +195,19 @@ export class FirestoreBookRepository implements BookRepository {
     if (!db) return;
     const ref = doc(db, USERS_COLLECTION, userId, BOOKS_COLLECTION, bookId);
     await deleteDoc(ref);
+  }
+
+  async deleteAll(userId: string): Promise<void> {
+    const db = this.getFirestoreInstance();
+    if (!db) return;
+    const coll = collection(db, USERS_COLLECTION, userId, BOOKS_COLLECTION);
+    const snapshot = await getDocs(query(coll));
+    if (snapshot.docs.length === 0) return;
+    for (let i = 0; i < snapshot.docs.length; i += BATCH_LIMIT) {
+      const chunk = snapshot.docs.slice(i, i + BATCH_LIMIT);
+      const batch = writeBatch(db);
+      chunk.forEach((d) => batch.delete(d.ref));
+      await batch.commit();
+    }
   }
 }

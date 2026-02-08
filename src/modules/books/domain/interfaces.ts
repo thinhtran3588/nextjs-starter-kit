@@ -25,4 +25,5 @@ export interface BookRepository {
     >,
   ): Promise<void>;
   delete(userId: string, bookId: string): Promise<void>;
+  deleteAll(userId: string): Promise<void>;
 }

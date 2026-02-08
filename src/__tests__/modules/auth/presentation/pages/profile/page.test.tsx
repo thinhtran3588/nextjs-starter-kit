@@ -8,6 +8,7 @@ import { ProfilePage } from "@/modules/auth/presentation/pages/profile/page";
 
 const mockUpdateProfileExecute = vi.fn();
 const mockUpdatePasswordExecute = vi.fn();
+const mockDeleteAccountExecute = vi.fn();
 const mockLogEventExecute = vi.fn();
 const mockToastSuccess = vi.fn();
 const mockToastError = vi.fn();
@@ -30,9 +31,11 @@ vi.mock("@/common/hooks/use-container", () => ({
         ? { execute: mockUpdateProfileExecute }
         : name === "updatePasswordUseCase"
           ? { execute: mockUpdatePasswordExecute }
-          : name === "logEventUseCase"
-            ? { execute: mockLogEventExecute }
-            : {},
+          : name === "deleteAccountUseCase"
+            ? { execute: mockDeleteAccountExecute }
+            : name === "logEventUseCase"
+              ? { execute: mockLogEventExecute }
+              : {},
   }),
 }));
 
@@ -48,6 +51,7 @@ describe("ProfilePage", () => {
   beforeEach(() => {
     mockUpdateProfileExecute.mockClear();
     mockUpdatePasswordExecute.mockClear();
+    mockDeleteAccountExecute.mockClear();
     mockLogEventExecute.mockClear();
     mockToastSuccess.mockClear();
     mockToastError.mockClear();
@@ -57,7 +61,7 @@ describe("ProfilePage", () => {
     });
   });
 
-  it("renders title, readonly form, Edit and Change password buttons", () => {
+  it("renders title, readonly form, Edit, Change password, and Delete account buttons", () => {
     render(<ProfilePage />);
 
     expect(
@@ -70,6 +74,9 @@ describe("ProfilePage", () => {
     expect(screen.getByRole("button", { name: /^Edit$/i })).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /change password/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /delete account/i }),
     ).toBeInTheDocument();
   });
 
@@ -279,5 +286,53 @@ describe("ProfilePage", () => {
       const alerts = screen.getAllByRole("alert");
       expect(alerts.length).toBeGreaterThan(0);
     });
+  });
+
+  it("opens delete account modal and shows success on deletion", async () => {
+    const user = userEvent.setup();
+    mockDeleteAccountExecute.mockResolvedValue({ success: true });
+
+    render(<ProfilePage />);
+    await user.click(screen.getByRole("button", { name: /delete account/i }));
+
+    expect(
+      screen.getByRole("heading", { name: "Delete account" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/This action is permanent/)).toBeInTheDocument();
+
+    await user.type(
+      screen.getByPlaceholderText("Type DELETE to confirm"),
+      "DELETE",
+    );
+    await user.type(
+      screen.getByPlaceholderText("Your current password"),
+      "my-password",
+    );
+    await user.click(
+      screen.getByRole("button", { name: /Delete my account/i }),
+    );
+
+    await waitFor(() => {
+      expect(mockDeleteAccountExecute).toHaveBeenCalledWith({
+        userId: "uid-1",
+        password: "my-password",
+      });
+    });
+    expect(mockToastSuccess).toHaveBeenCalledWith(
+      "Your account has been deleted.",
+    );
+  });
+
+  it("shows Delete account button for non-email auth types", () => {
+    useAuthUserStore.setState({
+      user: { ...mockUser, authType: AuthType.Google },
+      loading: false,
+    });
+
+    render(<ProfilePage />);
+
+    expect(
+      screen.getByRole("button", { name: /delete account/i }),
+    ).toBeInTheDocument();
   });
 });

@@ -29,6 +29,12 @@ describe("mapAuthErrorCode", () => {
     );
   });
 
+  it("maps auth/requires-recent-login to requires-recent-login", () => {
+    expect(mapAuthErrorCode("auth/requires-recent-login")).toBe(
+      "requires-recent-login",
+    );
+  });
+
   it("returns generic for unknown code", () => {
     expect(mapAuthErrorCode("auth/other")).toBe("generic");
   });
