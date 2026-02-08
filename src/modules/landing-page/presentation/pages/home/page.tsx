@@ -257,6 +257,13 @@ export async function LandingPage() {
                   descKey: "docs.items.firebase.description",
                   span: "lg:col-span-4",
                 },
+                {
+                  key: "deployment",
+                  href: "/docs/deployment",
+                  titleKey: "docs.items.deployment.title",
+                  descKey: "docs.items.deployment.description",
+                  span: "lg:col-span-4",
+                },
               ].map(({ key: itemKey, href, titleKey, descKey, span }) => (
                 <Link key={itemKey} href={href} className={span}>
                   <Card className="bento-card h-full px-6 py-6 transition-colors hover:bg-[var(--glass-highlight)] sm:rounded-2xl">

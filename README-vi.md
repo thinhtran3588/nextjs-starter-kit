@@ -1,7 +1,10 @@
 # Next.js Starter Kit
 
 [![CI - Main](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml/badge.svg?branch=main)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml)
+[![codecov - Main](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/branch/main/graph/badge.svg)](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/tree/main)
+
 [![CI - Develop](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml/badge.svg?branch=develop)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml)
+[![codecov - Develop](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/tree/develop)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
@@ -56,6 +59,7 @@ npm run dev
 | [Hướng dẫn Phát triển](docs/development-guide-vi.md) | Git workflow, thêm tính năng, tạo modules                |
 | [Hướng dẫn Testing](docs/testing-guide-vi.md)        | Tổ chức test, coverage, best practices                   |
 | [Tích hợp Firebase](docs/firebase-integration-vi.md) | Cài đặt Auth, Firestore & Analytics, thay đổi providers  |
+| [Triển khai](docs/deployment-vi.md)                  | Firebase, Cloudflare Pages, GitHub Actions CI/CD         |
 
 ## Tích hợp AI Agent
 

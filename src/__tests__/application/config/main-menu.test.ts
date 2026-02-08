@@ -15,6 +15,7 @@ describe("main-menu", () => {
       "development-guide",
       "testing-guide",
       "firebase-integration",
+      "deployment",
     ]);
   });
 
@@ -25,6 +26,7 @@ describe("main-menu", () => {
       "development-guide": "developmentGuide",
       "testing-guide": "testingGuide",
       "firebase-integration": "firebaseIntegration",
+      deployment: "deployment",
     });
   });
 
@@ -44,7 +46,7 @@ describe("main-menu", () => {
     expect(menu[2].id).toBe("documents");
     expect(menu[2].translationKey).toBe("navigation.documents");
     expect(menu[2].href).toBe("");
-    expect(menu[2].children).toHaveLength(5);
+    expect(menu[2].children).toHaveLength(6);
     const docSlugs = menu[2].children!.map((c) => c.id) as DocSlug[];
     expect(docSlugs).toEqual(DOC_SLUGS);
     expect(menu[2].children!.map((c) => c.href)).toEqual([
@@ -53,6 +55,7 @@ describe("main-menu", () => {
       "/docs/development-guide",
       "/docs/testing-guide",
       "/docs/firebase-integration",
+      "/docs/deployment",
     ]);
   });
 });

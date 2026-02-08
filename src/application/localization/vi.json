@@ -19,7 +19,8 @@
         "codingConventions": "Quy ước coding",
         "developmentGuide": "Hướng dẫn phát triển",
         "testingGuide": "Hướng dẫn kiểm thử",
-        "firebaseIntegration": "Tích hợp Firebase"
+        "firebaseIntegration": "Tích hợp Firebase",
+        "deployment": "Triển khai"
       },
       "menu": "Menu"
     },
@@ -219,6 +220,12 @@
           "metadata": {
             "title": "Hướng dẫn testing",
             "description": "Vitest + React Testing Library, 100% coverage, tổ chức test và pattern AAA."
+          }
+        },
+        "deployment": {
+          "metadata": {
+            "title": "Triển khai",
+            "description": "Thiết lập Firebase, hosting Cloudflare Pages, GitHub Actions CI/CD và biến môi trường."
           }
         }
       }
@@ -557,7 +564,7 @@
           },
           "docs": {
             "title": "Tài liệu",
-            "description": "Năm hướng dẫn toàn diện về kiến trúc, quy ước, quy trình phát triển, testing và tích hợp Firebase.",
+            "description": "Sáu hướng dẫn toàn diện về kiến trúc, quy ước, quy trình phát triển, testing, tích hợp Firebase và triển khai.",
             "items": {
               "architecture": {
                 "title": "Kiến trúc",
@@ -578,6 +585,10 @@
               "firebase": {
                 "title": "Tích hợp Firebase",
                 "description": "Thiết lập Auth, Firestore và Analytics, interfaces trừu tượng, security rules và thay đổi providers."
+              },
+              "deployment": {
+                "title": "Triển khai",
+                "description": "Thiết lập Firebase, hosting Cloudflare Pages, GitHub Actions CI/CD và biến môi trường."
               }
             }
           }

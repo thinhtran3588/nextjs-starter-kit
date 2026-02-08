@@ -8,6 +8,7 @@ const docSlugs = [
   "development-guide",
   "firebase-integration",
   "testing-guide",
+  "deployment",
 ];
 
 export function generateStaticParams() {

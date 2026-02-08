@@ -6,6 +6,7 @@ export const DOC_SLUGS = [
   "development-guide",
   "testing-guide",
   "firebase-integration",
+  "deployment",
 ] as const;
 
 export type DocSlug = (typeof DOC_SLUGS)[number];
@@ -16,6 +17,7 @@ export const DOC_I18N_KEYS: Record<DocSlug, string> = {
   "development-guide": "developmentGuide",
   "testing-guide": "testingGuide",
   "firebase-integration": "firebaseIntegration",
+  deployment: "deployment",
 };
 
 export function getMainMenuConfig(): MenuItem[] {

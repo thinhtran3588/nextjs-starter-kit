@@ -19,7 +19,8 @@
         "codingConventions": "编码规范",
         "developmentGuide": "开发指南",
         "testingGuide": "测试指南",
-        "firebaseIntegration": "Firebase 集成"
+        "firebaseIntegration": "Firebase 集成",
+        "deployment": "部署"
       },
       "menu": "菜单"
     },
@@ -219,6 +220,12 @@
           "metadata": {
             "title": "测试指南",
             "description": "Vitest + React Testing Library、100% 覆盖率、测试组织与 AAA 模式。"
+          }
+        },
+        "deployment": {
+          "metadata": {
+            "title": "部署",
+            "description": "Firebase 设置、Cloudflare Pages 托管、GitHub Actions CI/CD 与环境变量。"
           }
         }
       }
@@ -557,7 +564,7 @@
           },
           "docs": {
             "title": "文档",
-            "description": "五份全面指南涵盖架构、规范、开发流程、测试与 Firebase 集成。",
+            "description": "六份全面指南涵盖架构、规范、开发流程、测试、Firebase 集成与部署。",
             "items": {
               "architecture": {
                 "title": "架构",
@@ -578,6 +585,10 @@
               "firebase": {
                 "title": "Firebase 集成",
                 "description": "Auth、Firestore 与 Analytics 设置、抽象接口、安全规则与更换提供商。"
+              },
+              "deployment": {
+                "title": "部署",
+                "description": "Firebase 设置、Cloudflare Pages 托管、GitHub Actions CI/CD 与环境变量。"
               }
             }
           }

@@ -1,7 +1,10 @@
 # Next.js Starter Kit
 
 [![CI - Main](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml/badge.svg?branch=main)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml)
+[![codecov - Main](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/branch/main/graph/badge.svg)](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/tree/main)
+
 [![CI - Develop](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml/badge.svg?branch=develop)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml)
+[![codecov - Develop](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/tree/develop)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
@@ -56,6 +59,7 @@ The app runs at `http://localhost:3000`.
 | [Development Guide](docs/development-guide.md)       | Git workflow, adding features, creating modules       |
 | [Testing Guide](docs/testing-guide.md)               | Test organization, coverage, best practices           |
 | [Firebase Integration](docs/firebase-integration.md) | Auth, Firestore & Analytics setup, swapping providers |
+| [Deployment](docs/deployment.md)                     | Firebase, Cloudflare Pages, GitHub Actions CI/CD      |
 
 ## AI Agent Integration
 

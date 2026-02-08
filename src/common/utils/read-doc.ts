@@ -6,6 +6,9 @@ import architecture from "../../../docs/architecture.md";
 import codingConventionsVi from "../../../docs/coding-conventions-vi.md";
 import codingConventionsZh from "../../../docs/coding-conventions-zh.md";
 import codingConventions from "../../../docs/coding-conventions.md";
+import deploymentVi from "../../../docs/deployment-vi.md";
+import deploymentZh from "../../../docs/deployment-zh.md";
+import deployment from "../../../docs/deployment.md";
 import developmentGuideVi from "../../../docs/development-guide-vi.md";
 import developmentGuideZh from "../../../docs/development-guide-zh.md";
 import developmentGuide from "../../../docs/development-guide.md";
@@ -23,6 +26,9 @@ const docsContent: Record<string, string> = {
   "coding-conventions": codingConventions,
   "coding-conventions-vi": codingConventionsVi,
   "coding-conventions-zh": codingConventionsZh,
+  deployment,
+  "deployment-vi": deploymentVi,
+  "deployment-zh": deploymentZh,
   "development-guide": developmentGuide,
   "development-guide-vi": developmentGuideVi,
   "development-guide-zh": developmentGuideZh,

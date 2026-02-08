@@ -1,7 +1,10 @@
 # Next.js Starter Kit
 
 [![CI - Main](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml/badge.svg?branch=main)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-main.yml)
+[![codecov - Main](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/branch/main/graph/badge.svg)](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/tree/main)
+
 [![CI - Develop](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml/badge.svg?branch=develop)](https://github.com/thinhtran3588/nextjs-starter-kit/actions/workflows/ci-develop.yml)
+[![codecov - Develop](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/thinhtran3588/nextjs-starter-kit/tree/develop)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
@@ -56,6 +59,7 @@ npm run dev
 | [开发指南](docs/development-guide-zh.md)         | Git 工作流、添加功能、创建模块                   |
 | [测试指南](docs/testing-guide-zh.md)             | 测试组织、覆盖率、最佳实践                       |
 | [Firebase 集成](docs/firebase-integration-zh.md) | Auth、Firestore 与 Analytics 设置、更换 provider |
+| [部署](docs/deployment-zh.md)                    | Firebase、Cloudflare Pages、GitHub Actions CI/CD |
 
 ## AI Agent 集成
 
