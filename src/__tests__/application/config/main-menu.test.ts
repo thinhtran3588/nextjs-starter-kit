@@ -30,9 +30,9 @@ describe("main-menu", () => {
     });
   });
 
-  it("getMainMenuConfig returns menu items with home, app, and documents", () => {
+  it("getMainMenuConfig returns menu items with home, app, documents, and contact", () => {
     const menu = getMainMenuConfig();
-    expect(menu).toHaveLength(3);
+    expect(menu).toHaveLength(4);
     expect(menu[0]).toEqual({
       id: "home",
       translationKey: "navigation.home",
@@ -57,5 +57,10 @@ describe("main-menu", () => {
       "/docs/firebase-integration",
       "/docs/deployment",
     ]);
+    expect(menu[3]).toEqual({
+      id: "contact",
+      translationKey: "navigation.contact",
+      href: "/contact",
+    });
   });
 });

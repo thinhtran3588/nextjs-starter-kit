@@ -22,6 +22,7 @@
         "firebaseIntegration": "Firebase 集成",
         "deployment": "部署"
       },
+      "contact": "联系我们",
       "menu": "菜单"
     },
     "footer": {
@@ -458,6 +459,39 @@
               "body": "如对本条款有疑问，请联系使用该 starter kit 构建的应用的运营团队。"
             }
           }
+        }
+      }
+    },
+    "contact": {
+      "pages": {
+        "contact": {
+          "title": "联系我们",
+          "metadata": {
+            "description": "联系我们。发送消息或直接发送电子邮件。"
+          },
+          "subtitle": "有问题或需要帮助？填写下方表单或直接发送邮件至",
+          "form": {
+            "nameLabel": "姓名",
+            "namePlaceholder": "您的姓名",
+            "emailLabel": "邮箱",
+            "emailPlaceholder": "your.email@example.com",
+            "subjectLabel": "主题",
+            "subjectPlaceholder": "关于什么？",
+            "messageLabel": "消息",
+            "messagePlaceholder": "请告诉我们更多关于您的需求...",
+            "submitButton": "发送消息",
+            "validation": {
+              "nameRequired": "请输入姓名",
+              "nameMaxLength": "姓名最多 200 个字符",
+              "invalidEmail": "邮箱格式不正确",
+              "subjectRequired": "请输入主题",
+              "subjectMaxLength": "主题最多 200 个字符",
+              "messageRequired": "请输入消息",
+              "messageMaxLength": "消息最多 2000 个字符"
+            }
+          },
+          "emailNote": "您也可以直接通过以下邮箱联系我们",
+          "successMessage": "您的邮件客户端即将打开。如果没有打开，请直接发送邮件给我们。"
         }
       }
     },

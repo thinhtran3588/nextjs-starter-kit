@@ -22,6 +22,7 @@
         "firebaseIntegration": "Tích hợp Firebase",
         "deployment": "Triển khai"
       },
+      "contact": "Liên hệ",
       "menu": "Menu"
     },
     "footer": {
@@ -458,6 +459,39 @@
               "body": "Nếu có câu hỏi về các điều khoản này, hãy liên hệ với đội ngũ vận hành ứng dụng được xây dựng từ starter kit."
             }
           }
+        }
+      }
+    },
+    "contact": {
+      "pages": {
+        "contact": {
+          "title": "Liên hệ",
+          "metadata": {
+            "description": "Liên hệ với chúng tôi. Gửi tin nhắn hoặc email trực tiếp cho chúng tôi."
+          },
+          "subtitle": "Bạn có câu hỏi hoặc cần trợ giúp? Điền biểu mẫu bên dưới hoặc gửi email trực tiếp đến",
+          "form": {
+            "nameLabel": "Họ tên",
+            "namePlaceholder": "Họ tên của bạn",
+            "emailLabel": "Email",
+            "emailPlaceholder": "email.cua.ban@example.com",
+            "subjectLabel": "Chủ đề",
+            "subjectPlaceholder": "Nội dung liên hệ?",
+            "messageLabel": "Tin nhắn",
+            "messagePlaceholder": "Cho chúng tôi biết thêm về yêu cầu của bạn...",
+            "submitButton": "Gửi tin nhắn",
+            "validation": {
+              "nameRequired": "Vui lòng nhập họ tên",
+              "nameMaxLength": "Họ tên tối đa 200 ký tự",
+              "invalidEmail": "Email không hợp lệ",
+              "subjectRequired": "Vui lòng nhập chủ đề",
+              "subjectMaxLength": "Chủ đề tối đa 200 ký tự",
+              "messageRequired": "Vui lòng nhập tin nhắn",
+              "messageMaxLength": "Tin nhắn tối đa 2000 ký tự"
+            }
+          },
+          "emailNote": "Bạn cũng có thể liên hệ trực tiếp với chúng tôi tại",
+          "successMessage": "Ứng dụng email của bạn sẽ mở ngay. Nếu không, vui lòng gửi email trực tiếp cho chúng tôi."
         }
       }
     },
