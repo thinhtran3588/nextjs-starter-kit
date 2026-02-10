@@ -33,6 +33,10 @@ A production-ready Next.js starter kit with Clean Architecture and modular struc
 - **Testing** — Vitest + React Testing Library with 100% coverage requirement
 - **Firebase** — Auth, Firestore & Analytics with abstracted interfaces for easy provider swapping
 
+## Landing Page
+
+We provide a specialized, lightweight version of the landing page designed for maximum performance. This version has been optimized by removing all unnecessary components and dependencies, ensuring a fast and focused experience for visitors. Check the `landing-page` branch to see this implementation.
+
 ## Quick Start
 
 ```bash
