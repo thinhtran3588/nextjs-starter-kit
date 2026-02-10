@@ -33,6 +33,10 @@
 - **测试** — Vitest + React Testing Library，要求 100% 覆盖率
 - **Firebase** — Auth、Firestore 与 Analytics，抽象化接口便于更换 provider
 
+## 落地页
+
+我们为落地页提供了一个特殊版本，该版本删除了所有不必要的组件和依赖项，以确保最佳性能和专注的用户体验。请查看 `landing-page` 分支以了解此实现。
+
 ## 快速开始
 
 ```bash

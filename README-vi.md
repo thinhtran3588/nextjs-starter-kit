@@ -33,6 +33,10 @@ Bộ khởi tạo Next.js sẵn sàng production với Clean Architecture và c�
 - **Testing** — Vitest + React Testing Library với yêu cầu 100% coverage
 - **Firebase** — Auth, Firestore & Analytics với interfaces trừu tượng hóa, dễ thay đổi provider
 
+## Trang Landing
+
+Chúng tôi cung cấp một phiên bản đặc biệt cho trang landing, phiên bản này đã loại bỏ tất cả các thành phần không cần thiết để tối ưu hóa hiệu suất và tập trung vào trải nghiệm người dùng. Tham khảo branch `landing-page` để xem bản triển khai này.
+
 ## Bắt đầu nhanh
 
 ```bash
