@@ -1,0 +1,98 @@
+
+> nextjs-starter-kit@0.2.1 validate
+> npm run lint && npm run format:check && npm run test:coverage && npm run build
+
+
+> nextjs-starter-kit@0.2.1 lint
+> eslint
+
+
+/Users/thinhtran/Projects/nextjs-starter-kit/src/__tests__/modules/landing-page/pages/home/components/platform-download.test.tsx
+  37:5  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-non-null-assertion')
+
+✖ 1 problem (0 errors, 1 warning)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
+
+> nextjs-starter-kit@0.2.1 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> nextjs-starter-kit@0.2.1 test:coverage
+> vitest --coverage
+
+
+ DEV  v3.2.4 /Users/thinhtran/Projects/nextjs-starter-kit
+      Coverage enabled with v8
+
+ ✓ src/__tests__/common/components/tags-input.test.tsx (11 tests) 784ms
+   ✓ TagsInput > adds tag on Enter  343ms
+ ✓ src/__tests__/common/components/confirmation-modal.test.tsx (5 tests) 702ms
+   ✓ ConfirmationModal > renders when open with title and description  314ms
+stderr | src/__tests__/common/components/main-header.test.tsx
+Not implemented: navigation to another Document
+
+ ✓ src/__tests__/common/components/main-header.test.tsx (18 tests) 1166ms
+   ✓ MainHeader > renders the primary navigation  317ms
+ ✓ src/__tests__/modules/settings/presentation/components/theme-selector.test.tsx (7 tests) 1232ms
+   ✓ ThemeSelector > opens dropdown when trigger is clicked  361ms
+ ✓ src/__tests__/modules/settings/presentation/components/language-selector.test.tsx (8 tests) 1353ms
+   ✓ LanguageSelector > uses current pathname for locale links so URL is preserved when changing language  309ms
+stderr | src/__tests__/common/components/dialog.test.tsx > Dialog > renders overlay with data-testid
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/__tests__/common/components/dialog.test.tsx > Dialog > DialogClose closes when used inside content
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/__tests__/common/components/documents-dropdown.test.tsx
+Not implemented: navigation to another Document
+
+ ✓ src/__tests__/common/components/documents-dropdown.test.tsx (12 tests) 546ms
+ ✓ src/__tests__/common/components/dialog.test.tsx (3 tests) 528ms
+   ✓ Dialog > opens when trigger is clicked and shows content  350ms
+ ✓ src/__tests__/common/components/modal.test.tsx (5 tests) 508ms
+ ✓ src/__tests__/modules/landing-page/pages/home/page.test.tsx (3 tests) 450ms
+   ✓ LandingPage > renders the hero section with SparkMap title  322ms
+ ✓ src/__tests__/modules/landing-page/pages/contact/components/contact-form.test.tsx (4 tests) 377ms
+ ✓ src/__tests__/common/components/button.test.tsx (14 tests) 336ms
+ ✓ src/__tests__/common/components/dropdown-menu.test.tsx (1 test) 389ms
+   ✓ DropdownMenu (common/components) > opens and shows content, label, separator and items when trigger is clicked  387ms
+ ✓ src/__tests__/common/components/main-layout.test.tsx (2 tests) 391ms
+ ✓ src/__tests__/modules/landing-page/pages/contact/page.test.tsx (4 tests) 492ms
+   ✓ ContactPage > renders the page title  358ms
+ ✓ src/__tests__/modules/settings/presentation/components/settings-header-slot.test.tsx (1 test) 283ms
+ ✓ src/__tests__/common/components/button-group.test.tsx (4 tests) 227ms
+ ✓ src/__tests__/modules/landing-page/pages/legal-pages.test.tsx (2 tests) 326ms
+ ✓ src/__tests__/common/pages/error-page.test.tsx (4 tests) 439ms
+ ✓ src/__tests__/common/components/simple-page.test.tsx (2 tests) 329ms
+ ✓ src/__tests__/common/components/page.test.tsx (2 tests) 231ms
+ ✓ src/__tests__/common/pages/not-found-page.test.tsx (2 tests) 315ms
+ ✓ src/__tests__/common/components/chip.test.tsx (6 tests) 348ms
+ ✓ src/__tests__/common/components/back-to-home-button.test.tsx (2 tests) 313ms
+ ✓ src/__tests__/common/components/error-page-view.test.tsx (3 tests) 306ms
+ ✓ src/__tests__/common/components/main-footer.test.tsx (4 tests) 304ms
+ ✓ src/__tests__/common/components/card.test.tsx (8 tests) 242ms
+ ✓ src/__tests__/modules/settings/presentation/hooks/use-sync-user-settings.test.tsx (5 tests) 126ms
+ ✓ src/__tests__/common/components/icons.test.tsx (15 tests) 58ms
+ ✓ src/__tests__/common/components/form.test.tsx (4 tests) 55ms
+ ✓ src/__tests__/common/components/toaster.test.tsx (1 test) 164ms
+ ✓ src/__tests__/common/components/input.test.tsx (3 tests) 59ms
+ ✓ src/__tests__/modules/landing-page/pages/home/components/platform-download.test.tsx (2 tests) 79ms
+ ✓ src/__tests__/common/components/label.test.tsx (4 tests) 41ms
+ ✓ src/__tests__/application/config/firebase-config.test.ts (15 tests) 44ms
+ ✓ src/__tests__/modules/landing-page/pages/home/components/scroll-reveal.test.tsx (4 tests) 33ms
+ ✓ src/__tests__/common/components/textarea.test.tsx (3 tests) 26ms
+ ✓ src/__tests__/common/components/theme-provider.test.tsx (4 tests) 38ms
+
+⎯⎯⎯⎯ Unhandled Rejection ⎯⎯⎯⎯⎯
+Error: ENOENT: no such file or directory, open '/Users/thinhtran/Projects/nextjs-starter-kit/coverage/.tmp/coverage-36.json'
+ ❯ open node:internal/fs/promises:636:25
+ ❯ Object.writeFile node:internal/fs/promises:1239:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { errno: -2, code: 'ENOENT', syscall: 'open', path: '/Users/thinhtran/Projects/nextjs-starter-kit/coverage/.tmp/coverage-36.json' }
+
+
+

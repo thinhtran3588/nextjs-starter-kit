@@ -3,21 +3,16 @@ import { getTranslations } from "next-intl/server";
 import { MainFooter } from "@/common/components/main-footer";
 import { MainHeader } from "@/common/components/main-header";
 import type { ResolvedMenuItem } from "@/common/interfaces";
-import packageJson from "../../../package.json";
-
-const GITHUB_URL = "https://github.com/thinhtran3588/nextjs-starter-kit";
 
 type MainLayoutProps = {
   children: React.ReactNode;
   menuItems: ResolvedMenuItem[];
-  authSlot?: React.ReactNode;
   settingsSlot?: React.ReactNode;
 };
 
 export async function MainLayout({
   children,
   menuItems,
-  authSlot,
   settingsSlot,
 }: MainLayoutProps) {
   const [tCommon, tHome] = await Promise.all([
@@ -44,8 +39,6 @@ export async function MainLayout({
         badge={tHome("badge")}
         menuItems={menuItems}
         menuLabel={tCommon("navigation.menu")}
-        githubUrl={GITHUB_URL}
-        authSlot={authSlot}
         settingsSlot={settingsSlot}
       />
 
@@ -59,7 +52,6 @@ export async function MainLayout({
         termsLabel={tCommon("navigation.terms")}
         termsHref="/terms-of-service"
         copyright={tCommon("footer.copyright")}
-        version={packageJson.version}
       />
     </div>
   );

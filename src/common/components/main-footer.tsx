@@ -6,7 +6,6 @@ type MainFooterProps = {
   termsLabel: string;
   termsHref: string;
   copyright: string;
-  version?: string;
 };
 
 export function MainFooter({
@@ -15,7 +14,6 @@ export function MainFooter({
   termsLabel,
   termsHref,
   copyright,
-  version,
 }: MainFooterProps) {
   return (
     <footer className="relative z-10 border-t border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-[24px] backdrop-saturate-[1.8]">
@@ -35,7 +33,6 @@ export function MainFooter({
           </Link>
         </nav>
         <div className="flex items-center gap-4 text-sm text-[var(--text-muted)]">
-          {version ? <span data-testid="app-version">v{version}</span> : null}
           <p>{copyright}</p>
         </div>
       </div>

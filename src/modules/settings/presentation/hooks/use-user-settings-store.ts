@@ -1,14 +1,7 @@
-"use client";
-
-import { useTranslations } from "next-intl";
 import { useCallback } from "react";
-import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { useContainer } from "@/common/hooks/use-container";
-import { useAuthUserStore } from "@/modules/auth/presentation/hooks/use-auth-user-store";
-import type { SaveUserSettingsUseCase } from "@/modules/settings/application/save-user-settings-use-case";
 import type { UserSettings } from "@/modules/settings/domain/types";
 
 type UserSettingsState = {
@@ -39,9 +32,6 @@ export type UseUserSettingsReturn = {
 };
 
 export function useUserSettings(): UseUserSettingsReturn {
-  const t = useTranslations("settings");
-  const container = useContainer();
-  const user = useAuthUserStore((s) => s.user);
   const settings = useUserSettingsStore((s) => s.settings);
   const setSettings = useUserSettingsStore((s) => s.setSettings);
 
@@ -49,15 +39,8 @@ export function useUserSettings(): UseUserSettingsReturn {
     (locale: string) => {
       const next = { ...settings, locale };
       setSettings(next);
-      if (!user?.id) return;
-      const useCase = container.resolve(
-        "saveUserSettingsUseCase",
-      ) as SaveUserSettingsUseCase;
-      useCase.execute({ userId: user.id, settings: next }).then((result) => {
-        if (!result.success) toast.error(t("error.saveFailed"));
-      });
     },
-    [container, user, settings, setSettings, t],
+    [settings, setSettings],
   );
 
   const persistTheme = useCallback(
@@ -65,15 +48,8 @@ export function useUserSettings(): UseUserSettingsReturn {
       if (theme === undefined) return;
       const next = { ...settings, theme };
       setSettings(next);
-      if (!user?.id) return;
-      const useCase = container.resolve(
-        "saveUserSettingsUseCase",
-      ) as SaveUserSettingsUseCase;
-      useCase.execute({ userId: user.id, settings: next }).then((result) => {
-        if (!result.success) toast.error(t("error.saveFailed"));
-      });
     },
-    [container, user, settings, setSettings, t],
+    [settings, setSettings],
   );
 
   return { settings, setSettings, persistLocale, persistTheme };

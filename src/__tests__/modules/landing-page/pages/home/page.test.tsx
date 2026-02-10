@@ -1,13 +1,41 @@
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
 import messages from "@/application/localization/en.json";
+import { APP_NAME } from "@/common/constants";
 import { LandingPage } from "@/modules/landing-page/presentation/pages/home/page";
 
-const docItems = messages.modules.landing.pages.home.docs.items;
+// Mock ScrollReveal since it might use browser APIs
+vi.mock("../../components/scroll-reveal", () => ({
+  ScrollReveal: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
+
+// Mock PlatformDownload and TestimonialCard to avoid complex rendering in unit test
+vi.mock(
+  "@/modules/landing-page/presentation/pages/home/components/platform-download",
+  () => ({
+    PlatformDownload: () => <div data-testid="platform-download">Download</div>,
+  }),
+);
+vi.mock(
+  "@/modules/landing-page/presentation/pages/home/components/testimonial-card",
+  () => ({
+    TestimonialCard: ({ name }: { name: string }) => (
+      <div data-testid="testimonial-card">{name}</div>
+    ),
+  }),
+);
 
 describe("LandingPage", () => {
-  it("renders the hero headline and main app CTA", async () => {
-    render(await LandingPage());
+  const renderPage = () => {
+    return render(<LandingPage />);
+  };
+
+  // ... inside the test ...
+  it(`renders the hero section with ${APP_NAME} title`, () => {
+    renderPage();
 
     expect(
       screen.getByRole("heading", {
@@ -15,32 +43,45 @@ describe("LandingPage", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", {
-        name: messages.common.navigation.goToApp,
+      screen.getByText(messages.modules.landing.pages.home.hero.subtitle),
+    ).toBeInTheDocument();
+    const downloads = screen.getAllByTestId("platform-download");
+    expect(downloads.length).toBeGreaterThan(0);
+  });
+
+  it("renders the features section", () => {
+    renderPage();
+
+    expect(
+      screen.getByRole("heading", {
+        name: messages.modules.landing.pages.home.features.title,
       }),
+    ).toBeInTheDocument();
+
+    // Check for a few features
+    expect(
+      screen.getByText(
+        messages.modules.landing.pages.home.features.items.visualThinking.title,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        messages.modules.landing.pages.home.features.items.collaboration.title,
+      ),
     ).toBeInTheDocument();
   });
 
-  it("renders documentation cards as links to the corresponding doc pages", async () => {
-    render(await LandingPage());
+  it("renders the testimonials section", () => {
+    renderPage();
 
-    const expectedLinks = [
-      { title: docItems.architecture.title, href: "/docs/architecture" },
-      {
-        title: docItems.codingConventions.title,
-        href: "/docs/coding-conventions",
-      },
-      { title: docItems.development.title, href: "/docs/development-guide" },
-      { title: docItems.testing.title, href: "/docs/testing-guide" },
-      { title: docItems.firebase.title, href: "/docs/firebase-integration" },
-      { title: docItems.deployment.title, href: "/docs/deployment" },
-    ];
+    expect(
+      screen.getByRole("heading", {
+        name: messages.modules.landing.pages.home.testimonials.title,
+      }),
+    ).toBeInTheDocument();
 
-    for (const { title, href } of expectedLinks) {
-      const heading = screen.getByRole("heading", { name: title });
-      const link = heading.closest("a");
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute("href", href);
-    }
+    // Check if testimonial cards are rendered
+    const cards = screen.getAllByTestId("testimonial-card");
+    expect(cards.length).toBeGreaterThan(0);
   });
 });

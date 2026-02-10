@@ -87,4 +87,17 @@ describe("TagsInput", () => {
     expect(screen.getByPlaceholderText("Add…")).toBeDisabled();
     expect(screen.getByRole("button", { name: "Remove tag1" })).toBeDisabled();
   });
+
+  it("renders tags as read-only chips when readOnly is true", () => {
+    render(<TagsInput value={["alpha", "beta"]} onChange={vi.fn()} readOnly />);
+    expect(screen.getByText("alpha")).toBeInTheDocument();
+    expect(screen.getByText("beta")).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("Add…")).not.toBeInTheDocument();
+  });
+
+  it("renders empty placeholder when readOnly is true and value is empty", () => {
+    render(<TagsInput value={[]} onChange={vi.fn()} readOnly />);
+    expect(screen.getByText("—")).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("Add…")).not.toBeInTheDocument();
+  });
 });

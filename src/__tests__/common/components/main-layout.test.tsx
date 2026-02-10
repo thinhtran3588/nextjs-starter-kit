@@ -37,7 +37,7 @@ const translations: Record<string, Record<string, string>> = {
 
 const menuItems: ResolvedMenuItem[] = [
   { id: "home", label: "Home", href: "/" },
-  { id: "app", label: "App", href: "/app/books" },
+  { id: "contact", label: "Contact", href: "/contact" },
 ];
 
 vi.mock("next-intl/server", () => ({

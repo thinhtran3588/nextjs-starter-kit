@@ -2,36 +2,21 @@
   "common": {
     "navigation": {
       "home": "Home",
+      "privacy": "Privacy",
+      "terms": "Terms",
       "app": "App",
       "goToApp": "Go to main app",
       "backToHome": "Back to home",
-      "signIn": "Sign in",
-      "signUp": "Sign up",
-      "signOut": "Sign out",
-      "profile": "Profile",
-      "createAccount": "Create an account",
-      "privacy": "Privacy",
-      "terms": "Terms",
-      "legal": "Legal",
-      "documents": "Documents",
-      "docs": {
-        "architecture": "Architecture",
-        "codingConventions": "Coding conventions",
-        "developmentGuide": "Development guide",
-        "testingGuide": "Testing guide",
-        "firebaseIntegration": "Firebase integration",
-        "deployment": "Deployment"
-      },
       "contact": "Contact",
       "menu": "Menu"
     },
     "footer": {
-      "copyright": "© 2026 Next.js Starter Kit. All rights reserved."
+      "copyright": "© 2026 SparkMap. All rights reserved."
     },
     "app": {
       "metadata": {
-        "title": "Next.js Starter Kit",
-        "description": "Build scalable Next.js apps with Clean Architecture, TypeScript, and 100% test coverage out of the box."
+        "title": "SparkMap",
+        "description": "The ultimate mind mapping tool for creative thinkers."
       }
     },
     "errors": {
@@ -83,263 +68,6 @@
     }
   },
   "modules": {
-    "auth": {
-      "pages": {
-        "sign-in": {
-          "title": "Sign in",
-          "or": "Or",
-          "googleButton": "Continue with Google",
-          "emailLabel": "Email",
-          "passwordLabel": "Password",
-          "submitButton": "Sign in with email",
-          "forgotPasswordLink": "Forgot password?",
-          "noAccountPrompt": "Don't have an account?",
-          "signUpLink": "Sign up",
-          "agreeToPolicyAndTerms": "By signing in you agree to our {privacy} and {terms}.",
-          "validation": {
-            "invalidEmail": "Invalid email",
-            "passwordRequired": "Password is required",
-            "passwordMaxLength": "Password must be at most 20 characters"
-          },
-          "errors": {
-            "invalidCredentials": "Invalid email or password.",
-            "tooManyRequests": "Too many attempts. Try again later.",
-            "generic": "Something went wrong. Please try again."
-          }
-        },
-        "sign-up": {
-          "title": "Sign up",
-          "or": "Or",
-          "googleButton": "Continue with Google",
-          "emailLabel": "Email",
-          "passwordLabel": "Password",
-          "confirmPasswordLabel": "Confirm password",
-          "fullNameLabel": "Full name (optional)",
-          "submitButton": "Create account",
-          "hasAccountPrompt": "Already have an account?",
-          "signInLink": "Sign in",
-          "agreeToPolicyAndTerms": "By signing up you agree to our {privacy} and {terms}.",
-          "validation": {
-            "invalidEmail": "Invalid email",
-            "passwordRequired": "Password is required",
-            "minLength": "At least 8 characters",
-            "passwordMaxLength": "Password must be at most 20 characters",
-            "fullNameMaxLength": "Full name must be at most 200 characters",
-            "uppercase": "At least one uppercase letter",
-            "lowercase": "At least one lowercase letter",
-            "number": "At least one number",
-            "specialChar": "At least one special character",
-            "passwordsDoNotMatch": "Passwords do not match"
-          },
-          "errors": {
-            "emailAlreadyInUse": "This email is already in use.",
-            "generic": "Something went wrong. Please try again."
-          }
-        },
-        "forgot-password": {
-          "title": "Forgot password",
-          "emailLabel": "Email",
-          "submitButton": "Send reset link",
-          "successMessage": "If an account exists for this email, we've sent a reset link.",
-          "backToSignIn": "Back to sign in",
-          "validation": {
-            "invalidEmail": "Invalid email"
-          },
-          "errors": {
-            "generic": "Something went wrong. Please try again."
-          }
-        },
-        "profile": {
-          "title": "Profile",
-          "metadata": {
-            "description": "View and update your profile information and password."
-          },
-          "emailLabel": "Email",
-          "fullNameLabel": "Full name",
-          "signInTypeLabel": "Sign-in type",
-          "signInTypeEmail": "Email",
-          "signInTypeGoogle": "Google",
-          "signInTypeApple": "Apple",
-          "signInTypeOther": "Other",
-          "saveButton": "Save",
-          "editButton": "Edit",
-          "passwordSectionTitle": "Update password",
-          "oldPasswordLabel": "Current password",
-          "newPasswordLabel": "New password",
-          "confirmPasswordLabel": "Confirm new password",
-          "cancelButton": "Cancel",
-          "changePasswordButton": "Change password",
-          "updatePasswordButton": "Update password",
-          "backToApp": "Back to app",
-          "successMessage": "Profile updated.",
-          "passwordSuccessMessage": "Password updated.",
-          "validation": {
-            "fullNameMaxLength": "Full name must be at most 200 characters",
-            "oldPasswordRequired": "Current password is required",
-            "minLength": "At least 8 characters",
-            "passwordMaxLength": "Password must be at most 20 characters",
-            "uppercase": "At least one uppercase letter",
-            "lowercase": "At least one lowercase letter",
-            "number": "At least one number",
-            "specialChar": "At least one special character",
-            "passwordsDoNotMatch": "Passwords do not match"
-          },
-          "errors": {
-            "generic": "Something went wrong. Please try again.",
-            "invalidCredentials": "Current password is incorrect.",
-            "requiresRecentLogin": "For security, please sign out and sign back in before trying again."
-          },
-          "deleteAccount": {
-            "button": "Delete account",
-            "title": "Delete account",
-            "description": "This action is permanent and cannot be undone. All your data will be permanently deleted.",
-            "warning": "To confirm, type DELETE below:",
-            "inputPlaceholder": "Type DELETE to confirm",
-            "passwordLabel": "Enter your password to confirm:",
-            "passwordPlaceholder": "Your current password",
-            "confirmButton": "Delete my account",
-            "cancelButton": "Cancel",
-            "successMessage": "Your account has been deleted.",
-            "validation": {
-              "confirmationRequired": "Please type DELETE to confirm",
-              "confirmationMismatch": "You must type DELETE exactly",
-              "passwordRequired": "Password is required"
-            },
-            "errors": {
-              "generic": "Failed to delete account. Please try again.",
-              "invalidCredentials": "Incorrect password. Please try again.",
-              "requiresRecentLogin": "For security, please sign out and sign back in before deleting your account."
-            }
-          }
-        }
-      }
-    },
-    "docs": {
-      "pages": {
-        "architecture": {
-          "metadata": {
-            "title": "Architecture",
-            "description": "Layer structure, data flow diagrams, design patterns, and Awilix dependency injection."
-          }
-        },
-        "coding-conventions": {
-          "metadata": {
-            "title": "Coding Conventions",
-            "description": "App Router patterns, file naming, component props, forms with Zod, and next-intl i18n."
-          }
-        },
-        "development-guide": {
-          "metadata": {
-            "title": "Development Guide",
-            "description": "Git workflow, 7-step feature guide, module creation, and common patterns."
-          }
-        },
-        "firebase-integration": {
-          "metadata": {
-            "title": "Firebase Integration",
-            "description": "Auth, Firestore and Analytics setup, abstracted interfaces, security rules, and swapping providers."
-          }
-        },
-        "testing-guide": {
-          "metadata": {
-            "title": "Testing Guide",
-            "description": "Vitest + React Testing Library, 100% coverage, test organization, and AAA pattern."
-          }
-        },
-        "deployment": {
-          "metadata": {
-            "title": "Deployment",
-            "description": "Firebase setup, Cloudflare Pages hosting, GitHub Actions CI/CD, and environment variables."
-          }
-        }
-      }
-    },
-    "books": {
-      "form": {
-        "title": "Title",
-        "description": "Description",
-        "authors": "Authors",
-        "authorsPlaceholder": "Type and press Enter to add",
-        "genres": "Genres",
-        "genresPlaceholder": "Type and press Enter to add",
-        "links": "Links",
-        "linksPlaceholder": "Type URL and press Enter to add",
-        "cancel": "Cancel",
-        "validation": {
-          "titleRequired": "Title is required",
-          "titleMaxLength": "Max 200 characters",
-          "descriptionRequired": "Description is required",
-          "descriptionMaxLength": "Max 1000 characters",
-          "authorsRequired": "At least one author is required"
-        }
-      },
-      "pages": {
-        "list": {
-          "title": "Books",
-          "metadata": {
-            "description": "Browse and manage your personal book collection."
-          },
-          "titleColumn": "Title",
-          "create": "Create book",
-          "searchPlaceholder": "Search by title…",
-          "pageSize": "Per page",
-          "viewDetail": "View",
-          "delete": "Delete",
-          "previous": "Previous",
-          "next": "Next",
-          "loading": "Loading…",
-          "empty": "No books yet.",
-          "signInRequired": "Sign in to manage your books.",
-          "authorsLabel": "Authors",
-          "genresLabel": "Genres",
-          "actionsLabel": "Actions",
-          "confirmDelete": "Delete \"{title}\"?",
-          "cancel": "Cancel",
-          "deleted": "Book deleted.",
-          "errors": {
-            "loadFailed": "Failed to load books.",
-            "deleteFailed": "Failed to delete book."
-          }
-        },
-        "create": {
-          "title": "Create book",
-          "submit": "Create",
-          "signInRequired": "Sign in to create a book.",
-          "created": "Book created.",
-          "errors": {
-            "signInRequired": "Sign in required.",
-            "createFailed": "Failed to create book."
-          }
-        },
-        "detail": {
-          "title": "Book Detail",
-          "metadata": {
-            "description": "View and edit book details including authors, genres, and links."
-          },
-          "notFound": "Book not found.",
-          "signInRequired": "Sign in to view this book.",
-          "loading": "Loading…",
-          "edit": "Edit",
-          "backToList": "Back",
-          "save": "Save",
-          "updated": "Book updated.",
-          "cancel": "Cancel",
-          "delete": "Delete",
-          "authorsLabel": "Authors",
-          "descriptionLabel": "Description",
-          "genresLabel": "Genres",
-          "linksLabel": "Links",
-          "emptyValue": "—",
-          "confirmDelete": "Delete this book?",
-          "deleted": "Book deleted.",
-          "errors": {
-            "loadFailed": "Failed to load book.",
-            "updateFailed": "Failed to update book.",
-            "deleteFailed": "Failed to delete book."
-          }
-        }
-      }
-    },
     "legal": {
       "pages": {
         "privacy-policy": {
@@ -351,54 +79,49 @@
           "sections": {
             "overview": {
               "title": "Overview",
-              "body": "This starter kit provides authentication flows powered by Firebase. It may be used as a base for future applications. This policy explains what data the starter kit collects by default and how that data is used. If you build a real product on top of this starter kit, update this policy to match your actual behavior."
+              "body": "SparkMap is a cross-platform mind mapping application. This policy explains how we handle your data. Your data is stored securely on our servers to enable synchronization across all your devices."
             },
             "collection": {
               "title": "Information we collect",
-              "body": "We collect the minimum data needed to authenticate users:",
+              "body": "We collect the following information to provide our services:",
               "items": {
-                "email": "Email address",
-                "displayName": "Display name (if provided by the auth provider)",
-                "providerIds": "Authentication provider identifiers (Firebase, Google, Apple)"
+                "auth": "Account Information: We collect your email address and full name solely for authentication and account management purposes. We do not use this information to track you.",
+                "content": "User Content: We store your mind maps and related content on our secure servers to provide cross-device synchronization."
               },
-              "analyticsNote": "If analytics is enabled, we may also collect basic usage data such as device information, browser type, pages viewed, and interaction events."
+              "analyticsNote": "If analytics is enabled, we collect anonymous usage data via Firebase Analytics to help us improve the application."
             },
             "usage": {
               "title": "How we use information",
-              "items": {
-                "auth": "Authenticate you and keep your account secure.",
-                "display": "Display your name in the UI when available.",
-                "improve": "Monitor reliability and improve the user experience."
-              },
-              "note": "We use your email and display name only for authentication and account access."
+              "body": "We use your account information to authenticate you and secure your account. We use anonymous analytics data (if enabled) to monitor application stability and improve the user experience.",
+              "note": "We do not use your personal information for tracking or advertising purposes."
             },
             "analytics": {
               "title": "Analytics",
-              "body": "We may use Google Analytics or Firebase Analytics to understand how people use the starter kit. Analytics data helps us improve performance and usability. You can disable analytics in your own deployment if you do not need it."
+              "body": "We use Firebase Analytics to understand how people use SparkMap. Analytics data helps us improve performance and usability. You can disable analytics in your settings. We do not use Google Analytics."
             },
             "sharing": {
               "title": "Sharing and disclosure",
-              "body": "We do not sell your personal information. We only share data with service providers needed to operate authentication or analytics, such as Firebase and Google Analytics."
+              "body": "We do not sell your personal information. We only share anonymous analytics data with Firebase to operate our analytics services."
             },
             "retention": {
               "title": "Data retention",
-              "body": "Authentication data is stored as long as your account is active. If you delete your account, we remove associated authentication data from Firebase within a reasonable timeframe."
+              "body": "Your account information and mind maps are retained as long as your account is active. You can request deletion of your account and data at any time."
             },
             "security": {
               "title": "Security",
-              "body": "We use reasonable technical and organizational measures to protect your information. However, no system can be guaranteed to be 100% secure."
+              "body": "We use industry-standard encryption and security measures to protect your data stored on our servers and during transmission."
             },
             "children": {
               "title": "Children's privacy",
-              "body": "This starter kit is not intended for children under 13. If you believe a child has provided personal information, remove the data and update your product policies accordingly."
+              "body": "SparkMap does not knowingly collect personal information from children under 13."
             },
             "changes": {
               "title": "Changes to this policy",
-              "body": "We may update this policy as the starter kit evolves. Review it periodically, and update it when you ship a real product based on this starter kit."
+              "body": "We may update this policy as SparkMap evolves. Review it periodically."
             },
             "contact": {
               "title": "Contact",
-              "body": "For questions about privacy, contact the team that operates the application built from this starter kit."
+              "body": "For questions about privacy, please contact the SparkMap team."
             }
           }
         },
@@ -411,15 +134,15 @@
           "sections": {
             "overview": {
               "title": "Overview",
-              "body": "These terms describe how the starter kit can be used. If you deploy a real product based on this starter kit, you should update these terms to match your product, business model, and legal requirements."
+              "body": "These terms describe how the SparkMap application can be used."
             },
             "acceptance": {
               "title": "Acceptance",
-              "body": "By accessing or using the application built from this starter kit, you agree to these terms. If you do not agree, do not use the application."
+              "body": "By accessing or using SparkMap, you agree to these terms. If you do not agree, do not use the application."
             },
             "accounts": {
               "title": "Accounts and authentication",
-              "body": "The starter kit uses Firebase Authentication and supports email, Google, and Apple sign-in. You are responsible for safeguarding your credentials and for any activity that occurs under your account."
+              "body": "SparkMap uses secure authentication. You are responsible for safeguarding your credentials and for any activity that occurs under your account."
             },
             "acceptableUse": {
               "title": "Acceptable use",
@@ -432,11 +155,11 @@
             },
             "thirdParty": {
               "title": "Third-party services",
-              "body": "The starter kit integrates third-party services such as Firebase and Google Analytics. Your use of those services is also subject to their terms and privacy policies."
+              "body": "SparkMap integrates third-party services such as Firebase. Your use of those services is also subject to their terms and privacy policies."
             },
             "starterKit": {
-              "title": "Starter kit nature",
-              "body": "This project is a starter kit intended for development and customization. Features, data practices, and legal policies may change when you adapt it for a production application."
+              "title": "Service nature",
+              "body": "SparkMap is provided as a service. We reserve the right to modify, suspend, or discontinue the service at any time."
             },
             "termination": {
               "title": "Termination",
@@ -444,19 +167,19 @@
             },
             "disclaimers": {
               "title": "Disclaimers",
-              "body": "The starter kit is provided on an \"as is\" and \"as available\" basis. No warranties are provided, and you use it at your own risk."
+              "body": "The service is provided on an \"as is\" and \"as available\" basis. No warranties are provided, and you use it at your own risk."
             },
             "liability": {
               "title": "Limitation of liability",
-              "body": "To the fullest extent permitted by law, the creators of this starter kit are not liable for indirect, incidental, special, consequential, or punitive damages arising from your use of the application."
+              "body": "To the fullest extent permitted by law, SparkMap and its creators are not liable for indirect, incidental, special, consequential, or punitive damages arising from your use of the application."
             },
             "changes": {
               "title": "Changes",
-              "body": "These terms may be updated as the starter kit evolves. Review them periodically, and update them when you ship a real product based on this starter kit."
+              "body": "These terms may be updated as the application evolves. Review them periodically."
             },
             "contact": {
               "title": "Contact",
-              "body": "For questions about these terms, contact the team that operates the application built from this starter kit."
+              "body": "For questions about these terms, please contact the SparkMap team."
             }
           }
         }
@@ -498,156 +221,73 @@
     "landing": {
       "pages": {
         "home": {
-          "badge": "Starter Kit",
+          "badge": "SparkMap",
           "hero": {
-            "eyebrow": "Production-ready foundation",
-            "title": "Next.js Starter Kit",
-            "subtitle": "A production-ready Next.js starter with Clean Architecture and a modular structure for scalable frontend development. Built with the App Router, TypeScript, and 100% test coverage."
+            "eyebrow": "Visual Thinking Reimagined",
+            "title": "SparkMap",
+            "subtitle": "The ultimate mind mapping tool for creative thinkers. Organize your thoughts, plan projects, and unleash your creativity with a beautiful, intuitive interface available on all your devices."
           },
           "features": {
-            "title": "Key Features",
-            "description": "Everything you need to build scalable, maintainable frontend applications with best practices built-in.",
+            "title": "Why SparkMap?",
+            "description": "Designed to help you think clearly and work efficiently.",
             "items": {
-              "cleanArchitecture": {
-                "title": "Clean Architecture",
-                "description": "Four distinct layers (Domain, Application, Infrastructure, Presentation) with clear dependency rules and Awilix DI."
+              "visualThinking": {
+                "title": "Visual Thinking",
+                "description": "Break down complex ideas into manageable visual nodes. Connect concepts seamlessly."
               },
-              "modularStructure": {
-                "title": "Modular Structure",
-                "description": "Feature modules under src/modules/ with isolated boundaries. App Router handles routing only; all code lives in src/."
+              "collaboration": {
+                "title": "Real-time Collaboration",
+                "description": "Work together with your team in real-time. See changes as they happen."
               },
-              "testCoverage": {
-                "title": "100% Test Coverage",
-                "description": "Mandatory coverage thresholds with Vitest and React Testing Library. AAA pattern and behavior-focused testing."
+              "templates": {
+                "title": "Smart Templates",
+                "description": "Jumpstart your brainstorming with library of professionally designed templates."
               },
-              "i18nReady": {
-                "title": "i18n Ready",
-                "description": "next-intl with locale-based routing. English, Vietnamese, and Chinese translations included out of the box."
+              "crossPlatform": {
+                "title": "Cross-Platform Sync",
+                "description": "Your mind maps sync instantly across Web, Android, iOS, and macOS."
               },
-              "typeSafeForms": {
-                "title": "Type-Safe Forms",
-                "description": "React Hook Form with Zod validation. Single source of truth for schemas with automatic TypeScript inference."
+              "aiAssistance": {
+                "title": "AI Copilot",
+                "description": "Let AI help you expand your ideas, generate outlines, and summarize branches."
               },
-              "firebaseIntegration": {
-                "title": "Firebase Integration",
-                "description": "Auth, Firestore and Analytics with abstracted interfaces. Easy to swap providers without changing application code."
+              "export": {
+                "title": "Versatile Export",
+                "description": "Export your maps to PDF, PNG, Markdown, or Word documents for easy sharing."
               }
             }
           },
-          "architecture": {
-            "title": "Clean Architecture",
-            "description": "Separation of concerns with dependency inversion. Inner layers have no knowledge of outer layers, enabling testability and flexibility.",
-            "layers": {
-              "domain": {
-                "title": "Domain",
-                "description": "Core types, Zod schemas, and interfaces. No external dependencies—pure business rules and data shapes."
-              },
-              "application": {
-                "title": "Application",
-                "description": "Use cases orchestrating business logic. Depends only on Domain; no UI or framework specifics."
-              },
-              "infrastructure": {
-                "title": "Infrastructure",
-                "description": "Services and repositories implementing domain interfaces. All external I/O and SDK usage lives here."
-              },
-              "presentation": {
-                "title": "Presentation",
-                "description": "Pages, components, and hooks. React and Next.js specifics; uses Application layer via DI container."
-              }
-            }
-          },
-          "techStack": {
-            "title": "Tech Stack",
-            "description": "Modern, production-ready technologies carefully selected for developer experience and performance.",
+          "testimonials": {
+            "title": "Loved by Thinkers",
+            "description": "See what our users are saying about how SparkMap transformed their workflow.",
             "items": {
-              "nextjs": {
-                "name": "Next.js 16",
-                "description": "App Router, React Server Components, and optimized SSR/SSG."
+              "user1": {
+                "name": "Sarah Chen",
+                "role": "Product Manager",
+                "quote": "SparkMap has completely changed how I plan product roadmaps. The visual interface is intuitive and the sync is flawless."
               },
-              "react": {
-                "name": "React 19",
-                "description": "Latest React with concurrent features and improved performance."
+              "user2": {
+                "name": "Mark Johnson",
+                "role": "Software Architect",
+                "quote": "The best tool for visualizing system architecture. I love the dark mode and the keyboard shortcuts."
               },
-              "typescript": {
-                "name": "TypeScript 5",
-                "description": "Strict mode enabled for maximum type safety across the codebase."
-              },
-              "tailwind": {
-                "name": "Tailwind CSS 4",
-                "description": "Utility-first styling with automatic class sorting and optimization."
-              },
-              "radix": {
-                "name": "Radix UI",
-                "description": "Accessible, unstyled primitives via shadcn/ui component collection."
-              },
-              "rhf": {
-                "name": "React Hook Form",
-                "description": "Performant form management with minimal re-renders."
-              },
-              "zod": {
-                "name": "Zod",
-                "description": "Schema validation with TypeScript type inference."
-              },
-              "zustand": {
-                "name": "Zustand",
-                "description": "Lightweight client state management with simple API."
-              },
-              "nextIntl": {
-                "name": "next-intl",
-                "description": "Internationalization with locale routing and message formatting."
-              },
-              "firebase": {
-                "name": "Firebase",
-                "description": "Authentication, Firestore database and Analytics with abstracted interfaces."
-              },
-              "awilix": {
-                "name": "Awilix",
-                "description": "Dependency injection container for decoupled, testable code."
-              },
-              "vitest": {
-                "name": "Vitest",
-                "description": "Fast unit testing with React Testing Library integration."
+              "user3": {
+                "name": "Emily Rodriguez",
+                "role": "Creative Director",
+                "quote": "Finally, a mind map tool that looks as good as it works. The design is beautiful and keeps me in the flow."
               }
             }
           },
-          "gettingStarted": {
-            "title": "Getting started",
-            "description": "Clone the repo, install dependencies, and run the dev server. Validation runs lint, format check, and tests with coverage.",
-            "steps": {
-              "install": "npm install",
-              "dev": "npm run dev",
-              "validate": "npm run validate"
-            }
-          },
-          "docs": {
-            "title": "Documentation",
-            "description": "Six comprehensive guides cover architecture, conventions, development workflow, testing, Firebase integration, and deployment.",
-            "items": {
-              "architecture": {
-                "title": "Architecture",
-                "description": "Layer structure, data flow diagrams, design patterns, and Awilix dependency injection."
-              },
-              "codingConventions": {
-                "title": "Coding conventions",
-                "description": "App Router patterns, file naming, component props, forms with Zod, and next-intl i18n."
-              },
-              "development": {
-                "title": "Development guide",
-                "description": "Git workflow, 7-step feature guide, module creation, and common patterns."
-              },
-              "testing": {
-                "title": "Testing guide",
-                "description": "Vitest + React Testing Library, 100% coverage, test organization, and AAA pattern."
-              },
-              "firebase": {
-                "title": "Firebase integration",
-                "description": "Auth, Firestore and Analytics setup, abstracted interfaces, security rules, and swapping providers."
-              },
-              "deployment": {
-                "title": "Deployment",
-                "description": "Firebase setup, Cloudflare Pages hosting, GitHub Actions CI/CD, and environment variables."
-              }
-            }
+          "download": {
+            "title": "Download",
+            "description": "Download SparkMap for your favorite platform and start mapping your ideas today.",
+            "platforms": {
+              "web": "Open in Web",
+              "android": "Download on Android",
+              "ios": "Download on iOS",
+              "macos": "Download for macOS"
+            },
+            "footer": "Free for personal use. Upgrade for team features."
           }
         }
       }

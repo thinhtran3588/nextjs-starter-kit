@@ -30,9 +30,8 @@ export async function PrivacyPolicyPage() {
           </h2>
           <p>{tPrivacyPolicy("sections.collection.body")}</p>
           <ul className="list-disc space-y-2 pl-6">
-            <li>{tPrivacyPolicy("sections.collection.items.email")}</li>
-            <li>{tPrivacyPolicy("sections.collection.items.displayName")}</li>
-            <li>{tPrivacyPolicy("sections.collection.items.providerIds")}</li>
+            <li>{tPrivacyPolicy("sections.collection.items.auth")}</li>
+            <li>{tPrivacyPolicy("sections.collection.items.content")}</li>
           </ul>
           <p className="pt-2">
             {tPrivacyPolicy("sections.collection.analyticsNote")}
@@ -43,11 +42,7 @@ export async function PrivacyPolicyPage() {
           <h2 className="text-2xl font-semibold text-[var(--text-primary)]">
             {tPrivacyPolicy("sections.usage.title")}
           </h2>
-          <ul className="list-disc space-y-2 pl-6">
-            <li>{tPrivacyPolicy("sections.usage.items.auth")}</li>
-            <li>{tPrivacyPolicy("sections.usage.items.display")}</li>
-            <li>{tPrivacyPolicy("sections.usage.items.improve")}</li>
-          </ul>
+          <p>{tPrivacyPolicy("sections.usage.body")}</p>
           <p className="pt-2">{tPrivacyPolicy("sections.usage.note")}</p>
         </section>
 
@@ -77,13 +72,6 @@ export async function PrivacyPolicyPage() {
             {tPrivacyPolicy("sections.security.title")}
           </h2>
           <p>{tPrivacyPolicy("sections.security.body")}</p>
-        </section>
-
-        <section className="space-y-3">
-          <h2 className="text-2xl font-semibold text-[var(--text-primary)]">
-            {tPrivacyPolicy("sections.children.title")}
-          </h2>
-          <p>{tPrivacyPolicy("sections.children.body")}</p>
         </section>
 
         <section className="space-y-3">

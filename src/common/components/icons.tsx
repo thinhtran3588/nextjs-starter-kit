@@ -379,3 +379,57 @@ export function GitHubIcon({ className }: IconClassName) {
     </svg>
   );
 }
+
+export function AndroidIcon({ className }: IconClassName) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <path d="M17.523 15.3414C17.523 16.7112 16.6358 17.8213 15.541 17.8213C14.4462 17.8213 13.559 16.7112 13.559 15.3414C13.559 13.9715 14.4462 12.8615 15.541 12.8615C16.6358 12.8615 17.523 13.9715 17.523 15.3414ZM8.43572 12.8615C7.34086 12.8615 6.45369 13.9715 6.45369 15.3414C6.45369 16.7112 7.34086 17.8213 8.43572 17.8213C9.53059 17.8213 10.4178 16.7112 10.4178 15.3414C10.4178 13.9715 9.53059 12.8615 8.43572 12.8615ZM18.1561 8.87539L20.2443 5.26615C20.3541 5.07119 20.285 4.82522 20.0899 4.71578C19.8949 4.60634 19.6489 4.67543 19.5394 4.87039L17.4323 8.51343C15.8202 7.78119 13.9822 7.36294 12 7.36294C10.0177 7.36294 8.17983 7.78119 6.56767 8.51343L4.46055 4.87039C4.35102 4.67543 4.10515 4.60634 3.9101 4.71578C3.71506 4.82522 3.64596 5.07119 3.75569 5.26615L5.84393 8.87539C2.47772 10.7186 0.170564 14.1627 0 18.232H24C23.8294 14.1627 21.5222 10.7186 18.1561 8.87539Z" />
+    </svg>
+  );
+}
+
+export function StarIcon({ className }: IconClassName) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+    </svg>
+  );
+}
+
+export function BrainIcon({ className }: IconClassName) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
+      <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
+      <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+      <path d="M17.599 6.5a3 3 0 0 0 .399-1.375" />
+      <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />
+      <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />
+      <path d="M19.938 10.5a4 4 0 0 1 .585.396" />
+      <path d="M6 18a4 4 0 0 1-1.954-1.297" />
+      <path d="M19.954 16.703A4 4 0 0 1 18 18" />
+    </svg>
+  );
+}

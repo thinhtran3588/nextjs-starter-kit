@@ -4,6 +4,7 @@ import {
   AppleIcon,
   BackArrowIcon,
   ChevronDownIcon,
+  ExternalLinkIcon,
   EyeIcon,
   EyeOffIcon,
   GoogleIcon,
@@ -15,6 +16,7 @@ import {
   PencilIcon,
   PlusIcon,
   SunIcon,
+  TrashIcon,
   UserIcon,
   XIcon,
 } from "@/common/components/icons";
@@ -96,5 +98,17 @@ describe("Icons", () => {
     const { container: c2 } = render(<PlusIcon className="size-4" />);
     expect(c1.querySelector("svg")).toBeInTheDocument();
     expect(c2.querySelector("svg")).toBeInTheDocument();
+  });
+
+  it("TrashIcon renders", () => {
+    const { container } = render(<TrashIcon className="size-4" />);
+    expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(container.querySelector("svg")).toHaveClass("size-4");
+  });
+
+  it("ExternalLinkIcon renders", () => {
+    const { container } = render(<ExternalLinkIcon className="size-4" />);
+    expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(container.querySelector("svg")).toHaveClass("size-4");
   });
 });
