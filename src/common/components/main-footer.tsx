@@ -18,7 +18,7 @@ export function MainFooter({
   version,
 }: MainFooterProps) {
   return (
-    <footer className="relative z-10 border-t border-[var(--glass-border)] bg-[var(--glass-bg)]">
+    <footer className="relative z-10 border-t border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-[24px] backdrop-saturate-[1.8]">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-6 py-8 sm:flex-row sm:justify-between">
         <nav className="flex items-center gap-6 text-sm">
           <Link
