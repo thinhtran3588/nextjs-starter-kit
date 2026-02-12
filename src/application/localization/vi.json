@@ -287,7 +287,8 @@
               "ios": "Tải trên iOS",
               "macos": "Tải cho macOS"
             },
-            "footer": "Miễn phí cho sử dụng cá nhân. Nâng cấp cho tính năng nhóm."
+            "footer": "Miễn phí cho sử dụng cá nhân. Nâng cấp cho tính năng nhóm.",
+            "comingSoon": "Sắp ra mắt"
           }
         }
       }

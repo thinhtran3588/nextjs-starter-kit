@@ -291,7 +291,8 @@
               "ios": "Download on iOS",
               "macos": "Download for macOS"
             },
-            "footer": "Free for personal use. Upgrade for team features."
+            "footer": "Free for personal use. Upgrade for team features.",
+            "comingSoon": "Coming soon"
           }
         }
       }
