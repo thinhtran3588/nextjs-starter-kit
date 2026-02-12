@@ -12,6 +12,7 @@ describe("createContactFormSchema", () => {
       email: "alice@example.com",
       subject: "Inquiry",
       message: "Hello, I have a question.",
+      source: "gemsignal.com",
     });
     expect(result.success).toBe(true);
   });
@@ -23,17 +24,19 @@ describe("createContactFormSchema", () => {
       email: "alice@example.com",
       subject: "Inquiry",
       message: "Hello",
+      source: "gemsignal.com",
     });
     expect(result.success).toBe(false);
   });
 
-  it("rejects name over 200 characters", () => {
+  it("rejects name over 50 characters", () => {
     const schema = createContactFormSchema(t);
     const result = schema.safeParse({
-      name: "a".repeat(201),
+      name: "a".repeat(51),
       email: "alice@example.com",
       subject: "Inquiry",
       message: "Hello",
+      source: "gemsignal.com",
     });
     expect(result.success).toBe(false);
   });
@@ -45,6 +48,7 @@ describe("createContactFormSchema", () => {
       email: "not-an-email",
       subject: "Inquiry",
       message: "Hello",
+      source: "gemsignal.com",
     });
     expect(result.success).toBe(false);
   });
@@ -56,6 +60,7 @@ describe("createContactFormSchema", () => {
       email: "alice@example.com",
       subject: "",
       message: "Hello",
+      source: "gemsignal.com",
     });
     expect(result.success).toBe(false);
   });
@@ -67,6 +72,7 @@ describe("createContactFormSchema", () => {
       email: "alice@example.com",
       subject: "a".repeat(201),
       message: "Hello",
+      source: "gemsignal.com",
     });
     expect(result.success).toBe(false);
   });
@@ -78,17 +84,31 @@ describe("createContactFormSchema", () => {
       email: "alice@example.com",
       subject: "Inquiry",
       message: "",
+      source: "gemsignal.com",
     });
     expect(result.success).toBe(false);
   });
 
-  it("rejects message over 2000 characters", () => {
+  it("rejects message over 1000 characters", () => {
     const schema = createContactFormSchema(t);
     const result = schema.safeParse({
       name: "Alice",
       email: "alice@example.com",
       subject: "Inquiry",
-      message: "a".repeat(2001),
+      message: "a".repeat(1001),
+      source: "gemsignal.com",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects empty source", () => {
+    const schema = createContactFormSchema(t);
+    const result = schema.safeParse({
+      name: "Alice",
+      email: "alice@example.com",
+      subject: "Inquiry",
+      message: "Hello",
+      source: "",
     });
     expect(result.success).toBe(false);
   });
