@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { getWindowHost } from "./browser";
+import { getWindowHost } from "@/common/utils/browser";
 
 describe("getWindowHost", () => {
   it("returns host when window is defined", () => {
