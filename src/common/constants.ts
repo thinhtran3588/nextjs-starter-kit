@@ -1,5 +1,7 @@
 export const APP_NAME = "SparkMap";
 
+export const SUPPORT_API_URL = "https://support-api.gemsignal.com/contact";
+
 export const LINKS = {
   WEB: "https://app.sparkmap.com",
   ANDROID: "https://play.google.com/store/apps/details?id=com.sparkmap.app",

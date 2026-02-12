@@ -203,18 +203,22 @@
             "messageLabel": "Message",
             "messagePlaceholder": "Tell us more about your inquiry...",
             "submitButton": "Send message",
+            "submittingButton": "Sending...",
             "validation": {
               "nameRequired": "Name is required",
-              "nameMaxLength": "Name must be at most 200 characters",
+              "nameMaxLength": "Name must be at most 50 characters",
+              "emailRequired": "Email is required",
               "invalidEmail": "Invalid email",
               "subjectRequired": "Subject is required",
               "subjectMaxLength": "Subject must be at most 200 characters",
               "messageRequired": "Message is required",
-              "messageMaxLength": "Message must be at most 2000 characters"
+              "messageMaxLength": "Message must be at most 1000 characters",
+              "sourceRequired": "Source is required",
+              "sourceMaxLength": "Source must be at most 200 characters"
             }
           },
           "emailNote": "You can also reach us directly at",
-          "successMessage": "Your email client should open shortly. If it doesn't, please email us directly."
+          "successMessage": "Your message has been sent successfully. We will get back to you soon."
         }
       }
     },

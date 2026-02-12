@@ -199,18 +199,22 @@
             "messageLabel": "Tin nhắn",
             "messagePlaceholder": "Cho chúng tôi biết thêm về yêu cầu của bạn...",
             "submitButton": "Gửi tin nhắn",
+            "submittingButton": "Đang gửi...",
             "validation": {
               "nameRequired": "Vui lòng nhập họ tên",
-              "nameMaxLength": "Họ tên tối đa 200 ký tự",
+              "nameMaxLength": "Họ tên tối đa 50 ký tự",
+              "emailRequired": "Vui lòng nhập email",
               "invalidEmail": "Email không hợp lệ",
               "subjectRequired": "Vui lòng nhập chủ đề",
               "subjectMaxLength": "Chủ đề tối đa 200 ký tự",
               "messageRequired": "Vui lòng nhập tin nhắn",
-              "messageMaxLength": "Tin nhắn tối đa 2000 ký tự"
+              "messageMaxLength": "Tin nhắn tối đa 1000 ký tự",
+              "sourceRequired": "Vui lòng nhập nguồn",
+              "sourceMaxLength": "Nguồn tối đa 200 ký tự"
             }
           },
           "emailNote": "Bạn cũng có thể liên hệ trực tiếp với chúng tôi tại",
-          "successMessage": "Ứng dụng email của bạn sẽ mở ngay. Nếu không, vui lòng gửi email trực tiếp cho chúng tôi."
+          "successMessage": "Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ phản hồi sớm nhất có thể."
         }
       }
     },
